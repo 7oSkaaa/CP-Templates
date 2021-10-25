@@ -66,7 +66,7 @@ struct Fenwick_Tree {
     ll get_sum(int idx){
         ll sum = 0;
         idx++;
-        while(idx <= n){
+        while(idx){
             sum += Tree[idx];
             idx -= lowest_bit(idx);
         }
