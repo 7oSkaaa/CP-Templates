@@ -1,5 +1,9 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
+using namespace __gnu_pbds;
+#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
 
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
@@ -48,7 +52,7 @@ int k_ancestor(int node, int dist){
 }
 
 int combine(int u, int v){
-  return min(u, v);
+    return min(u, v);
 }
 
 void dfs(int node, int par, int c){
@@ -63,51 +67,52 @@ void dfs(int node, int par, int c){
 }
 
 int lca(int u, int v){
-  if(dep[u] > dep[v])
-    swap(u, v);
-  v = k_ancestor(v, dep[v] - dep[u]);
-  if(u == v) return u;
-  for(int bit = 19; bit >= 0; bit--)
-    if(anc[u][bit] != anc[v][bit])
-      u = anc[u][bit], v = anc[v][bit];
-  return anc[u][0];
+    if(dep[u] > dep[v])
+      swap(u, v);
+    v = k_ancestor(v, dep[v] - dep[u]);
+    if(u == v) return u;
+    for(int bit = 19; bit >= 0; bit--)
+      if(anc[u][bit] != anc[v][bit])
+        u = anc[u][bit], v = anc[v][bit];
+    return anc[u][0];
 }
 
 int get_cost(int node, int dist){
-  if(dep[node] <= dist) return -1;
-  int ans = OO;
-    for(int bit = 0; bit < 20; bit++)
-        if(dist & (1 << bit))
-            ans = combine(ans, cost[node][bit]), node = anc[node][bit];
-    return ans;
+    if(dep[node] <= dist) return -1;
+    int ans = OO;
+      for(int bit = 0; bit < 20; bit++)
+          if(dist & (1 << bit))
+              ans = combine(ans, cost[node][bit]), node = anc[node][bit];
+      return ans;
 }
 
 int query(int u, int v){
-  if(dep[u] > dep[v])
-    swap(u, v);
-  int LCA = lca(u, v);
-  return combine(get_cost(u, dep[u] - dep[LCA]), get_cost(v, dep[v] - dep[LCA]));
+    if(dep[u] > dep[v])
+      swap(u, v);
+    int LCA = lca(u, v);
+    return combine(get_cost(u, dep[u] - dep[LCA]), get_cost(v, dep[v] - dep[LCA]));
 }
 
 void solve(){
-  int n, m, q;
-  cin >> n >> m;
-  for(int i = 0, u, v, w; i < m && cin >> u >> v >> w; i++)
-    adj[u].push_back({v, w}), adj[v].push_back({u, w});
-  cin >> q;
-  int u, v;
-  dfs(1, 0, OO);
-  while(q-- && cin >> u >> v){
-    cout << query(u, v) << "\n";
-  }
+    int n, m, q;
+    cin >> n >> m;
+    for(int i = 0, u, v, w; i < m && cin >> u >> v >> w; i++)
+      adj[u].push_back({v, w}), adj[v].push_back({u, w});
+    cin >> q;
+    int u, v;
+    dfs(1, 0, OO);
+    while(q-- && cin >> u >> v){
+      cout << query(u, v) << "\n";
+    }
 }
 
+
 int main(){
-  AhMeD_HoSSaM();
-  int t = 1;
-  //cin >> t;
-  while(t--)
-    solve();
-  Time
-  return 0;
+    AhMeD_HoSSaM();
+    int t = 1;
+    //cin >> t;
+    while(t--)
+      solve();
+    Time
+    return 0;
 } 

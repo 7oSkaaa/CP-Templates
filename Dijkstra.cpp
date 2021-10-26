@@ -1,5 +1,9 @@
 #include <bits/stdc++.h>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
+using namespace __gnu_pbds;
+#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
 
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
@@ -15,7 +19,6 @@ using namespace std;
 #define all(vec) vec.begin(),vec.end()
 #define rall(vec) vec.rbegin(),vec.rend()
 #define sz(x) int(x.size())
-#define TC int t; cin >> t;   while(t--)
 #define fi first
 #define se second
 #define Pair pair < int, int >
@@ -62,9 +65,16 @@ int Dijkstra(vector < vector < Edge > >& adj, int search, int dest = -1){
     return (dest == -1 ? -1 : dist[dest]);
 }
 
-int main(){
-  AhMeD_HoSSaM();
-
-  Time
-  return 0;
+void solve(){
+    
 }
+
+int main(){
+    AhMeD_HoSSaM();
+    int t = 1;
+    //cin >> t;
+    while(t--)
+        solve();
+    Time
+    return 0;
+} 

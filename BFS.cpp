@@ -1,7 +1,10 @@
 #include <bits/stdc++.h>
-#pragma GCC optimize("0")
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
- 
+using namespace __gnu_pbds;
+#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
+
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
 #define cout(vec) for(auto& i : vec) cout << i << " "; cout << "\n";
@@ -12,20 +15,20 @@ using namespace std;
 #define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
 #define fill(vec, value) memset(vec, value, sizeof(vec));
 #define Num_of_Digits(n) ((int)log10(n)+1)
+#define mod_combine(a, b, m) (((a % m) * (b % m)) % m)
 #define all(vec) vec.begin(),vec.end()
 #define rall(vec) vec.rbegin(),vec.rend()
 #define sz(x) int(x.size())
-#define TC int t; cin >> t;   while(t--)
 #define fi first
 #define se second
 #define Pair pair < int, int >
 #define ll long long
 #define ull unsigned long long
 #define Mod  1'000'000'007
-#define INF 2'000'000'000
+#define OO 2'000'000'000
 #define EPS 1e-9
 #define PI acos(-1)
- 
+
 void AhMeD_HoSSaM(){
   ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
   #ifndef ONLINE_JUDGE
@@ -34,35 +37,37 @@ void AhMeD_HoSSaM(){
 }
 
 int n, m;
-
-vector < int > choice(int x, int y){
-  if(x >= y * 2) return {x - 1};
-  else if(x == 1) return {2};
-  else return {x - 1, x * 2};
-}
+vector < vector < int > > adj;
 
 int BFS (int start, int finish){
-  vector < int > path(1e5 + 1);
-  vector < bool > vis(1e5 + 1);
-  queue < int > bfs;
-  bfs.push(start);
-  if(start == finish) return 0;
-  vis[start] = true;
-  path[start] = 0;
-  while(!bfs.empty()){
-    int num = bfs.front(); 
-    bfs.pop();
-    for(auto& it : choice(num, m)){
-        if(!vis[it]) vis[it] = true, bfs.push(it), path[it] = path[num] + 1;
-        if(it == finish) return path[it];
+    vector < int > path(1e5 + 1);
+    vector < bool > vis(1e5 + 1);
+    queue < int > bfs;
+    bfs.push(start);
+    if(start == finish) return 0;
+    vis[start] = true;
+    path[start] = 0;
+    while(!bfs.empty()){
+      int num = bfs.front(); 
+      bfs.pop();
+      for(auto& it : adj[num]){
+          if(!vis[it]) vis[it] = true, bfs.push(it), path[it] = path[num] + 1;
+          if(it == finish) return path[it];
+      }
     }
-  }
-  return -1;
+    return -1;
+}
+
+void solve(){
+    
 }
 
 int main(){
-  AhMeD_HoSSaM();
-   
-  Time
-  return 0;
-}
+    AhMeD_HoSSaM();
+    int t = 1;
+    //cin >> t;
+    while(t--)
+        solve();
+    Time
+    return 0;
+} 

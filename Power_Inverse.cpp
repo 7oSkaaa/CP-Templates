@@ -30,66 +30,40 @@ using namespace __gnu_pbds;
 #define PI acos(-1)
 
 void AhMeD_HoSSaM(){
-  ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-  #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
-  #endif
+    ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    #ifndef ONLINE_JUDGE
+      freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
+    #endif
 }
 
-struct Fenwick_Tree {
-    
-    vector < vector < ll > > Tree;
-    int n, m;
-
-    Fenwick_Tree(int n, int m){
-        this -> n = n + 1, this -> m = m + 1;
-        Tree.assign(n + 1, vector < ll > (m + 1, 0));
+ll fast_pow(ll b, ll e, ll mod){
+    ll power = 1;
+    while(e){
+        if(e & 1) power = ((power % mod) * (b % mod)) % mod;
+        e >>= 1;
+        b = ((b % mod) * (b % mod)) % mod;
     }
+    return power % mod;
+}
 
-    int lowest_bit(int idx){
-        return (idx & -idx);
-    }
+vector < ll > factorial(1e5 + 1, 1);
 
-    void build(vector < vector < ll > >& nums){
-        for(int i = 0; i < sz(nums); i++)
-            for(int j = 0; j < sz(nums[0]); j++)
-                add(i, j, nums[i][j]);
-    }
+ll mod_inverse(ll n, ll p){
+    return fast_pow(n, p - 2, p);
+}
 
-    void add(int idx, int jdx, int val){
-        int i = idx + 1, j = jdx + 1;
-        while(i <= n){
-            j = jdx + 1;
-            while(j <= m){
-                Tree[i][j] += val;
-                j += lowest_bit(j);    
-            }
-            i += lowest_bit(i);
-        }
-    }
+void fact(){
+    for(int i = 1; i <= 1e5; i++) factorial[i] = mod_combine(factorial[i - 1], i, Mod);
+}
 
-    ll get_sum(int idx, int jdx){
-        ll sum = 0;
-        int i = idx + 1, j = jdx + 1;
-        while(i){
-            j = jdx + 1;
-            while(j){
-                sum += Tree[i][j];
-                j -= lowest_bit(j);    
-            }
-            i -= lowest_bit(i);
-        }
-        return sum;
-    }
-
-    ll query(int x1, int y1, int x2, int y2) {
-        return get_sum(x2, y2) - get_sum(x1 - 1, y2) - get_sum(x2, y1 - 1) + get_sum(x1 - 1, y1 - 1);
-    }
-
-};
+ll nCr(ll n, ll r){
+    if(n < r) return 0;
+    if(r == 0) return 1;
+    return ((factorial[n] * mod_inverse(factorial[r], Mod)) % Mod * mod_inverse(factorial[n - r], Mod) % Mod) % Mod;
+}
 
 void solve(){
-    
+  
 }
 
 int main(){
@@ -97,7 +71,7 @@ int main(){
     int t = 1;
     //cin >> t;
     while(t--)
-        solve();
+      solve();
     Time
     return 0;
 } 
