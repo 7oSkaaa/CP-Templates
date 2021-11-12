@@ -3,8 +3,8 @@
 #include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 using namespace __gnu_pbds;
-#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
 
+#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update> 
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
 #define cout(vec) for(auto& i : vec) cout << i << " "; cout << "\n";
@@ -14,11 +14,12 @@ using namespace __gnu_pbds;
 #define fixed(n) fixed << setprecision(n)
 #define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
 #define fill(vec, value) memset(vec, value, sizeof(vec));
-#define Num_of_Digits(n) ((int)log10(n)+1)
+#define Num_of_Digits(n) ((int)log10(n) + 1)
 #define mod_combine(a, b, m) (((a % m) * (b % m)) % m)
-#define all(vec) vec.begin(),vec.end()
-#define rall(vec) vec.rbegin(),vec.rend()
+#define all(vec) vec.begin(), vec.end()
+#define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
+#define debug(x) cout << #x << ": " << (x) << "\n";
 #define fi first
 #define se second
 #define Pair pair < int, int >
@@ -30,10 +31,10 @@ using namespace __gnu_pbds;
 #define PI acos(-1)
 
 void AhMeD_HoSSaM(){
-  ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-  #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
-  #endif
+    ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
+    #endif
 }
 
 constexpr int N = 3e5 + 5;
@@ -94,25 +95,15 @@ int query(int u, int v){
 }
 
 void solve(){
-    int n, m, q;
-    cin >> n >> m;
-    for(int i = 0, u, v, w; i < m && cin >> u >> v >> w; i++)
-      adj[u].push_back({v, w}), adj[v].push_back({u, w});
-    cin >> q;
-    int u, v;
-    dfs(1, 0, OO);
-    while(q-- && cin >> u >> v){
-      cout << query(u, v) << "\n";
-    }
+    
 }
-
 
 int main(){
     AhMeD_HoSSaM();
     int t = 1;
-    //cin >> t;
+    cin >> t;
     while(t--)
-      solve();
+        solve();
     Time
     return 0;
 } 

@@ -14,7 +14,7 @@ using namespace __gnu_pbds;
 #define fixed(n) fixed << setprecision(n)
 #define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
 #define fill(vec, value) memset(vec, value, sizeof(vec));
-#define Num_of_Digits(n) ((int)log10(n) + 1)
+#define Num_of_Digits(n) ((int)log10(n)+1)
 #define mod_combine(a, b, m) (((a % m) * (b % m)) % m)
 #define all(vec) vec.begin(), vec.end()
 #define rall(vec) vec.rbegin(), vec.rend()
@@ -37,33 +37,33 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Segment_Tree {
+struct Lazy_Propagation {
 
     int size;
-    vector < ll > tree; 
+    vector < ll > operations; 
     
     void intial(int n){
         size = 1;
         while(size <= n) size *= 2;
-        tree.assign(2 * size, 0ll);
+        operations.assign(2 * size, 0ll);
     }
 
-    Segment_Tree(int n){
+    Lazy_Propagation(int n){
         intial(n);
     }
 
     ll operation(ll a, ll b){
-        return a + b;
+        return max(a, b);
     }
 
     void build(vector < int >& nums, int idx, int lx, int rx){
         if(lx >= sz(nums)) return;
-        if(rx == lx) tree[idx] = nums[lx];
+        if(rx == lx) operations[idx] = nums[lx];
         else {
             int m = (rx + lx) / 2;
             build(nums, 2 * idx, lx, m);
             build(nums, 2 * idx + 1, m + 1, rx);
-            tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
+            operations[idx] = operation(operations[2 * idx], operations[2 * idx + 1]);
         }
     }
 
@@ -71,40 +71,58 @@ struct Segment_Tree {
         build(nums, 1, 1, size);
     }
 
-    void update(int i, int v, int idx, int lx, int rx){
-        if(rx == lx) tree[idx] = v;
+    void update(int l, int r, int v, int idx, int lx, int rx){
+        if(lx > r || l > rx) return;
+        if(lx >= l && rx <= r){
+            operations[idx] = operation(operations[idx], v);
+            return;
+        }
+        int m = (lx + rx) / 2;
+        update(l, r, v, 2 * idx, lx, m), update(l, r, v, 2 * idx + 1, m + 1, rx);
+    }
+
+    void update(int l, int r, int v){
+        update(l, r, v, 1, 1, size);
+    }
+
+    ll query(int i, int idx, int lx, int rx){
+        if(rx == lx) return operations[idx];
         else {  
             int m = (rx + lx) / 2;
-            if(i <= m) update(i, v, 2 * idx, lx, m);
-            else update(i, v, 2 * idx + 1, m + 1, rx);
-            tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
+            if(i <= m) return operation(operations[idx], query(i, 2 * idx, lx, m));
+            else return operation(operations[idx], query(i, 2 * idx + 1, m + 1, rx));
         }
     }
 
-    void update(int i, int v){
-        update(i, v, 1, 1, size);
+    ll query(int i){
+        return query(i, 1, 1, size);
     }
 
-    ll query(int l, int r, int idx, int lx, int rx){
-        if(lx > r || l > rx) return 0;
-        if(lx >= l && rx <= r) return tree[idx];
-        int m = (lx + rx) / 2;
-        return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
-    }
-
-    ll query(int l, int r){
-        return query(l, r, 1, 1, size);
-    }
 };
 
 void solve(){
-    
+    int n, m;
+    cin >> n >> m;
+    Lazy_Propagation st(n);
+    while(m--){
+        int order;
+        cin >> order;
+        if(order == 1){
+            int l, r, v;
+            cin >> l >> r >> v;
+            st.update(l + 1, r, v);
+        }else {
+            int idx;
+            cin >> idx;
+            cout << st.query(idx + 1) << "\n";
+        }
+    }
 }
 
 int main(){
     AhMeD_HoSSaM();
     int t = 1;
-    cin >> t;
+    //cin >> t;
     while(t--)
         solve();
     Time
