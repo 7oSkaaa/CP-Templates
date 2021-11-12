@@ -4,7 +4,7 @@
 using namespace std;
 using namespace __gnu_pbds;
 
-#define ordered_set tree<Pair, null_type,less<Pair>, rb_tree_tag,tree_order_statistics_node_update> 
+#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update> 
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
 #define cout(vec) for(auto& i : vec) cout << i << " "; cout << "\n";
@@ -14,11 +14,12 @@ using namespace __gnu_pbds;
 #define fixed(n) fixed << setprecision(n)
 #define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
 #define fill(vec, value) memset(vec, value, sizeof(vec));
-#define Num_of_Digits(n) ((int)log10(n)+1)
+#define Num_of_Digits(n) ((int)log10(n) + 1)
 #define mod_combine(a, b, m) (((a % m) * (b % m)) % m)
-#define all(vec) vec.begin(),vec.end()
-#define rall(vec) vec.rbegin(),vec.rend()
+#define all(vec) vec.begin(), vec.end()
+#define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
+#define debug(x) cout << #x << ": " << (x) << "\n";
 #define fi first
 #define se second
 #define Pair pair < int, int >
@@ -36,14 +37,14 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-void solve(){ 
+void solve(){
     
 }
 
 int main(){
     AhMeD_HoSSaM();
     int t = 1;
-    //cin >> t;
+    cin >> t;
     while(t--)
         solve();
     Time
