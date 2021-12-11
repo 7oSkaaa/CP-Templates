@@ -37,62 +37,72 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-constexpr int N = 3e5 + 5;
+struct LCA {
 
-vector < int > dep(N);
+    vector < int > dep;
+    vector < vector < Pair > > adj; 
+    vector < vector < int > > anc, cost;
 
-vector < vector < Pair > > adj(N); 
-vector < vector < int > > anc(N, vector < int > (20)), cost(N, vector < int > (20));
-
-int k_ancestor(int node, int dist){
-    if(dep[node] <= dist) return -1;
-    for(int bit = 0; bit < 20; bit++)
-        if(dist & (1 << bit))
-            node = anc[node][bit];
-    return node;
-}
-
-int combine(int u, int v){
-    return min(u, v);
-}
-
-void dfs(int node, int par, int c){
-    dep[node] = dep[par] + 1, anc[node][0] = par, cost[node][0] = c;
-    for(int bit = 1; bit < 20; bit++){
-        anc[node][bit] = anc[anc[node][bit - 1]][bit - 1];
-        cost[node][bit] = min(cost[node][bit - 1], cost[anc[node][bit - 1]][bit - 1]);
+    LCA(int n){
+        dep.resize(n);
+        adj.resize(n);
+        anc.assign(n, vector < int > (20));
+        cost.assign(n, vector < int > (20));
     }
-    for(auto& [new_node, value] : adj[node])
-      if(new_node != par)
-        dfs(new_node, node, value);
-}
 
-int lca(int u, int v){
-    if(dep[u] > dep[v])
-      swap(u, v);
-    v = k_ancestor(v, dep[v] - dep[u]);
-    if(u == v) return u;
-    for(int bit = 19; bit >= 0; bit--)
-      if(anc[u][bit] != anc[v][bit])
-        u = anc[u][bit], v = anc[v][bit];
-    return anc[u][0];
-}
+    int k_ancestor(int node, int dist){
+        if(dep[node] <= dist) return -1;
+        for(int bit = 0; bit < 20; bit++)
+            if(dist & (1 << bit))
+                node = anc[node][bit];
+        return node;
+    }
 
-int get_cost(int node, int dist){
-    if(dep[node] <= dist) return -1;
-    int ans = OO;
-      for(int bit = 0; bit < 20; bit++)
-          if(dist & (1 << bit))
-              ans = combine(ans, cost[node][bit]), node = anc[node][bit];
-      return ans;
-}
+    int combine(int u, int v){
+        return min(u, v);
+    }
 
-int query(int u, int v){
-    if(dep[u] > dep[v])
-      swap(u, v);
-    int LCA = lca(u, v);
-    return combine(get_cost(u, dep[u] - dep[LCA]), get_cost(v, dep[v] - dep[LCA]));
-}
+    void dfs(int node, int par, int c){
+        dep[node] = dep[par] + 1, anc[node][0] = par, cost[node][0] = c;
+        for(int bit = 1; bit < 20; bit++){
+            anc[node][bit] = anc[anc[node][bit - 1]][bit - 1];
+            cost[node][bit] = min(cost[node][bit - 1], cost[anc[node][bit - 1]][bit - 1]);
+        }
+        for(auto& [new_node, value] : adj[node])
+        if(new_node != par)
+            dfs(new_node, node, value);
+    }
+
+    int lca(int u, int v){
+        if(dep[u] > dep[v])
+        swap(u, v);
+        v = k_ancestor(v, dep[v] - dep[u]);
+        if(u == v) return u;
+        for(int bit = 19; bit >= 0; bit--)
+        if(anc[u][bit] != anc[v][bit])
+            u = anc[u][bit], v = anc[v][bit];
+        return anc[u][0];
+    }
+
+    int get_cost(int node, int dist){
+        if(dep[node] <= dist) return -1;
+        int ans = OO;
+        for(int bit = 0; bit < 20; bit++)
+            if(dist & (1 << bit))
+                ans = combine(ans, cost[node][bit]), node = anc[node][bit];
+        return ans;
+    }
+
+    int query(int u, int v){
+        if(dep[u] > dep[v])
+        swap(u, v);
+        int LCA = lca(u, v);
+        return combine(get_cost(u, dep[u] - dep[LCA]), get_cost(v, dep[v] - dep[LCA]));
+    }
+
+};
+
+
 
 void solve(){
     

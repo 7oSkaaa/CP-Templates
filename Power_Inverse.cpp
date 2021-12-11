@@ -37,31 +37,41 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-ll fast_pow(ll b, ll e, ll mod){
-    ll power = 1;
-    while(e){
-        if(e & 1) power = ((power % mod) * (b % mod)) % mod;
-        e >>= 1;
-        b = ((b % mod) * (b % mod)) % mod;
+struct Power_Inverse {
+    
+    ll n, r, mod;
+    vector < ll > fact, inv;
+
+    ll fast_power(ll b, ll e, ll mod){
+        ll power = 1;
+        while(e){
+            if(e & 1) power = mod_combine(power, b, mod);
+            e >>= 1, b = mod_combine(b, b, mod);
+        }
+        return power % mod;
     }
-    return power % mod;
-}
 
-vector < ll > factorial(1e5 + 1, 1);
+    Power_Inverse(ll n, ll r, ll mod){
+        this -> n = n, this -> r, this -> mod = mod;
+        fact.assign(n + 10, 1), inv.resize(n + 10);
+        for(ll i = 1; i <= n; i++){
+            fact[i] = mod_combine(fact[i - 1], i, mod);
+            inv[i] = fast_power(fact[i], mod - 2, mod);
+        }
+    }
 
-ll mod_inverse(ll n, ll p){
-    return fast_pow(n, p - 2, p);
-}
+    ll nCr(){
+        if(r > n) return 0;
+        return (((fact[n] % mod * inv[r] % mod) % mod) * (inv[n - r] % mod)) % mod;
+    }
 
-void fact(){
-    for(int i = 1; i <= 1e5; i++) factorial[i] = mod_combine(factorial[i - 1], i, Mod);
-}
+    ll nPr(){
+        if(r > n) return 0;
+        return (fact[n] % mod * inv[r] % mod) % mod;
+    }
 
-ll nCr(ll n, ll r){
-    if(n < r) return 0;
-    if(r == 0) return 1;
-    return ((factorial[n] * mod_inverse(factorial[r], Mod)) % Mod * mod_inverse(factorial[n - r], Mod) % Mod) % Mod;
-}
+};
+
 
 void solve(){
     

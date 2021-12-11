@@ -56,6 +56,7 @@ struct Segment_Tree {
         return a + b;
     }
 
+    // The vector must be 1-based and same thing for the tree
     void build(vector < int >& nums, int idx, int lx, int rx){
         if(lx >= sz(nums)) return;
         if(rx == lx) tree[idx] = nums[lx];

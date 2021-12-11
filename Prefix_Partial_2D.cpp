@@ -37,40 +37,67 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-vector < vector < ll > > prefix;
-vector < vector < ll > > partial;
-  
+struct Partial_2D {
 
-ll sum_range(int i, int j, int k, int l, vector < vector < ll > >& prefix){
-    return prefix[k][l] - prefix[i - 1][l] - prefix[k][j - 1] + prefix[i - 1][j - 1];
-}
+    vector < vector < ll > > partial;
+    int n, m;
 
-void build_prefix(int n, int m){
-    prefix.assign(n + 5, vector < ll > (m + 5));
-    for(int i = 1; i < n; i++)
-      for(int j = 1; j < m; j++)
-        prefix[i][j] += prefix[i][j - 1];
-    for(int j = 1; j < m; j++)
-      for(int i = 1; i < n; i++)
-        prefix[i][j] += prefix[i - 1][j];
-}
-
-void build_partial(int n, int m, int q){
-    partial.assign(n + 5, vector < ll > (m + 5));
-    while(q--){
-      Pair p1, p2;
-      cin >> p1.fi >> p1.se >> p2.fi >> p2.se;
-      if(p1.fi > p2.fi) swap(p1.fi, p2.fi);
-      if(p1.se > p2.se) swap(p1.se, p2.se);
-      partial[p2.fi][p2.se]++, partial[p2.fi][p1.se - 1]--, partial[p1.fi - 1][p2.se]--, partial[p1.fi - 1][p1.se - 1]++;
+    Partial_2D(int n, int m){
+        this -> n = n, this -> m = m;
+        partial.assign(n + 5, vector < ll > (m + 5));
     }
-    for(int i = n; i >= 0; i--)
-      for(int j = m; j >= 0; j--)
-        partial[i][j] += partial[i][j + 1];
-    for(int i = n; i >= 0; i--)
-      for(int j = m; j >= 0; j--)
-        partial[i][j] += partial[i + 1][j];
-}
+
+    void build_partial(int queries){
+        while(queries--){
+            Pair p1, p2;
+            cin >> p1.fi >> p1.se >> p2.fi >> p2.se;
+            if(p1.fi > p2.fi) swap(p1.fi, p2.fi);
+            if(p1.se > p2.se) swap(p1.se, p2.se);
+            partial[p2.fi][p2.se]++, partial[p2.fi][p1.se - 1]--, partial[p1.fi - 1][p2.se]--, partial[p1.fi - 1][p1.se - 1]++;
+        }
+        for(int i = n; i >= 0; i--)
+        for(int j = m; j >= 0; j--)
+            partial[i][j] += partial[i][j + 1];
+        for(int i = n; i >= 0; i--)
+        for(int j = m; j >= 0; j--)
+            partial[i][j] += partial[i + 1][j];
+    }
+
+    ll get(int x, int y){
+        return partial[x][y];
+    }
+
+    void print(){
+        for(int i = 1; i <= n; i++, cout << "\n")
+            for(int j = 1; j <= n && cout << partial[i][j] << " "; j++);
+    }
+
+};
+
+struct Prefix_2D {
+
+    int n, m;
+    vector < vector < ll > > prefix;
+    
+    Prefix_2D(int n, int m){
+        this -> n = n, this -> m = m;
+        prefix.assign(n + 5, vector < ll > (m + 5));
+    }
+
+    ll get_query(int i, int j, int k, int l){
+        return prefix[k][l] - prefix[i - 1][l] - prefix[k][j - 1] + prefix[i - 1][j - 1];
+    }
+
+    void build_prefix(){
+        for(int i = 1; i < n; i++)
+            for(int j = 1; j < m; j++)
+                prefix[i][j] += prefix[i][j - 1];
+        for(int j = 1; j < m; j++)
+            for(int i = 1; i < n; i++)
+                prefix[i][j] += prefix[i - 1][j];
+    }
+};
+
 
 void solve(){
     

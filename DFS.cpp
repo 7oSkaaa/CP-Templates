@@ -63,9 +63,10 @@ struct Graph {
     bool is_cycle(int node, int par){
         vis[node] = true;
         for(auto& new_node : adj[node]){
-            if(!vis[new_node])
+            if(!vis[new_node]){
                 if(is_cycle(new_node, node))
                     return true;
+            }
             else if(new_node != par)
                 return true;
         }

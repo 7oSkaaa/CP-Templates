@@ -36,34 +36,44 @@ void AhMeD_HoSSaM(){
   #endif
 }
 
-struct Edge {
-    int to, from, w;
-    Edge(int from, int to, int w): from(from), to(to), w(w) {}
-    bool operator < (const Edge& e) const {
-        return w > e.w;
-    }
-};
+struct Dijkstra {
+    
+    struct Edge {
+        int to, from, w;
+        Edge(int from, int to, int w): from(from), to(to), w(w) {}
+        bool operator < (const Edge& e) const {
+            return w > e.w;
+        }
+    };
 
-int Dijkstra(vector < vector < Edge > >& adj, int search, int dest = -1){
-    int n = sz(adj);
-    vector < int > dist(n, OO), prev(n, -1);
-    dist[search] = 0;
-    priority_queue < Edge > Dij;
-    Dij.push(Edge(-1, 0, 0));
-    while(!Dij.empty()){
-        Edge e = Dij.top();
-        Dij.pop();
-        if(e.w > dist[e.to]) continue;
-        prev[e.to] = e.from;
-        for(auto& edge: adj[e.to]){
-            if(dist[edge.to] > dist[edge.from] + edge.w){
-                edge.w = dist[edge.to] = dist[edge.from] + edge.w;
-                Dij.push(edge);
+    vector < vector < Edge > > adj;
+
+    Dijkstra(int edges){
+        adj.resize(edges);
+    }
+
+    int Min_Cost(int search, int dest = -1){
+        int n = sz(adj);
+        vector < int > dist(n, OO), prev(n, -1);
+        dist[search] = 0;
+        priority_queue < Edge > Dij;
+        Dij.push(Edge(-1, 0, 0));
+        while(!Dij.empty()){
+            Edge e = Dij.top();
+            Dij.pop();
+            if(e.w > dist[e.to]) continue;
+            prev[e.to] = e.from;
+            for(auto& edge: adj[e.to]){
+                if(dist[edge.to] > dist[edge.from] + edge.w){
+                    edge.w = dist[edge.to] = dist[edge.from] + edge.w;
+                    Dij.push(edge);
+                }
             }
         }
+        return (dest == -1 ? -1 : dist[dest]);
     }
-    return (dest == -1 ? -1 : dist[dest]);
-}
+
+};
 
 void solve(){
     

@@ -37,16 +37,17 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Node {
-    Node* child[26];
-    bool is_word;
-    Node(){
-      fill(child, 0);
-      is_word = false;
-    }
-};
- 
 struct Trie {
+    
+    struct Node {
+        Node* child[26];
+        bool is_word;
+        Node(){
+        fill(child, 0);
+        is_word = false;
+        }
+    };
+
     Node* root;
     
     Trie(){

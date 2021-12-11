@@ -37,15 +37,32 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-vector < bool > is_prime;
+struct Seive {
 
-void Seive(int n){
-    is_prime.assign(n + 1, true);
-    is_prime[0] = is_prime[1] = false;
-    for(int i = 2; i <= sqrt(n); i++)
-      if(is_prime[i])
-        for(int j = i * i; j <= n; j += i) is_prime[j] = false;
-}
+    vector < bool > is_prime;
+    vector < ll > primes;
+
+    Seive(int n){
+        is_prime.assign(n + 1, true);
+        is_prime[0] = is_prime[1] = false;
+        for(ll i = 2; i <= sqrt(n); i++)
+            if(is_prime[i])
+                for(ll j = i * i; j <= n; j += i) is_prime[j] = false;
+    }
+
+    void get_primes(int n){
+        for(int i = 1; i <= n; i++)
+            if(is_prime[i])
+                primes.push_back(i);
+    }
+
+    void print_primes(){
+        for(auto& p : primes)
+            cout << p << " ";
+        cout << "\n";
+    }
+
+};
 
 void solve(){
     

@@ -37,25 +37,41 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-vector < int > factors;
-vector < int > prime_factors;
+struct Factorization {
+    
+    int n;
+    vector < int > factors;
+    vector < int > prime_factors;
 
-void factorization(int n){ 
-    factors.assign(n + 5, 2);
-    for (int i = 2; i <= n; i++) {  
-        for (int j = i * 2; j <= n; j += i) factors[j]++;
+    Factorization(int n){
+        this -> n = n;
+        factors.assign(n + 10, 2);
+        prime_factors.resize(n + 10);
     }
-}
 
-void prime_factorization(int n){
-    prime_factors.resize(n + 5);
-    for (int i = 2; i <= 1e6; i++){ 
-        if (!prime_factors[i]) { 
-            for (int j = 2 * i; j <= 1e6; j += i) prime_factors[j]++;
-            prime_factors[i] = 1; 
+    void factorization(int n){ 
+        for (ll i = 2; i <= n; i++) {  
+            for (ll j = i * 2; j <= n; j += i) factors[j]++;
         }
     }
-}
+
+    ll get_factors(ll n){
+        return factors[n];
+    }
+
+    void prime_factorization(int n){
+        for (ll i = 2; i <= 1e6; i++){ 
+            if (!prime_factors[i]) { 
+                for (ll j = 2 * i; j <= 1e6; j += i) prime_factors[j]++;
+                prime_factors[i] = 1; 
+            }
+        }
+    }
+
+    ll get_prime_factors(ll n){
+        return prime_factors[n];
+    }
+};
 
 void solve(){
     

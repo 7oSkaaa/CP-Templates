@@ -39,13 +39,14 @@ void AhMeD_HoSSaM(){
 
 struct Graph {
 
-    int n, m;
+    int n, m, connected_components;
     vector < vector < int > > adj;
     vector < bool > vis;
     vector < int > depth, parent, deg;
     
     Graph(int n, int m){
         this -> n = n, this -> m = m;
+        connected_components = 0;
         adj.resize(n + 10); 
         vis.resize(n + 10); 
         depth.resize(n + 10); 
@@ -62,7 +63,12 @@ struct Graph {
         adj[u].erase(find(all(adj[u]), v)), adj[v].erase(find(all(adj[v]), u));
     }
 
-    void dfs(int node, int dep = 0, int par = 0){
+    void build_adj(){
+        for(int i = 0, u, v; i < m && cin >> u >> v; i++)
+            add_edge(u, v);
+    }
+
+    void dfs(int node, int dep = 0, int par = -1){
         vis[node] = true, parent[node] = par, depth[node] = dep;
         for(auto& new_node : adj[node])
             if(!vis[new_node])
@@ -72,9 +78,10 @@ struct Graph {
     bool is_cycle(int node, int par){
         vis[node] = true;
         for(auto& new_node : adj[node]){
-            if(!vis[new_node])
+            if(!vis[new_node]){
                 if(is_cycle(new_node, node))
                     return true;
+            }
             else if(new_node != par)
                 return true;
         }
