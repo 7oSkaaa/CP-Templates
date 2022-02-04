@@ -1,9 +1,14 @@
 #include <bits/stdc++.h>
 #include <ext/pb_ds/assoc_container.hpp>
 #include <ext/pb_ds/tree_policy.hpp>
+
 using namespace std;
 using namespace __gnu_pbds;
-#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update>
+
+template <typename K, typename V, typename Comp = std::less<K>>
+using ordered_map = tree<K, V, Comp, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename K, typename Comp = std::less<K>>
+using ordered_set = ordered_map<K, null_type, Comp>;
 
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
@@ -14,11 +19,12 @@ using namespace __gnu_pbds;
 #define fixed(n) fixed << setprecision(n)
 #define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
 #define fill(vec, value) memset(vec, value, sizeof(vec));
-#define Num_of_Digits(n) ((int)log10(n)+1)
+#define Num_of_Digits(n) ((int)log10(n) + 1)
 #define mod_combine(a, b, m) (((a % m) * (b % m)) % m)
-#define all(vec) vec.begin(),vec.end()
-#define rall(vec) vec.rbegin(),vec.rend()
+#define all(vec) vec.begin(), vec.end()
+#define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
+#define debug(x) cout << #x << ": " << (x) << "\n";
 #define fi first
 #define se second
 #define Pair pair < int, int >
@@ -30,32 +36,10 @@ using namespace __gnu_pbds;
 #define PI acos(-1)
 
 void AhMeD_HoSSaM(){
-  ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-  #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
-  #endif
-}
-
-int n, m;
-vector < vector < int > > adj;
-
-int BFS (int start, int finish){
-    vector < int > path(1e5 + 1);
-    vector < bool > vis(1e5 + 1);
-    queue < int > bfs;
-    bfs.push(start);
-    if(start == finish) return 0;
-    vis[start] = true;
-    path[start] = 0;
-    while(!bfs.empty()){
-      int num = bfs.front(); 
-      bfs.pop();
-      for(auto& it : adj[num]){
-          if(!vis[it]) vis[it] = true, bfs.push(it), path[it] = path[num] + 1;
-          if(it == finish) return path[it];
-      }
-    }
-    return -1;
+    ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
+    #endif
 }
 
 void solve(){
@@ -65,7 +49,7 @@ void solve(){
 int main(){
     AhMeD_HoSSaM();
     int t = 1;
-    //cin >> t;
+    cin >> t;
     while(t--)
         solve();
     Time
