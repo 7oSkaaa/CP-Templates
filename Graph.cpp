@@ -39,8 +39,23 @@ void AhMeD_HoSSaM(){
 
 struct Graph {
 
+    struct Edge {
+        
+        int v;
+        ll c;    
+
+        Edge(int v = 0, ll c = 0){
+            this -> v = v, this -> c = c;
+        }
+    
+        bool operator < (const Edge& e) const {
+            return c > e.c;
+        }
+    };
+
     int n, m, connected_components;
     vector < vector < int > > adj;
+    // vector < vector < Edge > > adj;   //If we need to use dijkstra
     vector < bool > vis;
     vector < int > depth, parent, deg;
     
@@ -57,6 +72,10 @@ struct Graph {
     void add_edge(int u, int v){
         adj[u].push_back(v), adj[v].push_back(u);
         deg[u]++, deg[v]++;
+    }
+
+    void add_edge(int u, int v, int w){
+        adj[u].push_back({v, w}), adj[v].push_back({u, w});
     }
 
     void remove_edge(int u, int v){
@@ -125,12 +144,34 @@ struct Graph {
                 int curr_node = BFS.front();
                 BFS.pop();
                 for(auto& new_node : adj[curr_node]){
-                    if(!vis[new_node])
-                        BFS.push(new_node), parent[new_node] = curr_node, depth[new_node] = min(depth[new_node], depth[curr_node] + 1);
+                    if(!vis[new_node]){
+                        BFS.push(new_node), parent[new_node] = curr_node; 
+                        depth[new_node] = min(depth[new_node], depth[curr_node] + 1);
+                        vis[new_node] = true;
+                    }
                 }
             }
         }
         return depth[to];
+    }
+
+    void dijkstra(int from){
+        priority_queue < Edge > Dij;
+        depth[from] = 0;
+        Dij.push({from, 0});
+        while(!Dij.empty()){
+            auto curr_node = Dij.top();
+            Dij.pop();
+            if(curr_node.c > depth[curr_node.v]) continue;
+            for(auto& new_node : adj[curr_node.v]){
+                if(depth[new_node.v] > curr_node.c + new_node.c){
+                    Edge add = new_node;
+                    add.c += curr_node.c;
+                    Dij.push(add); 
+                    depth[new_node.v] = curr_node.c + new_node.c;
+                }
+            }
+        }
     }
 
 };
