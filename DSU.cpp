@@ -52,7 +52,7 @@ struct DSU {
         return parent[node] = (parent[node] == node ? node : find_leader(parent[node]));
     }
 
-    bool same_set(int u, int v){
+    bool same_sets(int u, int v){
         return find_leader(u) == find_leader(v);
     }
 
