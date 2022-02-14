@@ -952,6 +952,9 @@ using ordered_map = tree<K, V, Comp, rb_tree_tag, tree_order_statistics_node_upd
 template <typename K, typename Comp = std::less<K>>
 using ordered_set = ordered_map<K, null_type, Comp>;
 
+// order_of_key(val)  count elements smaller than val
+// *s.find_by_order(idx)  element with index idx
+
 
 // -------------------------- Optimizations -----------------------------
 
