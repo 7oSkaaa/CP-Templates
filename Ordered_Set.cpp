@@ -42,6 +42,9 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
+//order_of_key(val)  count elements smaller than val
+// *s.find_by_order(idx)  element with index idx
+
 void solve(){
     
 }
