@@ -59,8 +59,8 @@ struct Graph {
     vector < bool > vis;
     vector < int > depth, parent, deg;
     
-    Graph(int n, int m){
-        this -> n = n, this -> m = m;
+    Graph(int N, int M){
+        n = N, m = M;
         connected_components = 0;
         adj.resize(n + 10); 
         vis.resize(n + 10); 
