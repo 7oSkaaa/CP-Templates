@@ -39,7 +39,7 @@ void AhMeD_HoSSaM(){
 
 struct DSU {
     
-    vector < int > parent, rank;
+    vector < int > parent, Gsize;
 
     DSU(int MaxNodes){
         parent.resize(MaxNodes + 5);
@@ -52,14 +52,14 @@ struct DSU {
         return parent[node] = (parent[node] == node ? node : find_leader(parent[node]));
     }
 
-    bool same_sets(int u, int v){
+    bool is_same_sets(int u, int v){
         return find_leader(u) == find_leader(v);
     }
 
     void union_sets(int u, int v){
         int leader_u = find_leader(u), leader_v = find_leader(v);
         if(leader_u ==leader_v) return;
-        if(Gsize[leader_u] <= Gsize[leader_v]) swap(leader_u, leader_v);
+        if(rank[leader_u] < Gsize[leader_v]) swap(leader_u, leader_v);
         Gsize[leader_u] += Gsize[leader_v], parent[leader_v] = leader_u;
     }
 
