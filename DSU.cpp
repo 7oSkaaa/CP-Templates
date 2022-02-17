@@ -75,6 +75,5 @@ int main(){
     cin >> t;
     while(t--)
         solve();
-    Time
     return 0;
 } 
