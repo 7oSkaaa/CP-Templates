@@ -52,7 +52,7 @@ void solve(){
 int main(){
     AhMeD_HoSSaM();
     int t = 1;
-    cin >> t;
+    //cin >> t;
     while(t--)
         solve();
     Time
