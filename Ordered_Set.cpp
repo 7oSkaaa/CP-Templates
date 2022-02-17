@@ -45,7 +45,7 @@ void AhMeD_HoSSaM(){
 //order_of_key(val)  count elements smaller than val
 // *s.find_by_order(idx)  element with index idx
 
-void solve(){
+void Solve(){
     
 }
 
@@ -54,7 +54,7 @@ int main(){
     int t = 1;
     //cin >> t;
     while(t--)
-        solve();
+        Solve();
     Time
     return 0;
 } 
