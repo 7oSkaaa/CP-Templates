@@ -45,7 +45,7 @@ struct DSU {
         parent.resize(MaxNodes + 5);
         rank.resize(MaxNodes + 5);
         for(int i = 1; i <= MaxNodes; i++)
-          parent[i] = i, rank[i] = 1;
+          parent[i] = i, Gsize[i] = 1;
     }
     
     int find_leader(int node){
