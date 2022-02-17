@@ -59,7 +59,7 @@ struct DSU {
     void union_sets(int u, int v){
         int leader_u = find_leader(u), leader_v = find_leader(v);
         if(leader_u ==leader_v) return;
-        if(rank[leader_u] < Gsize[leader_v]) swap(leader_u, leader_v);
+        if(Gsize[leader_u] < Gsize[leader_v]) swap(leader_u, leader_v);
         Gsize[leader_u] += Gsize[leader_v], parent[leader_v] = leader_u;
     }
 
