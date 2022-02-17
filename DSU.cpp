@@ -1,10 +1,7 @@
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
-using namespace std;
-using namespace __gnu_pbds;
 
-#define ordered_set tree<ll, null_type,less<ll>, rb_tree_tag,tree_order_statistics_node_update> 
+using namespace std;
+
 #define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
 #define cout(vec) for(auto& i : vec) cout << i << " "; cout << "\n";
