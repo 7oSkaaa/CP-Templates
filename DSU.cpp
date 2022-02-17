@@ -65,7 +65,7 @@ struct DSU {
     }
 };
 
-void solve(){
+void Solve(){
     
 }
 
@@ -74,6 +74,6 @@ int main(){
     int t = 1;
     //cin >> t;
     while(t--)
-        solve();
+        Solve();
     return 0;
 } 
