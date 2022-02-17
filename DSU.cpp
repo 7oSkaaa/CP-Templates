@@ -39,7 +39,7 @@ void AhMeD_HoSSaM(){
 
 struct DSU {
     
-    vector < int > parent, Gsize;
+    vector < int > parent, rank;
 
     DSU(int MaxNodes){
         parent.resize(MaxNodes + 5);
