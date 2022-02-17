@@ -43,7 +43,7 @@ struct DSU {
 
     DSU(int MaxNodes){
         parent.resize(MaxNodes + 5);
-        Gsize.resize(MaxNodes + 5);
+        rank.resize(MaxNodes + 5);
         for(int i = 1; i <= MaxNodes; i++)
           parent[i] = i, Gsize[i] = 1;
     }
