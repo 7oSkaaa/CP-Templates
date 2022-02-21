@@ -81,6 +81,8 @@ struct Fenwick_Tree {
     }
 
     ll query(int x1, int y1, int x2, int y2) {
+        if(x1 > x2) swap(x1, x2);
+        fi(y1 > y2) swap(y1, y2);
         return get_sum(x2, y2) - get_sum(x1 - 1, y2) - get_sum(x2, y1 - 1) + get_sum(x1 - 1, y1 - 1);
     }
 
