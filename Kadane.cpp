@@ -38,6 +38,8 @@ struct Kadane {
     
     // Minimum Contigours Subarray Sum
 
+    Kadane(){};
+
     ll Min_Subarray_Sum(vector < ll >& nums){
         ll Min_so_far = OO, Min_Curr = OO;
         for(auto& i : nums){
