@@ -133,6 +133,8 @@ struct Math {
         return divisors + (sqrt(n) == (int)sqrt(n));
     }
 
+    // get vector with the divisors for n
+
     vector < ll > Get_Divisors(ll n){
         vector < ll > divisors;
         for(int i = 1; i < sqrt(n); i++)
@@ -140,6 +142,8 @@ struct Math {
         if(sqrt(n) == int(sqrt(n))) divisors.push_back(sqrt(n));
         return divisors;
     }
+
+    // print all permutation of an array
 
     void Print_Permutation(vector < int >& nums){
         sort(all(nums));
@@ -150,13 +154,28 @@ struct Math {
         } while(next_permutation(nums.begin(), nums.end()));
     }
 
-    ll Summation(ll x){
-        return x * (x + 1) / 2;
+    // print all permutation of a string
+
+    void Print_Permutation(string s){
+        sort(all(s));
+        do {
+            cout << s << "\n";
+        } while(next_permutation(s.begin(), s.end()));
     }
+
+    // get the summation between two numbers or the summation between 1 and n
+
+    ll Summation(ll r, ll l = 1){
+        return (r * (r + 1) / 2) - (l * (l - 1) / 2);
+    }
+
+    // Get how many number divisable by c between a and b
 
     ll how_many_divisors(ll a, ll b, ll c){
         return (b / c - a / c) + !(a % c);
     }
+
+    // Get summation of numbers divisable by c between a and b
 
     ll Summation_of_Devisors(ll a, ll b, ll c){
         ll right = Summation(b / c);
