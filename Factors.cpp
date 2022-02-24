@@ -40,11 +40,13 @@ struct Factorization {
     vector < int > factors;
     vector < int > prime_factors;
 
-    Factorization(int n){
-        this -> n = n;
+    Factorization(int N){
+        n = N;
         factors.assign(n + 10, 2);
         prime_factors.resize(n + 10);
     }
+
+    // Get the number of factors for each number
 
     void factorization(int n){ 
         for (ll i = 2; i <= n; i++) {  
@@ -55,6 +57,8 @@ struct Factorization {
     ll get_factors(ll n){
         return factors[n];
     }
+
+    // Get the number of prime factors for each number
 
     void prime_factorization(int n){
         for (ll i = 2; i <= 1e6; i++){ 
@@ -79,6 +83,6 @@ int main(){
     int t = 1;
     //cin >> t;
     while(t--)
-        solve();
+        Solve();
     return 0;
 } 
