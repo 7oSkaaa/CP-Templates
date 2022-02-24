@@ -124,7 +124,9 @@ struct Math {
         return true;
     }
 
-    int number_of_devisors(ll n){
+    // get the number of divisors for n
+
+    int number_of_divisors(ll n){
         int divisors = 0;
         for(int i = 1; i < sqrt(n); i++)
             if(n % i == 0) divisors += 2;
