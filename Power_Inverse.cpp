@@ -48,8 +48,8 @@ struct Power_Inverse {
         return power % mod;
     }
 
-    Power_Inverse(ll n, ll r, ll mod){
-        this -> n = n, this -> r, this -> mod = mod;
+    Power_Inverse(ll N, ll R, ll MOD){
+        n = N, r = R, mod = MOD;
         fact.assign(n + 10, 1), inv.resize(n + 10);
         for(ll i = 1; i <= n; i++){
             fact[i] = mod_combine(fact[i - 1], i, mod);
@@ -57,10 +57,14 @@ struct Power_Inverse {
         }
     }
 
+    // Combination
+
     ll nCr(){
         if(r > n) return 0;
         return (((fact[n] % mod * inv[r] % mod) % mod) * (inv[n - r] % mod)) % mod;
     }
+
+    // Permutation
 
     ll nPr(){
         if(r > n) return 0;
