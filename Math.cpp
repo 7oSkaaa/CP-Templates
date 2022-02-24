@@ -34,15 +34,21 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-Struct Math {
+struct Math {
+
+    // Greatest common divisors between two numbers
 
     ll GCD(ll a, ll b){
         return (!b ? a : GCD(b, a % b));
     }
     
+    // least common multiplication between two numbers
+
     ll LCM(ll a, ll b){
         return a / GCD(a, b) * b;
     }
+
+    // Get vector with the prime factors of number
 
     vector < int > prime_factorization(ll n){
         vector < int > factors;
@@ -53,18 +59,22 @@ Struct Math {
         return factors;
     }
 
+    // Combination
+
     ll nCr(ll n, ll r){
-    ll p = 1, k = 1;
-    if (n - r < r) r = n - r;
-    // condition for minimum choose
-    if(n < 1) return 0;
-    while (r){
-        p *= n, k *= r;
-        ll m = __gcd(p, k);
-        p /= m, k /= m, n--, r--;        
+        ll p = 1, k = 1;
+        if (n - r < r) r = n - r;
+        // condition for minimum choose
+        if(n < 1) return 0;
+        while (r){
+            p *= n, k *= r;
+            ll m = __gcd(p, k);
+            p /= m, k /= m, n--, r--;        
+        }
+        return p;
     }
-    return p;
-    }
+
+    // Permutation
 
     ll nPr(ll n, ll r){
         vector < ll > factroial(n + 1, 1);
@@ -72,12 +82,16 @@ Struct Math {
         return factroial[n] / factroial[n - r];
     }
 
+    // get a mod for big int
+
     ll Big_Mod(string s, ll mod){
         ll res = 0;
         for(auto& c : s)
             res = (res * 10 + (c - '0')) % mod;
         return res;
     }
+
+    // b power e in O(log(n))
 
     ll fast_pow(ll b, ll e){
         ll power = 1;
@@ -88,6 +102,8 @@ Struct Math {
         }
         return power;
     }
+
+    // b power e % mod in O(log(n))
 
     ll fast_pow(ll b, ll e, ll mod){
         ll power = 1;
