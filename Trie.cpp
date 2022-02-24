@@ -40,33 +40,33 @@ struct Trie {
         Node* child[26];
         bool is_word;
         Node(){
-        fill(child, 0);
-        is_word = false;
+            fill(child, 0);
+            is_word = false;
         }
     };
 
     Node* root;
     
     Trie(){
-      root = new Node;
+      	root = new Node;
     }
     
     void insert(string word){
-      Node* curr = root; 
-      for(auto& c : word){
-        if(!curr -> child[c - '0']) curr -> child[c - '0'] = new Node;
-        curr = curr -> child[c - '0'];
-      }
-      curr -> is_word = true;
+		Node* curr = root; 
+		for(auto& c : word){
+			if(!curr -> child[c - '0']) curr -> child[c - '0'] = new Node;
+			curr = curr -> child[c - '0'];
+		}
+		curr -> is_word = true;
     }
   
     bool search(string word){
-      Node* curr = root; 
-      for(auto& c : word){
-        if(!curr -> child[c - '0']) return false;
-        curr = curr -> child[c - '0'];
-      }
-      return curr -> is_word;
+		Node* curr = root; 
+		for(auto& c : word){
+			if(!curr -> child[c - '0']) return false;
+			curr = curr -> child[c - '0'];
+		}
+		return curr -> is_word;
     }
  
 };
