@@ -83,6 +83,8 @@ struct BST {
 
     }
 
+    // Traverse each level
+
     void Level_Order(BST* root){
         if(!root) return;
         queue < BST* > bfs;
@@ -97,6 +99,8 @@ struct BST {
                 bfs.push(curr -> right);
         }
     }
+
+    // Search on a node
 
     bool Search(BST* root, int val){
         if(!root) return false;
