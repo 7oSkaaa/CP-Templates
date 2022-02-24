@@ -65,6 +65,7 @@ struct Lazy_Propagation {
     }
 
     // the vector should be 1-based also the tree is 1-based
+    
     void build(vector < int >& nums){
         build(nums, 1, 1, size);
     }
