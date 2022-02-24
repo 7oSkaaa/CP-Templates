@@ -36,6 +36,8 @@ struct Big_Int {
 
     Big_Int(){}
 
+    // Add two Bigints
+
     string Add (string s1,string s2) {
         string res;
         reverse(all(s1)), reverse(all(s2));
@@ -52,6 +54,8 @@ struct Big_Int {
         }
         return res;
     }
+
+    // Multiply two Bigints
 
     string Multiply(string A, string B) {    
         vector < int > arr(sz(A) + sz(B), 0);    
@@ -73,6 +77,8 @@ struct Big_Int {
             s += to_string(arr[j]);            
         return s;    
     }
+
+    // Compare two Bigints
 
     bool isSmaller(string str1, string str2){
         int n1 = sz(str1), n2 = sz(str2);
@@ -106,6 +112,8 @@ struct Big_Int {
         return str;
     }
 
+    // Divide two Bigints
+
     string longDivision(string number, int divisor){
         string ans;
         int idx = 0;
@@ -119,6 +127,8 @@ struct Big_Int {
         if (ans.length() == 0) return "0";
         return ans;
     }
+
+    // Check if it Bigint divided by int
 
     ll Big_Mod(string s, ll mod){
         ll res = 0;
