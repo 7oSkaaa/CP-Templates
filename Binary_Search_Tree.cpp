@@ -44,6 +44,8 @@ struct BST {
         left = right = nullptr;
     }
 
+    // Insert New node
+
     BST* Insert(BST* root, int val){
         if(!root) return new BST(val);
         if(val > root -> data)
@@ -53,6 +55,8 @@ struct BST {
         return root;
     }
 
+    // Inorder Traverse (LRR)
+
     void Inorder(BST* root){
         if(!root) return;
         Inorder(root -> left);
@@ -60,12 +64,16 @@ struct BST {
         Inorder(root -> right);
     }
 
+    // Preorde Traverse (RLR)
+
     void Preorder(BST* root){
         if(!root) return;
         cout << root -> data << " ";
         Preorder(root -> left);
         Preorder(root -> right);
     }
+
+    // Postorder Traverse (LRR)
 
     void Postorder(BST* root){
         if(!root) return;
