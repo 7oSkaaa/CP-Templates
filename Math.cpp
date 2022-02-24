@@ -115,6 +115,8 @@ struct Math {
         return power % mod;
     }
 
+    // Check if number is prime or not
+
     bool is_prime(ll n){
         if(n < 2 || (n % 2 == 0 && n != 2)) return false;
         for(int i = 3; i <= sqrt(n); i += 2)
