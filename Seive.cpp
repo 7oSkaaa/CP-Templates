@@ -47,11 +47,15 @@ struct Seive {
                 for(ll j = i * i; j <= n; j += i) is_prime[j] = false;
     }
 
+    // Build vector with prime numbers
+
     void get_primes(int n){
         for(int i = 1; i <= n; i++)
             if(is_prime[i])
                 primes.push_back(i);
     }
+
+    // Print the prime numbers
 
     void print_primes(){
         for(auto& p : primes)
