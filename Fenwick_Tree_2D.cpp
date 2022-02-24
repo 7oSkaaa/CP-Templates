@@ -39,9 +39,9 @@ struct Fenwick_Tree {
     vector < vector < ll > > Tree;
     int n, m;
 
-    Fenwick_Tree(int n, int m){
-        this -> n = n + 1, this -> m = m + 1;
-        Tree.assign(n + 1, vector < ll > (m + 1, 0));
+    Fenwick_Tree(int N, int M){
+        n = N + 1, m = M + 1;
+        Tree.assign(n + 10, vector < ll > (m + 10, 0));
     }
 
     int lowest_bit(int idx){
@@ -80,9 +80,11 @@ struct Fenwick_Tree {
         return sum;
     }
 
+    // Get the sum of the number in the rectangle x1, y1, x2, y2
+
     ll query(int x1, int y1, int x2, int y2) {
         if(x1 > x2) swap(x1, x2);
-        fi(y1 > y2) swap(y1, y2);
+        if(y1 > y2) swap(y1, y2);
         return get_sum(x2, y2) - get_sum(x1 - 1, y2) - get_sum(x2, y1 - 1) + get_sum(x1 - 1, y1 - 1);
     }
 
