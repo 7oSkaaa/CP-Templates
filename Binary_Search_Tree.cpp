@@ -109,11 +109,15 @@ struct BST {
         else return Search(root -> left, val);
     }
 
+    // Get minimum node in BST
+
     BST* minValueNode(BST* node){
         BST* current = node;
         while (current && current -> left != NULL) current = current->left;
         return current;
     }
+
+    // Delete Node
 
     BST* Delete_Node(BST* root, int key){
         if(!root) return root;
