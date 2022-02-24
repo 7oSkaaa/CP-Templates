@@ -36,6 +36,8 @@ void AhMeD_HoSSaM(){
 
 struct Kadane {
     
+    // Minimum Contigours Subarray Sum
+
     ll Min_Subarray_Sum(vector < ll >& nums){
         ll Min_so_far = OO, Min_Curr = OO;
         for(auto& i : nums){
@@ -45,6 +47,8 @@ struct Kadane {
         }
         return Min_so_far;
     }
+
+    // Maximum Contigours Subarray Sum
 
     ll Max_Subarray_Sum(vector < ll >& nums){
         ll Max_so_far = -OO, Max_Curr = -OO;
