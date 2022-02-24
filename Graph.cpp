@@ -154,7 +154,9 @@ struct Graph {
         return depth[to];
     }
 
-    void dijkstra(int from){
+    // Remove the comment if you need to use Dijkstra
+
+    /*void dijkstra(int from){
         priority_queue < Edge > Dij;
         depth[from] = 0;
         Dij.push({from, 0});
@@ -171,7 +173,7 @@ struct Graph {
                 }
             }
         }
-    }
+    }*/
 
 };
 
