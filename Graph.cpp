@@ -41,8 +41,8 @@ struct Graph {
         int v;
         ll c;    
 
-        Edge(int v = 0, ll c = 0){
-            this -> v = v, this -> c = c;
+        Edge(int V = 0, ll C = 0){
+            v = V, c = C;
         }
     
         bool operator < (const Edge& e) const {
@@ -71,9 +71,11 @@ struct Graph {
         deg[u]++, deg[v]++;
     }
 
-    void add_edge(int u, int v, int w){
+    // If we need to use dijkstra
+
+    /*void add_edge(int u, int v, int w){ 
         adj[u].push_back({v, w}), adj[v].push_back({u, w});
-    }
+    }*/
 
     void remove_edge(int u, int v){
         adj[u].erase(find(all(adj[u]), v)), adj[v].erase(find(all(adj[v]), u));
