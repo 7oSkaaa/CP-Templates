@@ -39,9 +39,9 @@ struct Fenwick_Tree {
     vector < ll > Tree;
     int n;
 
-    Fenwick_Tree(int n){
-        this -> n = n + 1;
-        Tree.assign(n + 1, 0);
+    Fenwick_Tree(int N){
+        n = N + 1;
+        Tree.assign(n + 10, 0);
     }
 
     int lowest_bit(int idx){
