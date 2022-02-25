@@ -586,7 +586,7 @@ struct Graph {
             }
         }
         reverse(all(graph));
-        cout(graph);
+        cout << graph << "\n";
     }
 
     int bfs(int from, int to){
