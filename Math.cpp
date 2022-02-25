@@ -44,6 +44,8 @@ void AhMeD_HoSSaM(){
 
 struct Math {
 
+    Math(){}
+
     // Greatest common divisors between two numbers
 
     ll GCD(ll a, ll b){
