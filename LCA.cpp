@@ -2,9 +2,7 @@
 
 using namespace std;
 
-#define cin(vec) for(auto& i : vec) cin >> i
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
-#define cout(vec) for(auto& i : vec) cout << i << " "; cout << "\n";
 #define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define cout_map(mp) for(auto& [f, s] : mp) cout << f << "  " << s << "\n";
 #define Time cerr << "Time Taken: " << (float)clock() / CLOCKS_PER_SEC << " Secs" << "\n";
@@ -40,7 +38,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 void AhMeD_HoSSaM(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     #ifndef ONLINE_JUDGE
-        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
+        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout); 
     #endif
 }
 
@@ -119,6 +117,5 @@ int main(){
     //cin >> t;
     while(t--)
         Solve();
-    Time
     return 0;
-} 
+}
