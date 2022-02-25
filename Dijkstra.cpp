@@ -26,11 +26,21 @@ using namespace std;
 #define EPS 1e-9
 #define PI acos(-1)
 
+template < typename T = int > istream& operator >> (istream &in, vector < T > &v) {
+    for (auto &x: v) in >> x;
+    return in;
+}
+
+template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
+    for (const T &x: v) out << x << ' '; 
+    return out;
+}
+
 void AhMeD_HoSSaM(){
-  ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-  #ifndef ONLINE_JUDGE
-    freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
-  #endif
+    ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
+    #ifndef ONLINE_JUDGE
+        freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
+    #endif
 }
 
 struct Dijkstra {
