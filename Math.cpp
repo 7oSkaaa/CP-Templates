@@ -193,6 +193,18 @@ struct Math {
         return (right * c) - (left * c);
     }
 
+    // Distination Between two points
+
+    double dist(double x1, double y1, double x2, double y2){
+        return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+    }
+
+    // Check if it valid triangle with 3 length sides
+
+    bool is_triangle(ll a, ll b, ll c){
+        return (a + b > c) && (a + c > b) && (b + c > a) && (a && b && c);
+    }
+
 };
 
 void Solve(){
