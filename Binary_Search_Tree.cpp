@@ -111,7 +111,15 @@ struct BST {
 
     BST* minValueNode(BST* node){
         BST* current = node;
-        while (current && current -> left != NULL) current = current->left;
+        while (current && current -> left != nullptr) current = current -> left;
+        return current;
+    }
+
+    // Get maximum node in BST
+
+    BST* maxValueNode(BST* node){
+        BST* current = node;
+        while (current && current -> right != nullptr) current = current -> right;
         return current;
     }
 
@@ -125,11 +133,11 @@ struct BST {
             root -> right = Delete_Node(root -> right, key);
         else {
             if(!root -> left && !root -> right) return nullptr;
-            else if(root -> left){
+            else if(!root -> left){
                 BST* temp = root -> right;
                 free(root);
                 return temp;
-            }else if(root -> right){
+            }else if(!root -> right){
                 BST* temp = root -> left;
                 free(root);
                 return temp;
