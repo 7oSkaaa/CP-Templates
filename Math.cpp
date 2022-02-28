@@ -176,6 +176,7 @@ struct Math {
     // get the summation between two numbers or the summation between 1 and n
 
     ll Summation(ll r, ll l = 1){
+        if(l > r) swap(l, r);
         return (r * (r + 1) / 2) - (l * (l - 1) / 2);
     }
 
