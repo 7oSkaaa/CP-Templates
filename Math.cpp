@@ -193,6 +193,18 @@ struct Math {
         return (right * c) - (left * c);
     }
 
+    // get logb(a)
+
+    double get_log(ll a, int b){
+        return log(a) / log(b);
+    }
+
+    // Check if number power of another or not
+
+    bool is_power(ll number, int base = 2){
+        return (get_log(number, base) == int(get_log(number, base)));
+    }
+
     // Distination Between two points
 
     double dist(double x1, double y1, double x2, double y2){
