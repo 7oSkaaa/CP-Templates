@@ -201,7 +201,7 @@ struct Math {
     ll Summation_of_Devisors(ll a, ll b, ll c){
         ll right = Summation(b / c);
         ll left = Summation((a - 1) / c);
-        return (right * c) - (left * c);
+        return (right - left) * c;
     }
 
     // get logb(a)
