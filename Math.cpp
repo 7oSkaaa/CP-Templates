@@ -231,13 +231,14 @@ struct Math {
     // Get Slope of two points
 
     double slope(double x1, double y1, double x2, double y2){
+        if(x2 == x1) return 0;
         return (y2 - y1) / (x2 - x1);
     }
 
     // Check if three points in the same line
 
-    bool is_same_line(double x1, double y1, double x2, double y2, double x3, double y3){
-        return abs(slope(x1, y1, x2, y2) - slope(x1, y1, x3, y3)) <= EPS;
+    bool is_same_line(ll x1, ll y1, ll x2, ll y2, ll x3, ll y3){
+        return (y2 - y1) * (x3 - x1) == (y3 - y1) * (x2 - x1);
     }
 
 };
