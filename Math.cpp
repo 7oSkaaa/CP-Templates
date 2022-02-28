@@ -175,7 +175,7 @@ struct Math {
 
     // get the summation between two numbers or the summation between 1 and n
 
-    ll Summation(ll r, ll l = 1){
+    ll Summation(ll r, ll l = 0){
         if(l > r) swap(l, r);
         return (r * (r + 1) / 2) - (l * (l - 1) / 2);
     }
@@ -190,7 +190,7 @@ struct Math {
 
     ll Summation_of_Devisors(ll a, ll b, ll c){
         ll right = Summation(b / c);
-        ll left = Summation(a % c == 0 ? (a - 1) / c : a / c);
+        ll left = Summation((a - 1) / c);
         return (right * c) - (left * c);
     }
 
