@@ -202,7 +202,7 @@ struct Math {
     // Check if number power of another or not
 
     bool is_power(ll number, int base = 2){
-        return (get_log(number, base) == (ll) get_log(number, base));
+        return (get_log(number, base) - (ll) get_log(number, base) <= EPS);
     }
 
     // Distination Between two points
