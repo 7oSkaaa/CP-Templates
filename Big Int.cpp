@@ -36,20 +36,17 @@ struct Big_Int {
 
     // Add two Bigints
 
-    string Add (string s1,string s2) {
+    string Add(string a, string b) {
+        int carry = 0, idx_a = sz(a) - 1, idx_b = sz(b) - 1;
         string res;
-        reverse(all(s1)), reverse(all(s2));
-        int temp = 0,carry = 0, i;
-        for (i = 0; i < sz(s1); i++) {
-            if ((i + 1) > sz(s2)) s2[i] = '0';
-            temp = s1[i] - '0' + s2[i] - '0' + carry;
-            res[i] = temp % 10 + '0';
-            carry = temp / 10;
+        while ((idx_a >= 0) || (idx_b >= 0) || (carry > 0)) {
+            int val = carry;
+            if (idx_a >= 0) val += a[idx_a--] - '0';
+            if (idx_b >= 0) val += b[idx_b--] - '0';
+            res += (('0' + val % 10));
+            carry = val / 10;
         }
-        while (carry != 0) {
-            res[i++] = carry % 10 + '0';
-            carry = carry / 10;
-        }
+        reverse(all(res));
         return res;
     }
 
