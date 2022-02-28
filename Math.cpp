@@ -183,7 +183,7 @@ struct Math {
     // Get how many number divisable by c between a and b
 
     ll how_many_divisors(ll a, ll b, ll c){
-        return (b / c - a / c) + !(a % c);
+        return (b / c) - ((a - 1) / c);
     }
 
     // Get summation of numbers divisable by c between a and b
