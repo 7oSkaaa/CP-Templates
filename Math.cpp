@@ -143,6 +143,16 @@ struct Math {
         return divisors + (sqrt(n) == (int)sqrt(n));
     }
 
+    // get Summation of divisors for n
+
+    ll sum_of_divisors(ll n){
+        ll sum_divisors = 0;
+        for(int i = 1; i < sqrt(n); i++)
+            if(n % i == 0) sum_divisors += ((n / i) + i);
+        ll sq = sqrt(n);
+        return sum_divisors + (sq * sq == n ? sq : 0);
+    }
+
     // get vector with the divisors for n
 
     vector < ll > Get_Divisors(ll n){
