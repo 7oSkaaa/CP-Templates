@@ -49,7 +49,7 @@ struct Kadane {
     Kadane(){};
 
     ll Min_Subarray_Sum(vector < ll >& nums){
-        ll Min_so_far = OO, Min_Curr = OO;
+        ll Min_so_far = OO, Min_Curr = 0;
         for(auto& i : nums){
             Min_Curr += i;
             Min_so_far = min(Min_so_far, Min_Curr);
@@ -61,7 +61,7 @@ struct Kadane {
     // Maximum Contigours Subarray Sum
 
     ll Max_Subarray_Sum(vector < ll >& nums){
-        ll Max_so_far = -OO, Max_Curr = -OO;
+        ll Max_so_far = -OO, Max_Curr = 0;
         for(auto& i : nums){
             Max_Curr += i;
             Max_so_far = max(Max_so_far, Max_Curr);
