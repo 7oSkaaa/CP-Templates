@@ -65,7 +65,7 @@ struct Kadane {
         for(auto& i : nums){
             Max_Curr += i;
             Max_so_far = max(Max_so_far, Max_Curr);
-            Max_Curr = min(Max_Curr, 0ll);
+            Max_Curr = max(Max_Curr, 0ll);
         }
         return Max_so_far;
     }
