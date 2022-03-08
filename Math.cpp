@@ -72,11 +72,12 @@ struct Math {
     // Combination
 
     ll nCr(ll n, ll r){
+        if(r > n) return 0;
         ll p = 1, k = 1;
         if (n - r < r) r = n - r;
         // condition for minimum choose
         if(n < 1) return 0;
-        while (r){
+        while (r > 0){
             p *= n, k *= r;
             ll m = __gcd(p, k);
             p /= m, k /= m, n--, r--;        
@@ -87,9 +88,11 @@ struct Math {
     // Permutation
 
     ll nPr(ll n, ll r){
-        vector < ll > factroial(n + 1, 1);
-        for(int i = 1; i <= n; i++) factroial[i] = factroial[i - 1] * i;
-        return factroial[n] / factroial[n - r];
+        if(r > n) return 0;
+        ll npr = 1;
+        while(r-- > 0)
+            npr *= n--;
+        return npr;
     }
 
     // get a mod for big int
