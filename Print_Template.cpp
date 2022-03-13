@@ -808,7 +808,6 @@ struct DSU {
     }
 };
 
-
 // -------------------------- Dijkstra -----------------------------
 
 struct Dijkstra {
@@ -846,6 +845,87 @@ struct Dijkstra {
             }
         }
         return (dest == -1 ? -1 : dist[dest]);
+    }
+
+};
+
+// -------------------------- Floyd -----------------------------
+
+struct Floyd {
+
+    struct Edge {
+        
+        ll u, v, w;
+        
+        Edge(int U = 0, int V = 0, int W = 0){
+            u = U, v = V, w = W;
+        }
+
+        bool operator < (const Edge& e) const {
+            return w < e.w;
+        }
+
+    };
+
+    int n, m;
+    vector < vector < ll > > dist;
+    vector < Edge > edges;
+
+    Floyd(int N, int M){
+        n = N, m = M;
+        dist.assign(n + 10, vector < ll > (n + 10, 1e18));
+        edges.resize(m);
+    }
+
+    ll operation(ll a, ll b, ll c){
+        return min(a, b + c);
+    }
+
+    void Get_Data(){
+        for(auto& e : edges){
+            cin >> e.u >> e.v >> e.w;
+            dist[e.u][e.u] = dist[e.v][e.v] = 0;
+            dist[e.u][e.v] = dist[e.v][e.u] = min({dist[e.u][e.v], dist[e.v][e.u], e.w});
+        }
+    }
+
+    void Build_Dist(){
+        for(int i = 1; i <= n; i++)
+            for(int u = 1; u <= n; u++)
+                for(int v = 1; v <= n; v++)
+                    dist[u][v] = operation(dist[u][v], dist[u][i], dist[i][v]);
+    }
+
+};
+
+// -------------------------- Floyd -----------------------------
+
+struct Kadane {
+    
+    // Minimum Contigours Subarray Sum
+
+    Kadane(){};
+
+    ll Min_Subarray_Sum(vector < ll >& nums){
+        ll Min_so_far = OO, Min_Curr = 0;
+        for(auto& i : nums){
+            Min_Curr += i;
+            Min_so_far = min(Min_so_far, Min_Curr);
+            Min_Curr = min(Min_Curr, 0ll);
+        }
+        return Min_so_far;
+    }
+
+    // Maximum Contigours Subarray Sum
+
+    ll Max_Subarray_Sum(vector < ll >& nums){
+        ll Max_so_far = -OO, Max_Curr = 0;
+        for(auto& i : nums){
+            Max_Curr += i;
+            Max_so_far = max(Max_so_far, Max_Curr);
+            Max_Curr = max(Max_Curr, 0ll);
+        }
+        return Max_so_far;
     }
 
 };
