@@ -246,22 +246,35 @@ struct Prefix_2D {
     int n, m;
     vector < vector < ll > > prefix;
     
-    Prefix_2D(int n, int m){
-        this -> n = n, this -> m = m;
+    Prefix_2D(int N, int M){
+        n = N, m = M;
         prefix.assign(n + 5, vector < ll > (m + 5));
     }
 
-    ll get_query(int i, int j, int k, int l){
-        return prefix[k][l] - prefix[i - 1][l] - prefix[k][j - 1] + prefix[i - 1][j - 1];
+    void Get_Data(){
+        for(int i = 1; i <= n; i++)
+            for(int j = 1; j <= m; j++)
+                cin >> prefix[i][j];
     }
 
-    void build_prefix(){
-        for(int i = 1; i < n; i++)
-            for(int j = 1; j < m; j++)
+    // Get the sum of the number in the rectangle between x1, y1, x2, y2
+
+    ll Get_Query(int x1, int y1, int x2, int y2){
+        return prefix[x2][y2] - prefix[x1 - 1][y2] - prefix[x2][y1 - 1] + prefix[x1 - 1][y1 - 1];
+    }
+
+    void Build_Prefix(){
+        for(int i = 1; i <= n; i++)
+            for(int j = 1; j <= m; j++)
                 prefix[i][j] += prefix[i][j - 1];
-        for(int j = 1; j < m; j++)
-            for(int i = 1; i < n; i++)
+        for(int j = 1; j <= m; j++)
+            for(int i = 1; i <= n; i++)
                 prefix[i][j] += prefix[i - 1][j];
+    }
+
+    void Print_Prefix(){
+        for(int i = 1; i <= n; i++, cout << '\n')
+            for(int j = 1; j <= m && cout << prefix[i][j] << ' '; j++);
     }
 };
 
