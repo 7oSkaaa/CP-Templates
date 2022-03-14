@@ -61,6 +61,8 @@ struct Prefix_2D {
     // Get the sum of the number in the rectangle between x1, y1, x2, y2
 
     ll Get_Query(int x1, int y1, int x2, int y2){
+        if(x1 > x2) swap(x1, x2);
+        if(y1 > y2) swap(y1, y2);
         return prefix[x2][y2] - prefix[x1 - 1][y2] - prefix[x2][y1 - 1] + prefix[x1 - 1][y1 - 1];
     }
 
