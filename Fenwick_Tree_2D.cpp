@@ -59,7 +59,7 @@ struct Fenwick_Tree {
     void build(vector < vector < ll > >& nums){
         for(int i = 0; i < sz(nums); i++)
             for(int j = 0; j < sz(nums[0]); j++)
-                add(i, j, nums[i][j]);
+                add(i + 1, j + 1, nums[i][j]);
     }
 
     void add(int idx, int jdx, int val){
