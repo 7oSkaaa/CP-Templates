@@ -56,12 +56,16 @@ struct Power_Inverse {
         return power % mod;
     }
 
+    ll Inverse(ll N, ll MOD){
+        return fast_power(N, MOD - 2, MOD);
+    }
+
     Power_Inverse(ll N, ll R, ll MOD){
         n = N, r = R, mod = MOD;
         fact.assign(n + 10, 1), inv.resize(n + 10);
         for(ll i = 1; i <= n; i++){
             fact[i] = mod_combine(fact[i - 1], i, mod);
-            inv[i] = fast_power(fact[i], mod - 2, mod);
+            inv[i] = Inverse(fact[i], mod);
         }
     }
 
