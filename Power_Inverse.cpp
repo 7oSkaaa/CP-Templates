@@ -47,22 +47,22 @@ struct Power_Inverse {
     ll n, r, mod;
     vector < ll > fact, inv;
 
-    ll fast_power(ll b, ll e, ll mod){
+    ll fast_power(ll b, ll e, ll MOD){
         ll power = 1;
         while(e){
-            if(e & 1) power = mod_combine(power, b, mod);
-            e >>= 1, b = mod_combine(b, b, mod);
+            if(e & 1) power = mod_combine(power, b, MOD);
+            e >>= 1, b = mod_combine(b, b, MOD);
         }
-        return power % mod;
+        return power % MOD;
     }
 
     ll Inverse(ll N, ll MOD){
-        return fast_power(N, MOD - 2, MOD);
+        return fast_power(N, MOD - 2, MOD) % MOD;
     }
 
     Power_Inverse(ll N, ll R, ll MOD){
         n = N, r = R, mod = MOD;
-        fact.assign(n + 10, 1), inv.resize(n + 10);
+        fact.assign(n + 10, 1), inv.resize(n + 10, 1);
         for(ll i = 1; i <= n; i++){
             fact[i] = mod_combine(fact[i - 1], i, mod);
             inv[i] = Inverse(fact[i], mod);
@@ -72,15 +72,15 @@ struct Power_Inverse {
     // Combination
 
     ll nCr(){
-        if(r > n) return 0;
-        return (((fact[n] % mod * inv[r] % mod) % mod) * (inv[n - r] % mod)) % mod;
+        if(r > n) return 0ll;
+        return (((fact[n] % mod) * (inv[r] % mod) % mod) * (inv[n - r] % mod)) % mod;
     }
 
     // Permutation
 
     ll nPr(){
-        if(r > n) return 0;
-        return (fact[n] % mod * inv[r] % mod) % mod;
+        if(r > n) return 0ll;
+        return ((fact[n] % mod) * (inv[r] % mod)) % mod;
     }
 
 };
