@@ -967,6 +967,76 @@ struct Coordinate_Compression {
 
 };
 
+// -------------------------- MO -----------------------------
+
+struct MO {
+
+    struct query {
+
+        int l, r, query_idx, block_idx;
+
+        query(int L = 0, int R = 0, int Query_idx = 0){
+            l = L - 1, r = R - 1, query_idx = Query_idx;
+        }
+
+        bool operator < (const query& q) const {
+            return (block_idx < q.block_idx) || (block_idx == q.block_idx && r < q.r);
+        }
+
+    };
+
+    int curr_l, curr_r, ans, n, m, Sqrt_N;
+    vector < query > queries;
+    vector < int > answers, nums;
+
+    MO(int N = 0, int M = 0){
+        curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = sqrt(n);
+        queries.resize(m), answers.resize(m), nums.resize(n);
+    }
+
+    void set_block_id(){
+        for(int i = 0; i < m; i++)
+            queries[i].block_idx = queries[i].l / Sqrt_N;
+    }
+    
+    void Get_Data(){
+        cin >> nums;
+        for(int i = 0, l, r; i < m && cin >> l >> r; i++)
+            queries[i] = query(l, r, i);
+        set_block_id();
+    }
+
+    void add(int idx){
+        // fill this function with what problem needs
+    }
+
+    void remove(int idx){
+        // fill this function with what problem needs
+    }
+
+    void set_range(query q){
+        while(curr_l < q.l) remove(curr_l++);
+        while(curr_l > q.l) add(--curr_l);
+        while(curr_r < q.r) add(++curr_r);
+        while(curr_r > q.r) remove(curr_r--);
+    }
+
+    void Process(){
+        sort(all(queries));
+
+        for(int i = 0; i < m; i++){
+            set_range(queries[i]);
+            answers[queries[i].query_idx] = ans;
+        }
+    }
+
+    void Print_queries_answers(){
+        for(int i = 0; i < m; i++)
+            cout << answers[i] << '\n';
+    }
+
+};
+
 // -------------------------- Big Integer -----------------------------
 
 struct Big_Int {
