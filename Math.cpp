@@ -244,6 +244,13 @@ struct Math {
         return (y2 - y1) * (x3 - x1) == (y3 - y1) * (x2 - x1);
     }
 
+    // Check if is perfect square
+
+    bool is_perfect_square(ll n){
+        ll sq = sqrt(n);
+        return sq * sq == n;
+    }
+
     // Convert Decimal to any base
 
     string decimal_to_any_base(ll decimal, ll base){
