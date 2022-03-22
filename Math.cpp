@@ -116,7 +116,7 @@ struct Math {
         return power;
     }
 
-    // b power e % mod in O(log(n))
+    // b power e % mod in O(log(e))
 
     ll fast_pow(ll b, ll e, ll mod){
         ll power = 1;
@@ -126,6 +126,18 @@ struct Math {
             b = ((b % mod) * (b % mod)) % mod;
         }
         return power % mod;
+    }
+
+    // b multiply e % mod in O(log(e))
+
+    ll fast_mul(ll b, ll e, ll mod){
+        ll mul = 0;
+        while(e){
+            if(e & 1) mul = ((mul % mod) + (b % mod)) % mod;
+            e >>= 1;
+            b = ((b % mod) + (b % mod)) % mod;
+        }
+        return mul % mod;
     }
 
     // Check if number is prime or not
