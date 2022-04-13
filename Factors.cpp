@@ -69,9 +69,9 @@ struct Factorization {
     // Get the number of prime factors for each number
 
     void prime_factorization(int n){
-        for (ll i = 2; i <= 1e6; i++){ 
+        for (ll i = 2; i <= n; i++){ 
             if (!prime_factors[i]) { 
-                for (ll j = 2 * i; j <= 1e6; j += i) prime_factors[j]++;
+                for (ll j = 2 * i; j <= n; j += i) prime_factors[j]++;
                 prime_factors[i] = 1; 
             }
         }
