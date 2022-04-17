@@ -290,6 +290,16 @@ struct Math {
         return num;
     }
 
+    void add(ll& a, ll b){
+        a += b;
+        if(a >= Mod)
+            a -= Mod;
+    }
+
+    void mul(ll& a, ll b){
+        a = ((a % Mod) * (b % Mod)) % Mod;
+    }
+
 };
 
 void Solve(){
