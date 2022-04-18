@@ -104,6 +104,20 @@ struct Math {
         return res;
     }
 
+    // add two number and take mod for them
+
+    void add(ll& a, ll b){
+        a += b;
+        if(a >= Mod)
+            a -= Mod;
+    }
+
+    // multiply two number and take mod for them
+
+    void mul(ll& a, ll b){
+        a = ((a % Mod) * (b % Mod)) % Mod;
+    }
+
     // b power e in O(log(n))
 
     ll fast_pow(ll b, ll e){
@@ -121,9 +135,9 @@ struct Math {
     ll fast_pow(ll b, ll e, ll mod){
         ll power = 1;
         while(e){
-            if(e & 1) power = ((power % mod) * (b % mod)) % mod;
+            if(e & 1) mul(power, b);
             e >>= 1;
-            b = ((b % mod) * (b % mod)) % mod;
+            mul(b, b);
         }
         return power % mod;
     }
@@ -131,13 +145,13 @@ struct Math {
     // b multiply e % mod in O(log(e))
 
     ll fast_mul(ll b, ll e, ll mod){
-        ll mul = 0;
+        ll mult = 0;
         while(e){
-            if(e & 1) mul = ((mul % mod) + (b % mod)) % mod;
+            if(e & 1) add(mult, b);
             e >>= 1;
-            b = ((b % mod) + (b % mod)) % mod;
+            add(b, b);
         }
-        return mul % mod;
+        return mult % mod;
     }
 
     // Check if number is prime or not
@@ -288,16 +302,6 @@ struct Math {
             power = power * base;
         }
         return num;
-    }
-
-    void add(ll& a, ll b){
-        a += b;
-        if(a >= Mod)
-            a -= Mod;
-    }
-
-    void mul(ll& a, ll b){
-        a = ((a % Mod) * (b % Mod)) % Mod;
     }
 
 };
