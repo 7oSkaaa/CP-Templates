@@ -75,7 +75,7 @@ struct Partial_2D {
 
     void print(){
         for(int i = 1; i <= n; i++, cout << "\n")
-            for(int j = 1; j <= n && cout << partial[i][j] << " "; j++);
+            for(int j = 1; j <= m && cout << partial[i][j] << " "; j++);
     }
 
 };
