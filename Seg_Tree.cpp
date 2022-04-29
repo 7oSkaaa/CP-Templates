@@ -50,7 +50,7 @@ struct Segment_Tree {
     void intial(int n){
         size = 1, DEFAULT = 0;
         while(size <= n) size *= 2;
-        tree.assign(2 * size, 0ll);
+        tree.assign(2 * size, DEFAULT);
     }
 
     Segment_Tree(int n){
