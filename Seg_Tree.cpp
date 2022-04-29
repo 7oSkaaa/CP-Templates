@@ -44,11 +44,11 @@ void AhMeD_HoSSaM(){
 
 struct Segment_Tree {
 
-    int size;
+    ll size, DEFAULT;
     vector < ll > tree; 
     
     void intial(int n){
-        size = 1;
+        size = 1, DEFAULT = 0;
         while(size <= n) size *= 2;
         tree.assign(2 * size, 0ll);
     }
@@ -95,7 +95,7 @@ struct Segment_Tree {
     }
 
     ll query(int l, int r, int idx, int lx, int rx){
-        if(lx > r || l > rx) return 0;
+        if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int m = (lx + rx) / 2;
         return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
