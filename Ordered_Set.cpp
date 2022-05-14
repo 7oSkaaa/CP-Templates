@@ -10,6 +10,11 @@ using ordered_map = tree<K, V, Comp, rb_tree_tag, tree_order_statistics_node_upd
 template <typename K, typename Comp = std::less<K>>
 using ordered_set = ordered_map<K, null_type, Comp>;
 
+template <typename K, typename V, typename Comp = std::less_equal<K>>
+using ordered_multimap = tree<K, V, Comp, rb_tree_tag, tree_order_statistics_node_update>;
+template <typename K, typename Comp = std::less_equal<K>>
+using ordered_multiset = ordered_multimap<K, null_type, Comp>;
+
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
 #define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define cout_map(mp) for(auto& [f, s] : mp) cout << f << "  " << s << "\n";
@@ -63,6 +68,5 @@ int main(){
     //cin >> t;
     while(t--)
         Solve();
-    Time
     return 0;
-} 
+}
