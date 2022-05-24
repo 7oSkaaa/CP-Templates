@@ -106,16 +106,16 @@ struct Math {
 
     // add two number and take mod for them
 
-    void add(ll& a, ll b){
+    void add(ll& a, ll b, ll mod = 1e9 + 7){
         a += b;
-        if(a >= Mod)
-            a -= Mod;
+        if(a >= mod)
+            a -= mod;
     }
 
     // multiply two number and take mod for them
 
-    void mul(ll& a, ll b){
-        a = ((a % Mod) * (b % Mod)) % Mod;
+    void mul(ll& a, ll b, ll mod = 1e9 + 7){
+        a = ((a % mod) * (b % mod)) % mod;
     }
 
     // b power e in O(log(n))
@@ -147,9 +147,9 @@ struct Math {
     ll fast_mul(ll b, ll e, ll mod){
         ll mult = 0;
         while(e){
-            if(e & 1) add(mult, b);
+            if(e & 1) add(mult, b, mod);
             e >>= 1;
-            add(b, b);
+            add(b, b, mod);
         }
         return mult % mod;
     }
