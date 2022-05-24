@@ -135,9 +135,9 @@ struct Math {
     ll fast_pow(ll b, ll e, ll mod){
         ll power = 1;
         while(e){
-            if(e & 1) mul(power, b);
+            if(e & 1) mul(power, b, mod);
             e >>= 1;
-            mul(b, b);
+            mul(b, b, mod);
         }
         return power % mod;
     }
