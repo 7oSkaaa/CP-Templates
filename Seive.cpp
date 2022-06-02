@@ -42,10 +42,10 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Seive {
+template < typename T = int > struct Seive {
 
     vector < bool > is_prime;
-    vector < ll > primes;
+    vector < T > primes;
 
     Seive(int n){
         is_prime.assign(n + 1, true);
