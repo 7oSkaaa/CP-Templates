@@ -42,10 +42,11 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Segment_Tree {
+template < typename T = int > struct Segment_Tree {
 
-    ll size, DEFAULT;
-    vector < ll > tree; 
+    int size; 
+    T DEFAULT;
+    vector < T > tree; 
     
     void intial(int n){
         size = 1, DEFAULT = 0;
@@ -59,13 +60,13 @@ struct Segment_Tree {
 
     // Main operation to do
 
-    ll operation(ll a, ll b){
+    T operation(T a, T b){
         return a + b;
     }
 
     // The vector must be 1-based and same thing for the tree
     
-    void build(vector < int >& nums, int idx, int lx, int rx){
+    void build(vector < T >& nums, int idx, int lx, int rx){
         if(lx >= sz(nums)) return;
         if(rx == lx) tree[idx] = nums[lx];
         else {
@@ -76,11 +77,11 @@ struct Segment_Tree {
         }
     }
 
-    void build(vector < int >& nums){
+    void build(vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
-    void update(int i, int v, int idx, int lx, int rx){
+    void update(int i, T v, int idx, int lx, int rx){
         if(rx == lx) tree[idx] = v;
         else {  
             int m = (rx + lx) / 2;
@@ -94,14 +95,14 @@ struct Segment_Tree {
         update(i, v, 1, 1, size);
     }
 
-    ll query(int l, int r, int idx, int lx, int rx){
+    T query(int l, int r, int idx, int lx, int rx){
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int m = (lx + rx) / 2;
         return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
-    ll query(int l, int r){
+    T query(int l, int r){
         return query(l, r, 1, 1, size);
     }
 };
