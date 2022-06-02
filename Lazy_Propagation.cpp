@@ -42,22 +42,24 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Lazy_Propagation {
+template < typename T = int > struct Lazy_Propagation {
 
     int size;
-    vector < ll > operations; 
+    T DEFUALT;
+    vector < T > operations;
     
     void intial(int n){
         size = 1;
+        DEFUALT = 0;
         while(size <= n) size *= 2;
-        operations.assign(2 * size, 0ll);
+        operations.assign(2 * size, DEFUALT);
     }
 
     Lazy_Propagation(int n){
         intial(n);
     }
 
-    ll operation(ll a, ll b){
+    T operation(T a, T b){
         return max(a, b);
     }
 
@@ -92,7 +94,7 @@ struct Lazy_Propagation {
         update(l, r, v, 1, 1, size);
     }
 
-    ll query(int i, int idx, int lx, int rx){
+    T query(int i, int idx, int lx, int rx){
         if(rx == lx) return operations[idx];
         else {  
             int m = (rx + lx) / 2;
@@ -101,7 +103,7 @@ struct Lazy_Propagation {
         }
     }
 
-    ll query(int i){
+    T query(int i){
         return query(i, 1, 1, size);
     }
 
