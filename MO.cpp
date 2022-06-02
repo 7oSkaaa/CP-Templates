@@ -42,7 +42,7 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct MO {
+template < typename T = int > struct MO {
 
     struct query {
 
@@ -60,7 +60,7 @@ struct MO {
 
     int curr_l, curr_r, ans, n, m, Sqrt_N;
     vector < query > queries;
-    vector < int > answers, nums;
+    vector < T > answers, nums;
 
     MO(int N = 0, int M = 0){
         curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = sqrt(n);
