@@ -42,14 +42,14 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Partial_2D {
+template < typename T = int > struct Partial_2D {
 
-    vector < vector < ll > > partial;
+    vector < vector < T > > partial;
     int n, m;
 
     Partial_2D(int N, int M){
         n = N, m = M;
-        partial.assign(n + 5, vector < ll > (m + 5));
+        partial.assign(n + 5, vector < T > (m + 5));
     }
 
     void build_partial(int queries){
@@ -69,7 +69,7 @@ struct Partial_2D {
                 partial[i][j] += partial[i + 1][j];
     }
 
-    ll get(int x, int y){
+    T get(int x, int y){
         return partial[x][y];
     }
 
