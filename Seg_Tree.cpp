@@ -66,7 +66,7 @@ template < typename T = int > struct Segment_Tree {
 
     // The vector must be 1-based and same thing for the tree
     
-    void build(vector < T >& nums, int idx, int lx, int rx){
+    void build(vector < int >& nums, int idx, int lx, int rx){
         if(lx >= sz(nums)) return;
         if(rx == lx) tree[idx] = nums[lx];
         else {
@@ -77,7 +77,7 @@ template < typename T = int > struct Segment_Tree {
         }
     }
 
-    void build(vector < T >& nums){
+    void build(vector < int >& nums){
         build(nums, 1, 1, size);
     }
 
