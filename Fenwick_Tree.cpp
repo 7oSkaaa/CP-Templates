@@ -41,17 +41,18 @@ void AhMeD_HoSSaM(){
         freopen("input.txt", "r", stdin), freopen("output.txt", "w", stdout);
     #endif
 }
-struct Fenwick_Tree {
+template < typename T = int > struct Fenwick_Tree {
     
-    vector < ll > Tree;
+    vector < T > Tree;
     int n;
+    T DEFAULT;
 
     Fenwick_Tree(int N){
-        n = N + 1;
-        Tree.assign(n + 10, 0);
+        n = N + 1, DEFAULT = 0;
+        Tree.assign(n + 10, DEFAULT);
     }
 
-    ll operation(ll a, ll b){
+    T operation(T a, T b){
         return a + b;
     }
 
@@ -59,7 +60,7 @@ struct Fenwick_Tree {
         return (idx & -idx);
     }
 
-    void build(vector < ll >& nums){
+    void build(vector < T >& nums){
         for(int i = 0; i < sz(nums); i++)
             add(i, nums[i]);
     }
@@ -72,8 +73,8 @@ struct Fenwick_Tree {
         }
     }
 
-    ll get_ans(int idx){
-        ll ans = 0;
+    T get_ans(int idx){
+        T ans = DEFAULT;
         idx++;
         while(idx){
             ans = operation(ans, Tree[idx]);
@@ -82,7 +83,7 @@ struct Fenwick_Tree {
         return ans;
     }
 
-    ll query(int l, int r){
+    T query(int l, int r){
         if(l > r) swap(l, r);
         return get_ans(r) - get_ans(l - 1);
     }
