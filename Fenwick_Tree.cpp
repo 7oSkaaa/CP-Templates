@@ -65,7 +65,7 @@ template < typename T = int > struct Fenwick_Tree {
             add(i, nums[i]);
     }
 
-    void add(int idx, int val){
+    void add(int idx, T val){
         idx++;
         while(idx <= n){
             Tree[idx] = operation(Tree[idx], val);

@@ -42,45 +42,50 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Fenwick_Tree {
+template < typename T = int > struct Fenwick_Tree {
     
-    vector < vector < ll > > Tree;
+    vector < vector < T > > Tree;
     int n, m;
+    T DEFAULT;
 
     Fenwick_Tree(int N, int M){
-        n = N + 1, m = M + 1;
-        Tree.assign(n + 10, vector < ll > (m + 10, 0));
+        n = N + 1, m = M + 1, DEFAULT = 0;
+        Tree.assign(n + 10, vector < ll > (m + 10, DEFAULT));
     }
 
     int lowest_bit(int idx){
         return (idx & -idx);
     }
 
-    void build(vector < vector < ll > >& nums){
+    void build(vector < vector < T > >& nums){
         for(int i = 0; i < sz(nums); i++)
             for(int j = 0; j < sz(nums[0]); j++)
                 add(i + 1, j + 1, nums[i][j]);
     }
 
-    void add(int idx, int jdx, int val){
+    T operation(T a, T b){
+        return a + b;
+    }
+
+    void add(int idx, int jdx, T val){
         int i = idx + 1, j = jdx + 1;
         while(i <= n){
             j = jdx + 1;
             while(j <= m){
-                Tree[i][j] += val;
+                Tree[i][j] = operation(Tree[i][j], val);
                 j += lowest_bit(j);    
             }
             i += lowest_bit(i);
         }
     }
 
-    ll get_sum(int idx, int jdx){
-        ll sum = 0;
+    T get_sum(int idx, int jdx){
+        T sum = DEFAULT;
         int i = idx + 1, j = jdx + 1;
         while(i){
             j = jdx + 1;
             while(j){
-                sum += Tree[i][j];
+                sum = operation(sum, Tree[i][j]);
                 j -= lowest_bit(j);    
             }
             i -= lowest_bit(i);
@@ -90,7 +95,7 @@ struct Fenwick_Tree {
 
     // Get the sum of the number in the rectangle x1, y1, x2, y2
 
-    ll query(int x1, int y1, int x2, int y2) {
+    T query(int x1, int y1, int x2, int y2) {
         if(x1 > x2) swap(x1, x2);
         if(y1 > y2) swap(y1, y2);
         return get_sum(x2, y2) - get_sum(x1 - 1, y2) - get_sum(x2, y1 - 1) + get_sum(x1 - 1, y1 - 1);
