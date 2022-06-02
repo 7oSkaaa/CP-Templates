@@ -42,7 +42,7 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Floyd {
+template < typename T = int > struct Floyd {
 
     struct Edge {
         
@@ -59,16 +59,17 @@ struct Floyd {
     };
 
     int n, m;
-    vector < vector < ll > > dist;
+    vector < vector < T > > dist;
     vector < Edge > edges;
+    T DEFAULT;
 
     Floyd(int N, int M){
-        n = N, m = M;
-        dist.assign(n + 10, vector < ll > (n + 10, 1e18));
+        n = N, m = M, DEFAULT = 1e18;
+        dist.assign(n + 10, vector < T > (n + 10, DEFAULT));
         edges.resize(m);
     }
 
-    ll operation(ll a, ll b, ll c){
+    T operation(T a, T b, T c){
         return min(a, b + c);
     }
 
