@@ -42,13 +42,13 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-struct Power_Inverse {
+template < typename T = int > struct Power_Inverse {
     
-    ll n, r, mod;
-    vector < ll > fact, inv;
+    T n, r, mod;
+    vector < T > fact, inv;
 
-    ll fast_power(ll b, ll e, ll MOD){
-        ll power = 1;
+    T fast_power(T b, T e, T MOD){
+        T power = 1;
         while(e){
             if(e & 1) power = mod_combine(power, b, MOD);
             e >>= 1, b = mod_combine(b, b, MOD);
@@ -56,11 +56,11 @@ struct Power_Inverse {
         return power % MOD;
     }
 
-    ll Inverse(ll N, ll MOD){
+    T Inverse(T N, T MOD){
         return fast_power(N, MOD - 2, MOD) % MOD;
     }
 
-    Power_Inverse(ll N, ll R, ll MOD){
+    Power_Inverse(T N, T R, T MOD){
         n = N, r = R, mod = MOD;
         fact.assign(n + 10, 1), inv.resize(n + 10, 1);
         for(ll i = 1; i <= n; i++){
@@ -71,14 +71,14 @@ struct Power_Inverse {
 
     // Combination
 
-    ll nCr(){
+    T nCr(){
         if(r > n) return 0ll;
         return (((fact[n] % mod) * (inv[r] % mod) % mod) * (inv[n - r] % mod)) % mod;
     }
 
     // Permutation
 
-    ll nPr(){
+    T nPr(){
         if(r > n) return 0ll;
         return ((fact[n] % mod) * (inv[r] % mod)) % mod;
     }
