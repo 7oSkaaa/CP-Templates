@@ -47,10 +47,10 @@ template < typename T = int > struct Sparse_Table {
     vector < vector < T > > table;
     vector < int > Bin_Log;
     int n, LOG;
+    T DEFAULT;
 
     Sparse_Table(vector < T >& vec){
-        n = sz(vec);
-        LOG = __lg(n) + 1;
+        n = sz(vec), DEFAULT = 0, LOG = __lg(n) + 1;
         table.resize(n + 10, vector < T > (LOG));
         Bin_Log.resize(n + 10);
         for(int i = 2; i <= n; i++)
@@ -61,7 +61,7 @@ template < typename T = int > struct Sparse_Table {
     }
 
     T operation(T a, T b){
-        return min(a, b);
+        return a + b;
     }
 
     void Build_Table(){
@@ -73,6 +73,17 @@ template < typename T = int > struct Sparse_Table {
     T query(int L, int R){
         int log = Bin_Log[R - L + 1];
         return operation(table[L][log], table[R - (1 << log) + 1][log]);
+    }
+
+    T query_overrlap(int L, int R){
+        T answer = DEFAULT;
+        for (int log = LOG; log >= 0; log--){
+            if (L + (1 << log) - 1 <= R) {
+                answer = operation(answer, table[L][log]);
+                L += 1 << log;
+            }
+        }
+        return answer;
     }
 
 };
