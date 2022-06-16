@@ -42,11 +42,11 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-template < ll MOD = 1000000007 > struct ModInt {
+template < int MOD = 1000000007 > struct ModInt {
 
-    ll val;
+    int val;
 
-    ModInt(ll V = 0, ll M = 1e9 + 7) : val(V) { val %= MOD; }
+    ModInt(int V = 0) : val(V) { val %= MOD; }
 
     ModInt& operator += (const ModInt& rhs) {
         if ((val += rhs.val) >= MOD) val -= MOD;
