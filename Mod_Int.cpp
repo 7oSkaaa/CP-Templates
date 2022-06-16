@@ -42,7 +42,7 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-template < ll MOD = 1'000'000'007 > struct ModInt {
+template < ll MOD = 1000000007 > struct ModInt {
 
     ll val;
 
