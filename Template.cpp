@@ -17,13 +17,13 @@ using namespace std;
 #define debug(x) cout << #x << ": " << (x) << "\n";
 #define fi first
 #define se second
-#define Pair pair < int, int >
 #define ll long long
 #define ull unsigned long long
 #define Mod  1'000'000'007
 #define OO 2'000'000'000
 #define EPS 1e-9
 #define PI acos(-1)
+template < typename T = int > using Pair = pair < T, T >;
 
 template < typename T = int > istream& operator >> (istream &in, vector < T > &v) {
     for (auto &x: v) in >> x;
