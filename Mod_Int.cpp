@@ -58,11 +58,15 @@ template < int MOD = 1000000007 > struct ModInt {
         return *this; 
     }
 
-    ModInt& operator *= (const ModInt& rhs) { val = (val * rhs.val) % MOD; return *this; }
+    ModInt& operator *= (const ModInt& rhs) { val = (1ll * val * rhs.val) % MOD; return *this; }
 
     ModInt& operator /= (const ModInt& rhs) { return *this *= rhs.inverse(); }
 
+    ModInt& operator %= (const ModInt& rhs) { return *this %= rhs; }
+
     ModInt operator + (const ModInt& rhs) const { ModInt res(*this); return res += rhs; }
+
+    ModInt operator % (const ModInt& rhs) const { ModInt res(*this); return res %= rhs; }
 
     ModInt operator - (const ModInt& rhs) const { ModInt res(*this); return res -= rhs; }
 
@@ -73,6 +77,10 @@ template < int MOD = 1000000007 > struct ModInt {
     bool operator == (const ModInt& rhs) const { return val == rhs.val; }
 
     bool operator != (const ModInt& rhs) const { return val != rhs.val; }
+
+    bool operator < (const ModInt& rhs) const { return val < rhs.val; }
+
+    bool operator > (const ModInt& rhs) const { return val > rhs.val; }
 
     ModInt inverse() const { return pow(MOD - 2); }
 
@@ -89,8 +97,6 @@ template < int MOD = 1000000007 > struct ModInt {
     friend std::ostream& operator<<(std::ostream& os, const ModInt& x) noexcept { return os << x.val; }
 
 };
-
-using Mint = ModInt < >;
 
 void Solve(){
     
