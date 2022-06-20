@@ -46,11 +46,11 @@ struct Trie {
     
     struct Node {
 
-        vector < Node* > child;
+        Node* child[26];
         bool is_word;
 
         Node(){
-            child.assign(26, nullptr);
+            fill(child, 0);
             is_word = false;
         }
     };
@@ -69,7 +69,7 @@ struct Trie {
                 delete node;
     }
 
-    void insert(string word){
+    void insert(string& word){
 		Node* curr = root; 
 		for(auto& c : word){
 			if(!curr -> child[c - DEFAULT]) curr -> child[c - DEFAULT] = new Node;
@@ -78,7 +78,7 @@ struct Trie {
 		curr -> is_word = true;
     }
   
-    bool search(string word){
+    bool search(string& word){
 		Node* curr = root; 
 		for(auto& c : word){
 			if(!curr -> child[c - DEFAULT]) return false;
@@ -87,7 +87,7 @@ struct Trie {
 		return curr -> is_word;
     }
  
-    bool is_prefix(string word){
+    bool is_prefix(string& word){
         Node* curr = root; 
 		for(auto& c : word){
 			if(!curr -> child[c - DEFAULT]) return false;
