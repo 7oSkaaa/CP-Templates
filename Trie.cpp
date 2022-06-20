@@ -45,25 +45,35 @@ void AhMeD_HoSSaM(){
 struct Trie {
     
     struct Node {
-        Node* child[26];
+
+        vector < Node* > child;
         bool is_word;
+
         Node(){
-            fill(child, 0);
+            child.assign(26, nullptr);
             is_word = false;
         }
     };
 
     Node* root;
-    
+    char DEFAULT;
+
     Trie(){
       	root = new Node;
+        DEFAULT = 'a';
     }
     
+    ~Trie(){
+        for(auto &node : root -> child)
+            if(node)
+                delete node;
+    }
+
     void insert(string word){
 		Node* curr = root; 
 		for(auto& c : word){
-			if(!curr -> child[c - '0']) curr -> child[c - '0'] = new Node;
-			curr = curr -> child[c - '0'];
+			if(!curr -> child[c - DEFAULT]) curr -> child[c - DEFAULT] = new Node;
+			curr = curr -> child[c - DEFAULT];
 		}
 		curr -> is_word = true;
     }
@@ -71,12 +81,21 @@ struct Trie {
     bool search(string word){
 		Node* curr = root; 
 		for(auto& c : word){
-			if(!curr -> child[c - '0']) return false;
-			curr = curr -> child[c - '0'];
+			if(!curr -> child[c - DEFAULT]) return false;
+			curr = curr -> child[c - DEFAULT];
 		}
 		return curr -> is_word;
     }
  
+    bool is_prefix(string word){
+        Node* curr = root; 
+		for(auto& c : word){
+			if(!curr -> child[c - DEFAULT]) return false;
+			curr = curr -> child[c - DEFAULT];
+		}
+		return true;
+    }
+
 };
 
 void Solve(){
