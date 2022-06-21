@@ -50,7 +50,7 @@ struct Trie {
         bool is_word;
 
         Node(){
-            fill(child, 0);
+            memset(child, 0, sizeof(child));
             is_word = false;
         }
     };
