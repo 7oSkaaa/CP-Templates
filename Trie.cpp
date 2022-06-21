@@ -64,9 +64,17 @@ struct Trie {
     }
     
     ~Trie(){
-        for(auto &node : root -> child)
-            if(node)
-                delete node;
+        Delete_Trie(root);
+        delete root;
+    }
+
+    void Delete_Trie(Node* curr){
+        for(auto& new_node : curr -> child){
+            if(new_node){
+                Delete_Trie(new_node);
+                delete new_node;
+            }
+        }
     }
 
     void insert(string& word){
