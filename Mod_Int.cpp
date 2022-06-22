@@ -42,7 +42,7 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-template < int MOD = 1000000007 > struct ModInt {
+template < int MOD = 10 > struct ModInt {
 
     int val;
 
@@ -62,7 +62,7 @@ template < int MOD = 1000000007 > struct ModInt {
 
     ModInt& operator /= (const ModInt& rhs) { return *this *= rhs.inverse(); }
 
-    ModInt& operator %= (const ModInt& rhs) { return *this -> val %= rhs.val; }
+    ModInt& operator %= (const ModInt& rhs) { return *this.val %= rhs.val; }
 
     ModInt operator + (const ModInt& rhs) const { ModInt res(*this); return res += rhs; }
 
@@ -97,6 +97,7 @@ template < int MOD = 1000000007 > struct ModInt {
     friend std::ostream& operator<<(std::ostream& os, const ModInt& x) noexcept { return os << x.val; }
 
 };
+using Mint = ModInt < 1000000007 >;
 
 void Solve(){
     
