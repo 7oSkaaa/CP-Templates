@@ -62,7 +62,7 @@ template < int MOD = 1000000007 > struct ModInt {
 
     ModInt& operator /= (const ModInt& rhs) { return *this *= rhs.inverse(); }
 
-    ModInt& operator %= (const ModInt& rhs) { return *this %= rhs; }
+    ModInt& operator %= (const ModInt& rhs) { return *this -> val %= rhs.val; }
 
     ModInt operator + (const ModInt& rhs) const { ModInt res(*this); return res += rhs; }
 
