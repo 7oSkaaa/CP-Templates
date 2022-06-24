@@ -30,112 +30,224 @@ void AhMeD_HoSSaM(){
   #endif
 }
 
-struct Big_Int {
+struct BigInt {
 
-    Big_Int(){}
+    const int BASE = 1000000000;
+    vector < int > v;
+    
+    BigInt() {}
 
-    // Add two Bigints
-
-    string Add(string a, string b) {
-        int carry = 0, idx_a = sz(a) - 1, idx_b = sz(b) - 1;
-        string res;
-        while ((idx_a >= 0) || (idx_b >= 0) || (carry > 0)) {
-            int val = carry;
-            if (idx_a >= 0) val += a[idx_a--] - '0';
-            if (idx_b >= 0) val += b[idx_b--] - '0';
-            res += (('0' + val % 10));
-            carry = val / 10;
+    BigInt(const long long &val) {
+        *this = val;
+    }
+    
+    BigInt(const string &val) {
+        *this = val;
+    
+    }
+    
+    int size() const { return v.size(); }
+    
+    bool zero() const { return v.empty(); }
+    
+    BigInt& operator = (long long val) {
+        v.clear();
+        while (val) {
+            v.push_back(val % BASE);
+            val /= BASE;
         }
-        reverse(all(res));
-        return res;
+        return *this;
     }
 
-    // Multiply two Bigints
-
-    string Multiply(string A, string B) {    
-        vector < int > arr(sz(A) + sz(B), 0);    
-        for(int i = sz(A) - 1;i >= 0; i--){        
-            for(int j = sz(B) - 1; j >= 0; j--){            
-            int x = (B[j] - '0') * (A[i] - '0') + arr[i + j + 1];           
-            arr[i + j + 1] = x % 10;            
-            arr[i + j] += x / 10;        
-            }
-        }    
-        int i = 0;    
-        while(i < sz(arr)){        
-            if(arr[i] != 0) break;            
-            i++;
-        }                
-        if(i == sz(arr)) return "0";                
-        string s = "";
-        for(int j = i; j < sz(arr); j++)        
-            s += to_string(arr[j]);            
-        return s;    
+    BigInt& operator = (const BigInt &a) {
+        v = a.v;
+        return *this;
     }
 
-    // Compare two Bigints
+    BigInt& operator = (const vector < int > &a) {
+        v = a;
+        return *this;
+    }
 
-    bool isSmaller(string str1, string str2){
-        int n1 = sz(str1), n2 = sz(str2);
-        if (n1 < n2) return true;
-        if (n2 < n1) return false;
-        for (int i = 0; i < n1; i++)
-            if (str1[i] < str2[i]) return true;
-            else if (str1[i] > str2[i]) return false;
+    BigInt& operator = (const string &s) {
+        *this = 0;
+        for (const char &ch : s)
+            *this = *this * 10 + (ch - '0');
+        return *this;
+    }
+    
+    bool operator < (const BigInt &a) const {
+        if (a.size() != size())
+            return size() < a.size();
+        for (int i = size() - 1; i >= 0; i--)
+            if (v[i] != a.v[i])
+                return v[i] < a.v[i];
         return false;
     }
 
-    string findDiff(string str1, string str2){
-        if (isSmaller(str1, str2)) swap(str1, str2);
-        string str = "";
-        int n1 = sz(str1), n2 = sz(str2);
-        reverse(all(str1)), reverse(all(str2));
-        int carry = 0;
-        for (int i = 0; i < n2; i++) {
-            int sub = ((str1[i] - '0') - (str2[i] - '0') - carry);
-            if (sub < 0) sub = sub + 10, carry = 1;
-            else carry = 0;
-            str.push_back(sub + '0');
-        }
-        for (int i = n2; i < n1; i++) {
-            int sub = ((str1[i] - '0') - carry);
-            if (sub < 0) sub = sub + 10, carry = 1;
-            else carry = 0;
-            str.push_back(sub + '0');
-        }
-        reverse(str.begin(), str.end()); 
-        return str;
+    bool operator > (const BigInt &a) const {
+        return a < *this;
     }
 
-    // Divide two Bigints
+    bool operator == (const BigInt &a) const {
+        return (!(*this < a) && !(a < *this));
+    }
 
-    string longDivision(string number, int divisor){
-        string ans;
-        int idx = 0;
-        int temp = number[idx] - '0';
-        while (temp < divisor)
-            temp = temp * 10 + (number[++idx] - '0');
-        while (sz(number) > idx) {
-            ans += (temp / divisor) + '0';
-            temp = (temp % divisor) * 10 + number[++idx] - '0';
-        }
-        if (ans.length() == 0) return "0";
+    bool operator <= (const BigInt &a) const {
+        return ((*this < a) || !(a < *this));
+    }
+    
+    ll val(){
+        ll ans = 0;
+        for (int i = 0; i < size(); i++)
+            ans = ans * 10 + v[i];
         return ans;
     }
 
-    // Check if it Bigint divided by int
-
-    ll Big_Mod(string s, ll mod){
-        ll res = 0;
-        for(auto& c : s)
-            res = (res * 10 + (c - '0')) % mod;
+    BigInt operator + (const BigInt &a) const {
+        BigInt res = *this;
+        int idx = 0, carry = 0;
+        while (idx < a.size() || carry) {
+            if (idx < a.size())
+                carry += a.v[idx];
+            if (idx == res.size())
+                res.v.push_back(0);
+            res.v[idx] += carry;
+            carry = res.v[idx] / BASE;
+            res.v[idx] %= BASE;
+            idx++;
+        }
         return res;
+    }
+    
+    BigInt& operator += (const BigInt &a) {
+        *this = *this + a;
+        return *this;
+    }
+    
+    BigInt operator * (const BigInt &a) const {
+        BigInt res;
+        if (this -> zero() || a.zero())
+            return res;
+        res.v.resize(size() + a.size());
+        for (int i = 0; i < size(); i++) {
+            if (v[i] == 0)
+                continue;
+            long long carry = 0;
+            for (int j = 0; carry || j < a.size(); j++) {
+                carry += 1LL * v[i] * (j < a.size() ? a.v[j] : 0);
+                while (i + j >= res.size())
+                    res.v.push_back(0);
+                carry += res.v[i + j];
+                res.v[i + j] = carry % BASE;
+                carry /= BASE;
+            }
+        }
+        while (!res.v.empty() && res.v.back() == 0)
+            res.v.pop_back();
+        return res;
+    }
+
+    BigInt& operator *= (const BigInt &a) {
+        *this = *this * a;
+        return *this;
+    }
+
+    BigInt& operator -= (const BigInt &b){
+        if(*this < b)
+            throw("UNDERFLOW");
+        int n = this -> size(), m = b.size();
+        int i, t = 0, s;
+        for (i = 0; i < n;i++){
+            if(i < m)
+                s = this -> v[i] - b.v[i]+ t;
+            else
+                s = this -> v[i] + t;
+            if(s < 0)
+                s += 10,
+                t = -1;
+            else
+                t = 0;
+            this -> v[i] = s;
+        }
+        while(n > 1 && this -> v[n - 1] == 0)
+            this -> v.pop_back(),
+            n--;
+        return *this;
+    }
+
+    BigInt operator - (const BigInt&b){
+        BigInt a = *this;
+        a -= b;
+        return a;
+    }
+
+    BigInt operator -- (const int){
+        *this -= BigInt(1);
+        return *this;
+    }
+
+    BigInt operator ++ (const int){
+        *this += BigInt(1);
+        return *this;
+    }
+
+    BigInt& operator /=(const ll a) {
+        ll carry = 0;
+        for (int i = (int) v.size() - 1; i >= 0; i--) {
+            ll cur = v[i] + carry * BASE;
+            v[i] = cur / a;
+            carry = cur % a;
+        }
+        while (!v.empty() && v.back() == 0)
+            v.pop_back();
+        return *this;
+    }
+    
+    BigInt operator / (const ll a) {
+        ll carry = 0;
+        vector < int > res = this -> v;
+        for (int i = (int) res.size() - 1; i >= 0; i--) {
+            ll cur = res[i] + carry * BASE;
+            res[i] = cur / a;
+            carry = cur % a;
+        }
+        BigInt ans;
+        ans = res;
+        return ans;
+    }
+    
+    BigInt operator % (const ll a){
+        ll res = 0;
+        for (int i = (int) v.size() - 1; i >= 0; i--)
+            res = (res * 10 + v[i]) % a;
+        BigInt ans = res;
+        return ans;
+    }
+
+    BigInt& operator %= (const ll a) {
+        *this = *this % a;
+        return *this;
+    }
+
+    friend ostream& operator<<(ostream &out, const BigInt &a) {
+        out << (a.zero() ? 0 : a.v.back());
+        for (int i = (int) a.v.size() - 2; i >= 0; i--)
+            out << setfill('0') << setw(9) << a.v[i];
+        return out;
+    }
+
+    friend istream& operator>>(istream &in, BigInt &a) {
+        string s;
+        in >> s;
+        a = s;
+        return in;
     }
 
 };
 
 void Solve(){
-    
+      
 }
 
 int main(){
