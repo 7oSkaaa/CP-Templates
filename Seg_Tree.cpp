@@ -42,16 +42,29 @@ void AhMeD_HoSSaM(){
     #endif
 }
 
-template < typename T = int > struct Segment_Tree {
+template < typename T = int, int Mode = 1 > struct Segment_Tree {
+
+    struct Node {
+
+        ll val;
+
+        Node(ll V = 0) : val(V) {}
+    
+        Node operator = (const T rhs) {
+            val = rhs;
+            return *this;
+        }
+
+    };
 
     int size; 
-    T DEFAULT;
-    vector < T > tree; 
+    Node DEFAULT;
+    vector < Node > tree; 
     
     void intial(int n){
         size = 1, DEFAULT = 0;
-        while(size <= n) size *= 2;
-        tree.assign(2 * size, DEFAULT);
+        while(size < n) size *= 2;
+        tree = vector < Node > (2 * size, DEFAULT);
     }
 
     Segment_Tree(int n){
@@ -60,15 +73,15 @@ template < typename T = int > struct Segment_Tree {
 
     // Main operation to do
 
-    T operation(T a, T b){
-        return a + b;
+    Node operation(Node a, Node b){
+        return a.val + b.val;
     }
-
-    // The vector must be 1-based and same thing for the tree
     
-    void build(vector < int >& nums, int idx, int lx, int rx){
-        if(lx >= sz(nums)) return;
-        if(rx == lx) tree[idx] = nums[lx];
+    // If Mode is 1 so the array is 0 - based else the array is 1-based
+    
+    void build(vector < T >& nums, int idx, int lx, int rx){
+        if(Mode ? lx > sz(nums) : lx >= sz(nums)) return;
+        if(rx == lx) tree[idx] = nums[lx - Mode];
         else {
             int m = (rx + lx) / 2;
             build(nums, 2 * idx, lx, m);
@@ -77,7 +90,7 @@ template < typename T = int > struct Segment_Tree {
         }
     }
 
-    void build(vector < int >& nums){
+    void build(vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
@@ -95,15 +108,20 @@ template < typename T = int > struct Segment_Tree {
         update(i, v, 1, 1, size);
     }
 
-    T query(int l, int r, int idx, int lx, int rx){
+    Node query(int l, int r, int idx, int lx, int rx){
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int m = (lx + rx) / 2;
         return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
-    T query(int l, int r){
+    Node query(int l, int r){
         return query(l, r, 1, 1, size);
+    }
+
+    friend ostream& operator << (ostream &out, const Node &node) {
+        out << node.val;
+        return out;
     }
 };
 
