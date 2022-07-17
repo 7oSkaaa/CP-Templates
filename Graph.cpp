@@ -44,54 +44,33 @@ void AhMeD_HoSSaM(){
 
 struct Graph {
 
-    struct Edge {
-        
-        int v;
-        ll c;    
-
-        Edge(int V = 0, ll C = 0){
-            v = V, c = C;
-        }
-    
-        bool operator < (const Edge& e) const {
-            return c > e.c;
-        }
-    };
-
     int n, m, connected_components;
     vector < vector < int > > adj;
-    // vector < vector < Edge > > adj;   //If we need to use dijkstra
     vector < bool > vis;
-    vector < int > depth, parent, deg;
+    vector < int > depth, parent, deg, colour;
     
     Graph(int N, int M){
         n = N, m = M;
         connected_components = 0;
-        adj.resize(n + 10); 
-        vis.resize(n + 10); 
-        depth.resize(n + 10); 
-        parent.resize(n + 10);
-        deg.resize(n + 10);
+        adj = vector < vector < int > > (n + 10);
+        vis = vector < bool > (n + 10, false);
+        depth = deg = colour = vector < int > (n + 10, 0);
+        parent = vector < int > (n + 10, -1);
     }
 
-    void add_edge(int u, int v){
-        adj[u].push_back(v), adj[v].push_back(u);
-        deg[u]++, deg[v]++;
+    void add_edge(int u, int v, bool is_directed = false){
+        adj[u].push_back(v), deg[u]++; 
+        if(!is_directed) 
+            adj[v].push_back(u), deg[v]++;
     }
-
-    // If we need to use dijkstra
-
-    /*void add_edge(int u, int v, int w){ 
-        adj[u].push_back({v, w}), adj[v].push_back({u, w});
-    }*/
 
     void remove_edge(int u, int v){
         adj[u].erase(find(all(adj[u]), v)), adj[v].erase(find(all(adj[v]), u));
     }
 
-    void build_adj(){
+    void build_adj(bool is_directed = false){
         for(int i = 0, u, v; i < m && cin >> u >> v; i++)
-            add_edge(u, v);
+            add_edge(u, v, is_directed);
     }
 
     void dfs(int node, int dep = 0, int par = -1){
@@ -162,26 +141,30 @@ struct Graph {
         return depth[to];
     }
 
-    // Remove the comment if you need to use Dijkstra
-
-    /*void dijkstra(int from){
-        priority_queue < Edge > Dij;
-        depth[from] = 0;
-        Dij.push({from, 0});
-        while(!Dij.empty()){
-            auto curr_node = Dij.top();
-            Dij.pop();
-            if(curr_node.c > depth[curr_node.v]) continue;
-            for(auto& new_node : adj[curr_node.v]){
-                if(depth[new_node.v] > curr_node.c + new_node.c){
-                    Edge add = new_node;
-                    add.c += curr_node.c;
-                    Dij.push(add); 
-                    depth[new_node.v] = curr_node.c + new_node.c;
+    bool is_Bipartite(int u){
+        for(auto v : adj[u]){
+            if(colour[v] == colour[u])
+                return false;
+            else if(colour[v] == 0){
+                colour[v] = -colour[u];
+                if(!is_Bipartite(v)){
+                    return false;
                 }
             }
         }
-    }*/
+        return true;
+    }
+    
+    bool is_Bipartite(){
+        for(int i = 1; i <= n; i++){
+            if(colour[i] == 0) {
+                colour[i] = -1;
+                if(!is_Bipartite(i))
+                    return false;
+            }
+        }
+        return true;
+    }
 
 };
 
