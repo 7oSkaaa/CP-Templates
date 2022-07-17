@@ -44,8 +44,11 @@ void AhMeD_HoSSaM(){
 struct Dijkstra {
     
     struct Edge {
-        int to, from, w;
-        Edge(int from, int to, int w): from(from), to(to), w(w) {}
+
+        ll v, w;
+        
+        Edge(ll V = 0, ll W = 0): v(V), w(W) {}
+        
         bool operator < (const Edge& e) const {
             return w > e.w;
         }
@@ -53,29 +56,52 @@ struct Dijkstra {
 
     vector < vector < Edge > > adj;
 
-    Dijkstra(int edges){
-        adj.resize(edges);
+    Dijkstra(int edges, bool indirected = true){
+        adj = vector < vector < Edge > > (edges);
+        for(int i = 0, u, v, w; i < edges; i++){
+            cin >> u >> v >> w;
+            adj[u].push_back(Edge(v, w));
+            if(indirected)
+                adj[v].push_back(Edge(u, w));
+        }
     }
 
-    int Min_Cost(int search, int dest = -1){
+    ll Min_Cost(int src, int dest){
         int n = sz(adj);
-        vector < int > dist(n, OO), prev(n, -1);
-        dist[search] = 0;
+        vector < ll > dist(n, LLONG_MAX);
+        dist[src] = 0;
         priority_queue < Edge > Dij;
-        Dij.push(Edge(-1, 0, 0));
+        Dij.push(Edge(src, 0));
         while(!Dij.empty()){
-            Edge e = Dij.top();
+            auto [u, cost] = Dij.top();
             Dij.pop();
-            if(e.w > dist[e.to]) continue;
-            prev[e.to] = e.from;
-            for(auto& edge: adj[e.to]){
-                if(dist[edge.to] > dist[edge.from] + edge.w){
-                    edge.w = dist[edge.to] = dist[edge.from] + edge.w;
-                    Dij.push(edge);
+            for(auto& [v, w] : adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    Dij.push(Edge(v, dist[v]));
                 }
             }
         }
-        return (dest == -1 ? -1 : dist[dest]);
+        return (dist[dest] == LLONG_MAX ? -1 : dist[dest]);
+    }
+
+    vector < ll > get_dist(int src){
+        int n = sz(adj);
+        vector < ll > dist(n, LLONG_MAX);
+        dist[src] = 0;
+        priority_queue < Edge > Dij;
+        Dij.push(Edge(src, 0));
+        while(!Dij.empty()){
+            auto [u, cost] = Dij.top();
+            Dij.pop();
+            for(auto& [v, w] : adj[u]){
+                if(dist[v] > dist[u] + w){
+                    dist[v] = dist[u] + w;
+                    Dij.push(Edge(v, dist[v]));
+                }
+            }
+        }
+        return dist;
     }
 
 };
