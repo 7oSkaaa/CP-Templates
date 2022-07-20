@@ -22,6 +22,7 @@ using namespace std;
 #define EPS 1e-9
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
+vector < string > RET = {"NO", "YES"};
 
 template < typename T = int > istream& operator >> (istream &in, vector < T > &v) {
     for (auto &x : v) in >> x;
