@@ -56,8 +56,8 @@ template < typename T = int > struct Sparse_Table {
 
     Sparse_Table(vector < T >& vec){
         n = sz(vec), DEFAULT = 0, LOG = __lg(n) + 1;
-        table.resize(n + 10, vector < T > (LOG));
-        Bin_Log.resize(n + 10);
+        table = vector < vector < Node > > (n + 10, vector < Node > (LOG));
+        Bin_Log = vector < int > (n + 10);
         for(int i = 2; i <= n; i++)
             Bin_Log[i] = Bin_Log[i >> 1] + 1;
         for(int i = 0; i < n; i++)
@@ -77,16 +77,12 @@ template < typename T = int > struct Sparse_Table {
                 table[i][log] = operation(table[i][log - 1], table[i + (1 << (log - 1))][log - 1]);
     }
 
-    Node query(int L, int R){
+    Node query_1(int L, int R){
         int log = Bin_Log[R - L + 1];
         return operation(table[L][log], table[R - (1 << log) + 1][log]);
     }
 
-    T query(int L, int R){
-        return query(L, R).val;
-    }
-
-    Node query_overrlap(int L, int R){
+    Node query_log_n(int L, int R){
         T answer = DEFAULT;
         for (int log = LOG; log >= 0; log--){
             if (L + (1 << log) - 1 <= R) {
@@ -95,6 +91,10 @@ template < typename T = int > struct Sparse_Table {
             }
         }
         return answer;
+    }
+
+    T query(int L, int R, bool overlap = false){
+        return (overlap ? query_1(L, R) : query_log_n(L, R)).val;
     }
 
 };
