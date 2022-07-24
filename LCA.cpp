@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
-
+ 
 #define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
 #define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define fixed(n) fixed << setprecision(n)
@@ -23,82 +23,85 @@ using namespace std;
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
 vector < string > RET = {"NO", "YES"};
-
+ 
 template < typename T = int > istream& operator >> (istream &in, vector < T > &v) {
     for (auto &x : v) in >> x;
     return in;
 }
-
+ 
 template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
     for (const T &x : v) out << x << ' '; 
     return out;
 }
-
-vector < int > dep;
-vector < vector < Pair < int > > > adj; 
+ 
+int N, LOG;
 vector < vector < int > > anc, cost;
-
+vector < vector < Pair < int > > > adj;
+vector < int > dep;
+ 
 void init(int n){
-    n += 10;
-    dep = vector < int > (n, 0);
-    adj = vector < vector < Pair < int > > > (n);
-    anc = cost = vector < vector < int > > (n, vector < int > (20, 0));
+    N = n + 10, LOG = 0;
+    while((1 << LOG) <= n) LOG++;
+    dep = vector < int > (N);
+    adj = vector < vector < Pair < int > > > (N);
+    anc = cost = vector < vector < int > > (N, vector < int > (LOG));
 }
-
-int k_ancestor(int node, int dist){
-    if(dep[node] <= dist) return -1;
-    for(int bit = 0; bit < 20; bit++)
-        if(dist & (1 << bit))
-            node = anc[node][bit];
-    return node;
+ 
+int operation(int a, int b){
+    return a + b;
 }
-
-int combine(int u, int v){
-    return min(u, v);
-}
-
-void dfs(int node, int par, int c){
-    dep[node] = dep[par] + 1, anc[node][0] = par, cost[node][0] = c;
-    for(int bit = 1; bit < 20; bit++){
-        anc[node][bit] = anc[anc[node][bit - 1]][bit - 1];
-        cost[node][bit] = min(cost[node][bit - 1], cost[anc[node][bit - 1]][bit - 1]);
+ 
+void dfs(int u, int p = 0){
+    for(auto& [v, w] : adj[u]){
+        if(v == p) continue;
+        dep[v] = dep[u] + 1, anc[v][0] = u, cost[v][0] = w;
+        for(int bit = 1; bit < LOG; bit++){
+            anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+            cost[v][bit] = operation(cost[v][bit - 1], cost[anc[v][bit - 1]][bit - 1]);
+        }
+        dfs(v, u);
     }
-    for(auto& [new_node, value] : adj[node])
-    if(new_node != par)
-        dfs(new_node, node, value);
 }
-
-int lca(int u, int v){
-    if(dep[u] > dep[v])
-    swap(u, v);
-    v = k_ancestor(v, dep[v] - dep[u]);
-    if(u == v) return u;
-    for(int bit = 19; bit >= 0; bit--)
-    if(anc[u][bit] != anc[v][bit])
-        u = anc[u][bit], v = anc[v][bit];
+ 
+int kth_ancestor(int u, int k){
+    if(dep[u] < k) 
+        return -1;
+    for(int bit = LOG - 1; bit >= 0; bit--)
+        if(k & (1 << bit))
+            u = anc[u][bit];
+    return u;
+}
+ 
+int get_lca(int u, int v){
+    if(dep[u] < dep[v])
+        swap(u, v);
+    u = kth_ancestor(u, dep[u] - dep[v]);
+    if(u == v)
+        return u;
+    for(int bit = LOG - 1; bit >= 0; bit--)
+        if(anc[u][bit] != anc[v][bit])
+            u = anc[u][bit], v = anc[v][bit];
     return anc[u][0];
 }
-
-int get_cost(int node, int dist){
-    if(dep[node] <= dist) return -1;
-    int ans = OO;
+ 
+int get_cost(int u, int dist){
+    if(dep[u] < dist) return -1;
+    int ans = 0;
     for(int bit = 0; bit < 20; bit++)
         if(dist & (1 << bit))
-            ans = combine(ans, cost[node][bit]), node = anc[node][bit];
+            ans = operation(ans, cost[u][bit]), u = anc[u][bit];
     return ans;
 }
-
+ 
 int query(int u, int v){
-    if(dep[u] > dep[v])
-    swap(u, v);
-    int LCA = lca(u, v);
-    return combine(get_cost(u, dep[u] - dep[LCA]), get_cost(v, dep[v] - dep[LCA]));
+    int lca = get_lca(u, v);
+    return operation(get_cost(u, dep[u] - dep[lca]), get_cost(v, dep[v] - dep[lca]));
 }
 
 void Solve(){
     
 }
-
+ 
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     int t = 1;
