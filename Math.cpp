@@ -144,7 +144,7 @@ struct Math {
 
     // b multiply e % mod in O(log(e))
 
-    ll fast_mul(ll b, ll e, ll mod){
+    ll Bin_Mul(ll b, ll e, ll mod){
         ll mult = 0;
         while(e){
             if(e & 1) add(mult, b, mod);
