@@ -120,7 +120,7 @@ struct Math {
 
     // b power e in O(log(n))
 
-    ll fast_pow(ll b, ll e){
+    ll Bin_Pow(ll b, ll e){
         ll power = 1;
         while(e){
             if(e & 1) power *= b;
@@ -132,7 +132,7 @@ struct Math {
 
     // b power e % mod in O(log(e))
 
-    ll fast_pow(ll b, ll e, ll mod){
+    ll Bin_Pow(ll b, ll e, ll mod){
         ll power = 1;
         while(e){
             if(e & 1) mul(power, b, mod);
