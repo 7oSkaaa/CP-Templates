@@ -1975,6 +1975,7 @@ using ordered_multiset = ordered_multimap<K, null_type, Comp>;
 #pragma GCC optimize("Ofast")
 #pragma GCC target("avx,avx2,fma")
 #pragma GCC optimization ("unroll-loops")
+#pragma GCC target("popcnt")
 
 // -------------------------- Directions -----------------------------
  
