@@ -83,7 +83,7 @@ template < typename T = int > struct Sparse_Table {
     }
 
     Node query_log_n(int L, int R){
-        T answer = DEFAULT;
+        Node answer = DEFAULT;
         for (int log = LOG; log >= 0; log--){
             if (L + (1 << log) - 1 <= R) {
                 answer = operation(answer, table[L][log]);
