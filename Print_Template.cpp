@@ -209,15 +209,19 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         update(i, v, 1, 1, size);
     }
 
-    Node query(int l, int r, int idx, int lx, int rx){
+    Node _query(int l, int r, int idx, int lx, int rx){
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int m = (lx + rx) / 2;
-        return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
+        return operation(_query(l, r, 2 * idx, lx, m), _query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
-    Node query(int l, int r){
-        return query(l, r, 1, 1, size);
+    Node _query(int l, int r){
+        return _query(l, r, 1, 1, size);
+    }
+
+    T query(int l, int r){
+        return _query(l, r).val;
     }
 
     friend ostream& operator << (ostream &out, const Node &node) {
@@ -1190,7 +1194,7 @@ template < typename T = int > struct Sparse_Table {
     }
 
     Node query_log_n(int L, int R){
-        T answer = DEFAULT;
+        Node answer = DEFAULT;
         for (int log = LOG; log >= 0; log--){
             if (L + (1 << log) - 1 <= R) {
                 answer = operation(answer, table[L][log]);
