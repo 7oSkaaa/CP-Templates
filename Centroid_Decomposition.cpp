@@ -36,16 +36,17 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 struct Centroid_Decomposition {
 
-    int n, root;
-    vector < vector < int > > adj;
+    int n, treeRoot;
+    const vector < vector < int > > adj;
     vector < int > SubtreeSz, isCentroid;
 
-    Centroid_Decomposition(int N, const vector <vector <int> > &G, int treeRoot = 1){
-        n = N, root = treeRoot;
-        adj = G;
+    // Initialize the Centroid Decomposition
+    Centroid_Decomposition(int N, const vector <vector <int> > &G, int Root = 1) : adj(G){
+        n = N, treeRoot = Root;
         SubtreeSz = isCentroid = vector < int > (n + 5, 0);
     }
 
+    // update subtree size of each node
     int updateSize(int u, int p = -1){
         SubtreeSz[u] = 1;
         for (int v : adj[u]) 
@@ -54,26 +55,29 @@ struct Centroid_Decomposition {
         return SubtreeSz[u];
     }
 
+    // get centroid of subtree rooted at u
     int getCentroid(int u, int target, int p = -1){
         for(auto& v : adj[u]){
             if(v == p || isCentroid[v]) continue;
             if(SubtreeSz[v] * 2 > target) 
                 return getCentroid(v, target, u);
         }
+        return u;
     }
 
-    void Centroid(int u = 1){
+    // decompose tree into centroid tree
+    void Centroid(int u, int p = 0){
         int centroidPoint = getCentroid(u, updateSize(u));
         
         // do something with centroid
-        
+
         isCentroid[centroidPoint] = true;
         for(auto& v : adj[centroidPoint]){
             if(isCentroid[v]) continue;
-            Centroid(v);
+            Centroid(v, centroidPoint);
         }
     }
-
+    
 };
 
 void Solve(){
