@@ -96,7 +96,7 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         }
     }
 
-    void update(int i, int v){
+    void update(int i, T v){
         update(i, v, 1, 1, size);
     }
 
