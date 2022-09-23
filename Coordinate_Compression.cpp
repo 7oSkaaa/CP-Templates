@@ -34,31 +34,35 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Coordinate_Compression {
+template < typename T = int > struct Coordinate_Compression {
 
-    map < ll, ll > mapping;
-    vector < ll > orig, comp, nums;
-    int sz;
+    vector < T > compressed;
 
-    Coordinate_Compression(vector < ll >& Nums){
-        sz = 1;
-        nums = Nums;
-        sort(all(nums));
-        nums.resize(unique(all(nums)) - nums.begin());
-        for(auto& i : nums)
-            mapping[i] = sz++;
-        orig.resize(sz);
-        for(auto& [f, s] : mapping) orig[s] = f;
-        comp = nums;
-        for(auto& i : comp) i = mapping[i];
+    Coordinate_Compression(){}
+
+    Coordinate_Compression(vector < T > &vec) {
+        compressed = vec;
+        build();
     }
 
-    vector < ll > orignal(){
-        return orig;
+    void add(T x) {
+        compressed.push_back(x);
     }
 
-    vector < ll > compressed(){
-        return comp;
+    void build() {
+        sort(all(compressed));
+        compressed.resize(unique(all(compressed)) - compressed.begin());
+    }
+
+    T get(T x) {
+        return upper_bound(all(compressed), x) - compressed.begin();
+    }
+
+    vector < T > get(vector < T > &vec) {
+        vector < T > ret;
+        for (auto &x : vec) 
+            ret.push_back(get(x));
+        return ret;
     }
 
 };
@@ -70,7 +74,7 @@ void Solve(){
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     int t = 1;
-    //cin >> t;
+    // cin >> t;
     while(t--)
         Solve();
     return 0;
