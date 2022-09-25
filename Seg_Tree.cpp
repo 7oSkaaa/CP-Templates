@@ -100,19 +100,15 @@ template < typename T = int, const int Base = 0 > struct Segment_Tree {
         update(i, v, 1, 1, size);
     }
 
-    Node _query(int l, int r, int idx, int lx, int rx){
+    Node query(int l, int r, int idx, int lx, int rx){
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int m = (lx + rx) / 2;
         return operation(_query(l, r, 2 * idx, lx, m), _query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
-    Node _query(int l, int r){
-        return _query(l, r, 1, 1, size);
-    }
-
     T query(int l, int r){
-        return _query(l, r).val;
+        return _query(l, r, 1, 1, size).val;
     }
 
     friend ostream& operator << (ostream &out, const Node &node) {
