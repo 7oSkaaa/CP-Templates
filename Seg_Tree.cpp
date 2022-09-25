@@ -108,7 +108,7 @@ template < typename T = int, const int Base = 0 > struct Segment_Tree {
     }
 
     T query(int l, int r){
-        return _query(l, r, 1, 1, size).val;
+        return query(l, r, 1, 1, size).val;
     }
 
     friend ostream& operator << (ostream &out, const Node &node) {
