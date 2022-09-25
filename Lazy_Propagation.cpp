@@ -34,69 +34,103 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct Lazy_Propagation {
+template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
+
+    struct Node {
+
+        ll val;
+
+        Node(ll V = 0) : val(V) {}
+    
+        Node operator = (const T rhs) {
+            val = rhs;
+            return *this;
+        }
+
+        bool operator == (const Node rhs) {
+            return val == rhs.val;
+        }
+
+    };
 
     int size;
-    T DEFUALT;
-    vector < T > operations;
+    Node DEFAULT;
+    vector < Node > Tree;
     
     void intial(int n){
-        size = 1;
-        DEFUALT = 0;
+        size = 1, DEFAULT = -OO;
         while(size <= n) size *= 2;
-        operations.assign(2 * size, DEFUALT);
+        Tree = vector < Node > (size << 1, DEFAULT);
     }
 
     Lazy_Propagation(int n){
         intial(n);
     }
 
-    T operation(T a, T b){
-        return max(a, b);
+    // Main operation to do
+
+    Node operation(Node a, Node b){
+        return (b == DEFAULT ? a : b);
     }
 
-    void build(vector < int >& nums, int idx, int lx, int rx){
-        if(lx >= sz(nums)) return;
-        if(rx == lx) operations[idx] = nums[lx];
+    void build(vector < T >& nums, int idx, int lx, int rx){
+        if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
+        if(rx == lx) Tree[idx] = nums[lx - !Base];
         else {
             int m = (rx + lx) / 2;
             build(nums, 2 * idx, lx, m);
             build(nums, 2 * idx + 1, m + 1, rx);
-            operations[idx] = operation(operations[2 * idx], operations[2 * idx + 1]);
+            Tree[idx] = operation(Tree[2 * idx], Tree[2 * idx + 1]);
         }
     }
 
-    // the vector should be 1-based also the tree is 1-based
+    // If Base is 1 so the array is 1-based else the array is 0-based
     
-    void build(vector < int >& nums){
+    void build(vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
-    void update(int l, int r, int v, int idx, int lx, int rx){
-        if(lx > r || l > rx) return;
-        if(lx >= l && rx <= r){
-            operations[idx] = operation(operations[idx], v);
-            return;
-        }
-        int m = (lx + rx) / 2;
-        update(l, r, v, 2 * idx, lx, m), update(l, r, v, 2 * idx + 1, m + 1, rx);
+    // for uncommutative operation
+
+    void propagate(int idx, int lx, int rx){
+        if(lx == rx) return;
+        Tree[2 * idx] = operation(Tree[2 * idx], Tree[idx]);
+        Tree[2 * idx + 1] = operation(Tree[2 * idx + 1], Tree[idx]);
+        Tree[idx] = DEFAULT;
     }
 
-    void update(int l, int r, int v){
+    void update(int l, int r, T v, int idx, int lx, int rx){
+        if(lx > r || l > rx) return;
+        // comment this line if the operation is commutative
+        propagate(idx, lx, rx);
+        if(lx >= l && rx <= r) return Tree[idx] = operation(Tree[idx], v), void();
+        int m = (lx + rx) / 2;
+        update(l, r, v, 2 * idx, lx, m); 
+        update(l, r, v, 2 * idx + 1, m + 1, rx);
+    }
+
+    // update the range [l, r] with value v
+
+    void update(int l, int r, T v){
         update(l, r, v, 1, 1, size);
     }
 
-    T query(int i, int idx, int lx, int rx){
-        if(rx == lx) return operations[idx];
+    Node query(int i, int idx, int lx, int rx){
+        if(rx == lx) return Tree[idx];
         else {  
             int m = (rx + lx) / 2;
-            if(i <= m) return operation(operations[idx], query(i, 2 * idx, lx, m));
-            else return operation(operations[idx], query(i, 2 * idx + 1, m + 1, rx));
+            if(i <= m) 
+                return operation(query(i, 2 * idx, lx, m), Tree[idx]);
+            else 
+                return operation(query(i, 2 * idx + 1, m + 1, rx), Tree[idx]);
         }
     }
 
+    // query to get element at position i
+
     T query(int i){
-        return query(i, 1, 1, size);
+        Node ret = query(i, 1, 1, size);
+        return (ret == DEFAULT ? 0 : ret.val);
     }
 
 };
