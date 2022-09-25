@@ -34,7 +34,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int, int Mode = 0 > struct Segment_Tree {
+template < typename T = int, const int Base = 0 > struct Segment_Tree {
 
     struct Node {
 
@@ -69,11 +69,11 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         return a.val + b.val;
     }
     
-    // If Mode is 1 so the array is 1-based else the array is 0-based
+    // If Base is 1 so the array is 1-based else the array is 0-based
     
     void build(vector < T >& nums, int idx, int lx, int rx){
-        if(Mode ? lx >= sz(nums) : lx > sz(nums)) return;
-        if(rx == lx) tree[idx] = nums[lx - !Mode];
+        if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
+        if(rx == lx) tree[idx] = nums[lx - !Base];
         else {
             int m = (rx + lx) / 2;
             build(nums, 2 * idx, lx, m);
