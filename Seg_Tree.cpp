@@ -104,7 +104,7 @@ template < typename T = int, const int Base = 0 > struct Segment_Tree {
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int m = (lx + rx) / 2;
-        return operation(_query(l, r, 2 * idx, lx, m), _query(l, r, 2 * idx + 1, m + 1, rx));
+        return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
     T query(int l, int r){
