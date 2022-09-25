@@ -129,7 +129,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
                 return query_operation(query(i, 2 * idx + 1, m + 1, rx), Tree[idx]);
         }
     }
-
+ 
     // query to get element at position i
 
     T query(int i){
