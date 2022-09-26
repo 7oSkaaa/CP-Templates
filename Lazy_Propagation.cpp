@@ -52,15 +52,19 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         build();
     }
 
-    // Main operation to do
+    // update operation (add, set, min, max, ...)
 
     T update_operation(T a, T b){
         return (a | b);
     }   
 
+    // query operation (add, set, min, max, ...)
+
     T query_operation(T a, T b){
         return (a & b);
     }
+
+    // apply update operation
 
     void apply_operation(int idx, T val){
         operations[idx] = update_operation(operations[idx], val);
@@ -93,6 +97,8 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     void build(vector < T >& nums){
         build(nums, 1, 1, size);
     }
+
+    // If we want to build the array with the same value in all cells
 
     void build(){
         build(1, 1, size);
@@ -130,7 +136,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         return ret;
     }
 
-    // query to get element at position i
+    // query to get value of range [l, r]
 
     T query(int l, int r){
         return query(l, r, 1, 1, size);
