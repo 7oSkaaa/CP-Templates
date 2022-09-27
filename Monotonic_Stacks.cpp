@@ -34,15 +34,15 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Next_Prev_Element {
+struct Monotonic_Stacks {
 
-    Next_Prev_Element(){ }
+    Monotonic_Stacks(){ }
 
     vector < ll > nextGreaterelement(vector < ll >& nums) {
         int n = nums.size();
         vector < ll > res(n);
         stack < int > st;
-        for(int i = n - 1; i >= 1; i--){
+        for(int i = n - 1; i >= 0; i--){
             while(!st.empty() && nums[st.top()] <= nums[i]) st.pop();
             res[i] = (st.empty() ? n : st.top());
             st.push(i);
@@ -54,7 +54,7 @@ struct Next_Prev_Element {
         int n = nums.size();
         vector < ll > res(n);
         stack < int > st;
-        for(int i = 1; i < n; i++){
+        for(int i = 0; i < n; i++){
             while(!st.empty() && nums[st.top()] <= nums[i]) st.pop();
             res[i] = (st.empty() ? 0 : st.top());
             st.push(i);
@@ -66,7 +66,7 @@ struct Next_Prev_Element {
         int n = nums.size();
         vector < ll > res(n);
         stack < int > st;
-        for(int i = n - 1; i >= 1; i--){
+        for(int i = n - 1; i >= 0; i--){
             while(!st.empty() && nums[st.top()] >= nums[i]) st.pop();
             res[i] = (st.empty() ? n : st.top());
             st.push(i);
@@ -78,7 +78,7 @@ struct Next_Prev_Element {
         int n = nums.size();
         vector < ll > res(n);
         stack < int > st;
-        for(int i = 1; i < n; i++){
+        for(int i = 0; i < n; i++){
             while(!st.empty() && nums[st.top()] >= nums[i]) st.pop();
             res[i] = (st.empty() ? 0 : st.top());
             st.push(i);
