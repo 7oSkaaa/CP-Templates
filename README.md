@@ -77,4 +77,4 @@ This template is made for competitive programming using `C++` language.
 
 - [Coordinates Compression](https://github.com/7oSkaaa/CP-Templates/blob/main/Coordinate_Compression.cpp)&nbsp;<a href='Coordinate_Compression.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
-### [Template to Print](https://github.com/7oSkaaa/CP-Templates/blob/main/Print_Template.cpp)&nbsp;<a href='Print_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px" align="center"/></a>
+### [Template to Print](https://github.com/7oSkaaa/CP-Templates/blob/main/Print_Template.cpp)&nbsp;<a href='Print_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
