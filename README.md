@@ -27,11 +27,11 @@ This template is made for competitive programming using `C++` language.
 
 ### Contest templates
 
-- [My template C++](Template.cpp)
+- [My template C++](https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp)
 
 ### Graph
 
-- [Graph Traversing (DFS, BFS)](https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp)
+- [Graph Traversing (DFS, BFS)](https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp)  <img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px" align="center"/>
 - [Dijkstra](https://github.com/7oSkaaa/CP-Templates/blob/main/Dijkstra.cpp)
 - [Floyd](https://github.com/7oSkaaa/CP-Templates/blob/main/Floyd.cpp)
 - [Prim](https://github.com/7oSkaaa/CP-Templates/blob/main/Prim.cpp)
