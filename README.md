@@ -5,6 +5,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ## <picture><img src="https://github.com/7oSkaaa/7oSkaaa/blob/main/Images/competitive_programming_profile.png?raw=true" width=40/></picture> My Competitive Programming Profiles
+---
 
 <p align="center">
   <a href="https://codeforces.com/profile/7oSkaaa"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces"/></a>
@@ -18,6 +19,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Contest templates
+---
 
 - [My template C++](https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp)&nbsp;<a href='Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Google template C++](https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp)&nbsp;<a href='Google_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -25,6 +27,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Graph
+---
 
 - [Graph Traversing (DFS, BFS)](https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp)&nbsp;<a href='Graph.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Dijkstra](https://github.com/7oSkaaa/CP-Templates/blob/main/Dijkstra.cpp)&nbsp;<a href='Dijkstra.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
