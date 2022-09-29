@@ -113,8 +113,8 @@ This template is made for competitive programming using `C++` language.
 ### Additional Files
 ---
 
-### [Template to Print](https://github.com/7oSkaaa/CP-Templates/blob/main/Print_Template.cpp)&nbsp;<a href='Print_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [Template to Print](https://github.com/7oSkaaa/CP-Templates/blob/main/Print_Template.cpp)&nbsp;<a href='Print_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
-### [CP-Snippets](https://github.com/7oSkaaa/CP-Templates/blob/main/CP.code-snippets)&nbsp;<a href='CP.code-snippets'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [CP-Snippets](https://github.com/7oSkaaa/CP-Templates/blob/main/CP.code-snippets)&nbsp;<a href='CP.code-snippets'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
 <br><br><br>
