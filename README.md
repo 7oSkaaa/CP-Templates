@@ -40,6 +40,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Data Structures
+---
 
 - [Segment Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Seg_Tree.cpp)&nbsp;<a href='Seg_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Lazy Propagation](https://github.com/7oSkaaa/CP-Templates/blob/main/Lazy_Propagation.cpp)&nbsp;<a href='Lazy_Propagation.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -58,6 +59,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Dynamic Programming
+---
 
 - [Convex Hull Trick](https://github.com/7oSkaaa/CP-Templates/blob/main/Convex_Hull_Trick.cpp)&nbsp;<a href='Convex_Hull_Trick.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Kadane](https://github.com/7oSkaaa/CP-Templates/blob/main/Kadane.cpp)&nbsp;<a href='Kadane.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -68,12 +70,14 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### String Algorithm
+---
 
 - [KMP](https://github.com/7oSkaaa/CP-Templates/blob/main/KMP.cpp)&nbsp;<a href='KMP.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
 <br><br><br>
 
 ### Number Theory
+---
 
 - [Sieve of Eratosthenes](https://github.com/7oSkaaa/CP-Templates/blob/main/Seive.cpp)&nbsp;<a href='Seive.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Factors](https://github.com/7oSkaaa/CP-Templates/blob/main/Factors.cpp)&nbsp;<a href='Factors.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -81,6 +85,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Math & Computational Geometry
+---
 
 - [Convex Hull](https://github.com/7oSkaaa/CP-Templates/blob/main/Convex_Hull.cpp)&nbsp;<a href='Convex_Hull.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Math Template](https://github.com/7oSkaaa/CP-Templates/blob/main/Math.cpp)&nbsp;<a href='Math.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -91,6 +96,7 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Data types Templates
+---
 
 - [Mod Int](https://github.com/7oSkaaa/CP-Templates/blob/main/Mod_Int.cpp)&nbsp;<a href='Mod_Int.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Bit Int](https://github.com/7oSkaaa/CP-Templates/blob/main/Big_Int.cpp)&nbsp;<a href='Big_Int.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -98,9 +104,11 @@ This template is made for competitive programming using `C++` language.
 <br><br><br>
 
 ### Compression Algorithms
+---
 
 - [Coordinates Compression](https://github.com/7oSkaaa/CP-Templates/blob/main/Coordinate_Compression.cpp)&nbsp;<a href='Coordinate_Compression.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
 <br><br><br>
 
+---
 ### [Template to Print](https://github.com/7oSkaaa/CP-Templates/blob/main/Print_Template.cpp)&nbsp;<a href='Print_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
