@@ -111,7 +111,7 @@ template < typename T = int , typename Comp = std::less_equal<T> > struct Ordere
     T count(T val){ 
         if(!is_exist(val))
             return 0;
-        return last_idx(val) - fisrt_idx(val) + 1;
+        return last_idx(val) - first_idx(val) + 1;
     }
 
     // clear the ordered multiset
