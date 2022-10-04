@@ -48,8 +48,9 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int , typename Comp = std::less_equal<T> > struct Ordered_Multiset {
-    ordered_multiset < T, Comp > mst;
+template < typename T = int , typename CompFunction = std::less_equal < T > > struct Ordered_Multiset {
+    
+    ordered_multiset < T, CompFunction > mst;
     
     // Constructor 
     Ordered_Multiset() {
@@ -130,12 +131,12 @@ template < typename T = int , typename Comp = std::less_equal<T> > struct Ordere
     }
 
     // return iterator to element with given index
-    ordered_multiset < T, Comp >::iterator find_by_order(int idx){
+    typename ordered_multiset < T, CompFunction >::iterator find_by_order(int idx){
         return mst.find_by_order(idx);
     }
 
     // print the ordered multiset
-    friend ostream& operator << (ostream &out, const Ordered_Multiset < T, Comp > &mst) { 
+    friend ostream& operator << (ostream &out, const Ordered_Multiset < T, CompFunction > &mst) { 
         for (const T &x : mst.mst) out << x << ' '; 
         return out;
     }
