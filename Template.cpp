@@ -2,13 +2,11 @@
 
 using namespace std;
 
-#define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
-#define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define fixed(n) fixed << setprecision(n)
 #define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
-#define fill(vec, value) memset(vec, value, sizeof(vec));
-#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 #define add_mod(a, b, m) (((a % m) + (b % m)) % m)
+#define sub_mod(a, b, m) (((a % m) - (b % m) + m) % m)
+#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 #define all(vec) vec.begin(), vec.end()
 #define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
@@ -18,8 +16,9 @@ using namespace std;
 #define ll long long
 #define ull unsigned long long
 #define Mod  1'000'000'007
-#define OO 2'000'000'000
 #define EPS 1e-9
+constexpr int INF = 1 << 30;
+constexpr ll LINF = 1LL << 62;
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
 vector < string > RET = {"NO", "YES"};
@@ -40,9 +39,11 @@ void Solve(){
 
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int t = 1;
-    //cin >> t;
-    while(t--)
+    int test_cases = 1;
+    // cin >> test_cases;
+    for(int tc = 1; tc <= test_cases; tc++){
+        // cout << "Case #" << tc << ": ";
         Solve();
+    }
     return 0;
 }

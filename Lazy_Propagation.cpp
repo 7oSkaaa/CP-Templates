@@ -36,24 +36,28 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
-    int size;
+    int size, levels;
     T lazy_default, tree_default;
     vector < T > tree, lazy; 
-    vector < bool > Clazy;
+    vector < bool > is_lazy;
     
     // initial lazy and tree
     void intial(int n){
-        size = 1;
+        size = 1, levels = 1;
         tree_default = 0, lazy_default = 0;
-        while(size <= n) size *= 2;
+        while(size <= n) size *= 2, levels++;
         tree = vector < T > (size * 2, tree_default);
         lazy = vector < T > (size * 2, lazy_default);
-        Clazy = vector < bool > (size * 2, false);
+        is_lazy = vector < bool > (size * 2, false);
     }
 
     Lazy_Propagation(int n){
         intial(n);
-        build(lazy_default);
+    }
+
+    Lazy_Propagation(int n, vector < T > &v){
+        intial(n);
+        build(v);
     }
 
     // the function that will be used to update the tree
@@ -68,14 +72,14 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
     // push lazy value to children in lazy
     void propagate(int idx, int lx, int rx){
-        if(!Clazy[idx]) return;
+        if(!is_lazy[idx]) return;
         tree[idx] = lazy_operation(tree[idx], lazy[idx] * (rx - lx + 1));
         if(lx != rx){
             lazy[2 * idx] = lazy_operation(lazy[2 * idx], lazy[idx]);
             lazy[2 * idx + 1] = lazy_operation(lazy[2 * idx + 1], lazy[idx]);
-            Clazy[2 * idx] = Clazy[2 * idx + 1] = true;
+            is_lazy[2 * idx] = is_lazy[2 * idx + 1] = true;
         }
-        lazy[idx] = lazy_default, Clazy[idx] = false;
+        lazy[idx] = lazy_default, is_lazy[idx] = false;
     }
 
     // push value to children int lazy
@@ -84,7 +88,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         if(lx != rx){
             lazy[2 * idx] = lazy_operation(lazy[2 * idx], v);
             lazy[2 * idx + 1] = lazy_operation(lazy[2 * idx + 1], v);
-            Clazy[2 * idx] = Clazy[2 * idx + 1] = true;
+            is_lazy[2 * idx] = is_lazy[2 * idx + 1] = true;
         }
     }
 
@@ -155,6 +159,11 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     // query the value of the tree in range [l, r]
     T query(int l, int r){
         return query(l, r, 1, 1, size);
+    }
+
+    // query the value of the tree in index i
+    T query(int i){
+        return query(i, i, 1, 1, size);
     }
 
 };

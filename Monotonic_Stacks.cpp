@@ -38,9 +38,9 @@ struct Monotonic_Stacks {
 
     Monotonic_Stacks(){ }
 
-    vector < ll > nextGreaterelement(vector < ll >& nums) {
+    template < typename T = int > vector < T > nextGreaterelement(vector < T >& nums) {
         int n = nums.size();
-        vector < ll > res(n);
+        vector < T > res(n);
         stack < int > st;
         for(int i = n - 1; i >= 0; i--){
             while(!st.empty() && nums[st.top()] <= nums[i]) st.pop();
@@ -50,9 +50,9 @@ struct Monotonic_Stacks {
         return res;
     }
     
-    vector < ll > prevGreaterelement(vector < ll >& nums) {
+    template < typename T = int > vector < T > prevGreaterelement(vector < T >& nums) {
         int n = nums.size();
-        vector < ll > res(n);
+        vector < T > res(n);
         stack < int > st;
         for(int i = 0; i < n; i++){
             while(!st.empty() && nums[st.top()] <= nums[i]) st.pop();
@@ -62,9 +62,9 @@ struct Monotonic_Stacks {
         return res;
     }
 
-    vector < ll > nextSmallerelement(vector < ll >& nums) {
+    template < typename T = int > vector < T > nextSmallerelement(vector < T >& nums) {
         int n = nums.size();
-        vector < ll > res(n);
+        vector < T > res(n);
         stack < int > st;
         for(int i = n - 1; i >= 0; i--){
             while(!st.empty() && nums[st.top()] >= nums[i]) st.pop();
@@ -74,9 +74,9 @@ struct Monotonic_Stacks {
         return res;
     }
     
-    vector < ll > prevSmallerelement(vector < ll >& nums) {
+    template < typename T = int > vector < T > prevSmallerelement(vector < T >& nums) {
         int n = nums.size();
-        vector < ll > res(n);
+        vector < T > res(n);
         stack < int > st;
         for(int i = 0; i < n; i++){
             while(!st.empty() && nums[st.top()] >= nums[i]) st.pop();

@@ -58,10 +58,17 @@ template < typename T = int > struct Coordinate_Compression {
         return upper_bound(all(compressed), x) - compressed.begin();
     }
 
-    vector < T > get(vector < T > &vec) {
+    vector < T > get_compressed(vector < T > &vec) {
         vector < T > ret;
         for (auto &x : vec) 
             ret.push_back(get(x));
+        return ret;
+    }
+
+    vector < T > get_mapping(vector < T > &vec) {
+        vector < T > ret(sz(compressed) + 5);
+        for (auto &x : vec)
+            ret[get(x)] = x;
         return ret;
     }
 
