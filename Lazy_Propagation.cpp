@@ -37,107 +37,122 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
     int size;
-    T Default, queryDefault, InitValue;
-    vector < T > operations, values;
+    T lazy_default, tree_default;
+    vector < T > tree, lazy; 
+    vector < bool > Clazy;
     
+    // initial lazy and tree
     void intial(int n){
-        size = 1, Default = InitValue = 0, queryDefault = -1;
+        size = 1;
+        tree_default = 0, lazy_default = 0;
         while(size <= n) size *= 2;
-        operations = vector < T > (size << 1, Default);
-        values = vector < T > (size << 1, queryDefault);
+        tree = vector < T > (size * 2, tree_default);
+        lazy = vector < T > (size * 2, lazy_default);
+        Clazy = vector < bool > (size * 2, false);
     }
 
     Lazy_Propagation(int n){
         intial(n);
-        build();
+        build(lazy_default);
     }
 
-    // update operation (add, set, min, max, ...)
-
-    T update_operation(T a, T b){
-        return (a | b);
-    }   
-
-    // query operation (add, set, min, max, ...)
-
-    T query_operation(T a, T b){
-        return (a & b);
+    // the function that will be used to update the tree
+    T lazy_operation(T a, T b){
+        return a + b;
     }
 
-    // apply update operation
-
-    void apply_operation(int idx, T val){
-        operations[idx] = update_operation(operations[idx], val);
-        values[idx] = update_operation(values[idx], val);
+    // the function that will be used to query on the tree
+    T tree_operation(T a, T b){
+        return a + b;
     }
 
+    // push lazy value to children in lazy
+    void propagate(int idx, int lx, int rx){
+        if(!Clazy[idx]) return;
+        tree[idx] = lazy_operation(tree[idx], lazy[idx] * (rx - lx + 1));
+        if(lx != rx){
+            lazy[2 * idx] = lazy_operation(lazy[2 * idx], lazy[idx]);
+            lazy[2 * idx + 1] = lazy_operation(lazy[2 * idx + 1], lazy[idx]);
+            Clazy[2 * idx] = Clazy[2 * idx + 1] = true;
+        }
+        lazy[idx] = lazy_default, Clazy[idx] = false;
+    }
+
+    // push value to children int lazy
+    void propagate(int idx, int lx, int rx, T v){
+        tree[idx] = lazy_operation(tree[idx], v * (rx - lx + 1));
+        if(lx != rx){
+            lazy[2 * idx] = lazy_operation(lazy[2 * idx], v);
+            lazy[2 * idx + 1] = lazy_operation(lazy[2 * idx + 1], v);
+            Clazy[2 * idx] = Clazy[2 * idx + 1] = true;
+        }
+    }
+
+    // build the tree with given vector
     void build(vector < T >& nums, int idx, int lx, int rx){
+        propagate(idx, lx, rx);
         if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
-        if(rx == lx) values[idx] = nums[lx - !Base];
+        if(rx == lx) tree[idx] = nums[lx - !Base];
         else {
-            int m = (rx + lx) / 2; 
+            int m = (rx + lx) / 2;
             build(nums, 2 * idx, lx, m);
             build(nums, 2 * idx + 1, m + 1, rx);
-            values[idx] = query_operation(values[2 * idx], values[2 * idx + 1]);
+            tree[idx] = tree_operation(tree[2 * idx], tree[2 * idx + 1]);
         }
     }
 
-    void build(int idx, int lx, int rx){
-        if(rx == lx) values[idx] = InitValue;
+    // build the tree with initial value
+    void build(T initial_value, int idx, int lx, int rx){
+        propagate(idx, lx, rx);
+        if(rx == lx) tree[idx] = initial_value;
         else {
-            int m = (rx + lx) / 2; 
-            build(2 * idx, lx, m);
-            build(2 * idx + 1, m + 1, rx);
-            values[idx] = query_operation(values[2 * idx], values[2 * idx + 1]);
+            int m = (rx + lx) / 2;
+            build(initial_value, 2 * idx, lx, m);
+            build(initial_value, 2 * idx + 1, m + 1, rx);
+            tree[idx] = tree_operation(tree[2 * idx], tree[2 * idx + 1]);
         }
     }
 
-    // If Base is 1 so the array is 1-based else the array is 0-based
-    
+    // build the tree with initial value
+    void build(T initial_value){
+        build(initial_value, 1, 1, size);
+    }
+
+    // the vector should be 1-based also the tree is 1-based
     void build(vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
-    // If we want to build the array with the same value in all cells
-
-    void build(){
-        build(1, 1, size);
-    }
-
-    // for uncommutative operation
-
-    void propagate(int idx, int lx, int rx){
-        values[idx] = query_operation(values[2 * idx], values[2 * idx + 1]);
-        values[idx] = update_operation(values[idx], operations[idx]);
-    }
-
+    // update the value of the tree in range [l, r] with value v
     void update(int l, int r, T v, int idx, int lx, int rx){
-        if(lx > r || l > rx) return;
-        // comment this line if the operation is commutative
-        if(lx >= l && rx <= r) return apply_operation(idx, v);
-        int m = (lx + rx) / 2;
-        update(l, r, v, 2 * idx, lx, m); 
-        update(l, r, v, 2 * idx + 1, m + 1, rx);
         propagate(idx, lx, rx);
+        if(lx >= l && rx <= r) return propagate(idx, lx, rx, v);
+        if(lx > r || rx < l) return;
+        int m = (lx + rx) / 2;
+        update(l, r, v, 2 * idx, lx, m), update(l, r, v, 2 * idx + 1, m + 1, rx);
+        tree[idx] = tree_operation(tree[2 * idx], tree[2 * idx + 1]);
     }
 
-    // update the range [l, r] with value v
+    // update the value in one index
+    void update(int i, T v){
+        update(i, i, v, 1, 1, size);
+    }
 
+    // update the value of the tree in range [l, r] with value v
     void update(int l, int r, T v){
         update(l, r, v, 1, 1, size);
     }
 
+    // query the value of the tree in range [l, r]
     T query(int l, int r, int idx, int lx, int rx){
-        if(lx > r || l > rx) return queryDefault;
-        if(lx >= l && rx <= r) return values[idx];
-        int m = (lx + rx) / 2;
-        auto ret =  query_operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
-        ret = update_operation(ret, operations[idx]);
-        return ret;
+        propagate(idx, lx, rx);
+        if(lx >= l && rx <= r) return tree[idx];
+        if(lx > r || rx < l) return tree_default;
+        int m = (rx + lx) / 2;
+        return tree_operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
-    // query to get value of range [l, r]
-
+    // query the value of the tree in range [l, r]
     T query(int l, int r){
         return query(l, r, 1, 1, size);
     }
