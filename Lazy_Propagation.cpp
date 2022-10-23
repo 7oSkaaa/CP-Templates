@@ -62,18 +62,18 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
     // the function that will be used to update the tree
     T lazy_operation(T a, T b){
-        return a + b;
+        return b;
     }
 
     // the function that will be used to query on the tree
     T tree_operation(T a, T b){
-        return a + b;
+        return min(a, b);
     }
 
     // push lazy value to children in lazy
     void propagate(int idx, int lx, int rx){
         if(!is_lazy[idx]) return;
-        tree[idx] = lazy_operation(tree[idx], lazy[idx] * (rx - lx + 1));
+        tree[idx] = lazy_operation(tree[idx], lazy[idx]);
         if(lx != rx){
             lazy[2 * idx] = lazy_operation(lazy[2 * idx], lazy[idx]);
             lazy[2 * idx + 1] = lazy_operation(lazy[2 * idx + 1], lazy[idx]);
@@ -84,7 +84,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
     // push value to children int lazy
     void propagate(int idx, int lx, int rx, T v){
-        tree[idx] = lazy_operation(tree[idx], v * (rx - lx + 1));
+        tree[idx] = lazy_operation(tree[idx], v);
         if(lx != rx){
             lazy[2 * idx] = lazy_operation(lazy[2 * idx], v);
             lazy[2 * idx + 1] = lazy_operation(lazy[2 * idx + 1], v);
