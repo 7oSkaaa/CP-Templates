@@ -137,6 +137,7 @@ struct Math {
     // b multiply e % mod in O(log(e))
 
     ll Bin_Mul(ll b, ll e, ll mod){
+        b %= mod;
         ll mult = 0;
         while(e){
             if(e & 1) add(mult, b, mod);
