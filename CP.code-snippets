@@ -1,13 +1,13 @@
 {
     "CP Template": {
-		"prefix": "7oSkaa",
+		"prefix": "Reset",
 		"body": [
 		  "#include <bits/stdc++.h>",
 		  "",
 		  "using namespace std;",
 		  "",
 		  "#define fixed(n) fixed << setprecision(n)",
-		  "#define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))",
+		  "#define ceil(n, m) (((n) + (m) - 1) / (m))",
 		  "#define add_mod(a, b, m) (((a % m) + (b % m)) % m)",
 		  "#define sub_mod(a, b, m) (((a % m) - (b % m) + m) % m)",
 		  "#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)",
@@ -19,9 +19,8 @@
 		  "#define se second",
 		  "#define ll long long",
 		  "#define ull unsigned long long",
-		  "#define Mod  1'000'000'007",
 		  "#define EPS 1e-9",
-		  "constexpr int INF = 1 << 30;",
+		  "constexpr int INF = 1 << 30, Mod = 1e9 + 7;",
 		  "constexpr ll LINF = 1LL << 62;",
 		  "#define PI acos(-1)",
 		  "template < typename T = int > using Pair = pair < T, T >;",
