@@ -1,7 +1,3 @@
-<head>
-	<link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
-</head>
-
 # Competitive Programming Templates
 
 This template is made for competitive programming using `C++` language.
@@ -58,15 +54,7 @@ This template is made for competitive programming using `C++` language.
 - [Ordered Set](https://github.com/7oSkaaa/CP-Templates/blob/main/Ordered_Set.cpp)&nbsp;<a href='Ordered_Set.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie.cpp)&nbsp;<a href='Trie.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Queue with Stacks](https://github.com/7oSkaaa/CP-Templates/blob/main/Queue_with_Stacks.cpp)&nbsp;<a href='Queue_with_Stacks.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-
-<br><br><br>
-
-### Hashing
----
-- [Hash Interval](https://github.com/7oSkaaa/CP-Templates/blob/main/Hash.cpp)&nbsp;<a href='Hash.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Hashed Deque](https://github.com/7oSkaaa/CP-Templates/blob/main/Hashed_Deque.cpp)&nbsp;<a href='Hashed_Deque.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-
-
 
 <br><br><br>
 
