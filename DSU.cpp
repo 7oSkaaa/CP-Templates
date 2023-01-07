@@ -34,18 +34,17 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct DSU {
+template < typename T = int, int Base = 1 > struct DSU {
     
-    vector < int > parent, Gsize;
+    vector < T > parent, Gsize;
 
     DSU(int MaxNodes){
-        parent.resize(MaxNodes + 5);
-        Gsize.resize(MaxNodes + 5);
-        for(int i = 1; i <= MaxNodes; i++)
+        parent = Gsize = vector < T > (MaxNodes + 5);
+        for(int i = Base; i <= MaxNodes; i++)
           parent[i] = i, Gsize[i] = 1;
     }
     
-    int find_leader(int node){
+    T find_leader(int node){
         return parent[node] = (parent[node] == node ? node : find_leader(parent[node]));
     }
 
@@ -60,8 +59,8 @@ struct DSU {
         Gsize[leader_u] += Gsize[leader_v], parent[leader_v] = leader_u;
     }
 
-    int get_size(int node){
-        return Gsize[find_leader(node)];
+    int get_size(int u){
+        return Gsize[find_leader(u)];
     }
 };
 
