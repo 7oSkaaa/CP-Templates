@@ -1,3 +1,4 @@
+title: 7oSkaa's CP Templates
 theme: jekyll-theme-Hacker
 author: Ahmed Hossam
 navbar-links:
@@ -5,3 +6,6 @@ navbar-links:
   Compititve Profiles: "My Competitive Programming Profiles"
   Author's home: "https://cutt.ly/Ahmed_Hossam_Website"
 avatar: "https://iili.io/H5APPzG.png"
+round-avatar: true
+plugins:
+  - jekyll-default-layout
