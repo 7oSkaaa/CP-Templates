@@ -1,3 +1,7 @@
+<head>
+	<link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
+</head>
+
 # Competitive Programming Templates
 
 This template is made for competitive programming using `C++` language.
