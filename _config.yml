@@ -1,1 +1,7 @@
 theme: jekyll-theme-Hacker
+author: Ahmed Hossam
+navbar-links:
+  About Me: "https://github.com/7oSkaaa"
+  Compititve Profiles: "My Competitive Programming Profiles"
+  Author's home: "https://cutt.ly/Ahmed_Hossam_Website"
+avatar: "https://iili.io/H5APPzG.png"
