@@ -43,6 +43,7 @@ This template is made for competitive programming using `C++` language.
 - [Binary Search Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Binary_Search_Tree.cpp)&nbsp;<a href='Binary_Search_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Centroid Decomposition](https://github.com/7oSkaaa/CP-Templates/blob/main/Centroid_Decomposition.cpp)&nbsp;<a href='Centroid_Decomposition.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Lowest Common Ancestor](https://github.com/7oSkaaa/CP-Templates/blob/main/LCA.cpp)&nbsp;<a href='LCA.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [Lowest Common Ancestor Weighted](https://github.com/7oSkaaa/CP-Templates/blob/main/LCA_Weighted.cpp)&nbsp;<a href='LCA_Weighted.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
 <br><br><br>
 
