@@ -1,12 +1,14 @@
 #include <bits/stdc++.h>
-
+ 
 using namespace std;
-
+ 
+#define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
+#define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define fixed(n) fixed << setprecision(n)
-#define ceil(n, m) (((n) + (m) - 1) / (m))
-#define add_mod(a, b, m) (((a % m) + (b % m)) % m)
-#define sub_mod(a, b, m) (((a % m) - (b % m) + m) % m)
+#define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
+#define fill(vec, value) memset(vec, value, sizeof(vec));
 #define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
+#define add_mod(a, b, m) (((a % m) + (b % m)) % m)
 #define all(vec) vec.begin(), vec.end()
 #define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
@@ -15,18 +17,18 @@ using namespace std;
 #define se second
 #define ll long long
 #define ull unsigned long long
+#define Mod  1'000'000'007
+#define OO 2'000'000'000
 #define EPS 1e-9
-constexpr int INF = 1 << 30, Mod = 1e9 + 7;
-constexpr ll LINF = 1LL << 62;
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
 vector < string > RET = {"NO", "YES"};
-
+ 
 template < typename T = int > istream& operator >> (istream &in, vector < T > &v) {
     for (auto &x : v) in >> x;
     return in;
 }
-
+ 
 template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
     for (const T &x : v) out << x << ' '; 
     return out;
@@ -34,42 +36,53 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 template < typename T = int > struct LCA {
     
+    struct Edge {
+
+        ll v, w;
+
+        Edge(ll V = 0, ll W = 0) : v(V), w(W) {}
+
+        bool operator < (const Edge &rhs) const {
+            return w < rhs.w;
+        }
+
+    };
+
     int N, LOG;
-    vector < vector < T > > anc;
-    vector < vector < T > > adj;
+    vector < vector < T > > anc, cost;
+    vector < vector < Edge > > adj;
     vector < int > dep;
     
-    LCA(int n = 0){
+    LCA(int n){
         N = n + 10, LOG = 0;
         while((1 << LOG) <= n) LOG++;
         dep = vector < int > (N);
-        adj = vector < vector < T > > (N);
-        anc = vector < vector < T > > (N, vector < T > (LOG));
+        adj = vector < vector < Edge > > (N);
+        anc = cost = vector < vector < T > > (N, vector < T > (LOG));
     }
-
-    LCA(int n, vector < vector < T > > &G) : adj(G){ 
-        N = n + 10, LOG = 0;
-        while((1 << LOG) <= n) LOG++;
-        dep = vector < int > (N);
-        anc = vector < vector < T > > (N, vector < T > (LOG));
-    }
-
-    void add_edge(int u, int v){
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+    
+    void add_edge(int u, int v, T w){
+        adj[u].push_back(Edge(v, w));
+        adj[v].push_back(Edge(u, w));
     }
 
     void build_adj(int edges){
-        for(int i = 0, u, v; i < edges && cin >> u >> v; i++)
-            add_edge(u, v);
+        for(int i = 0, u, v, w; i < edges && cin >> u >> v >> w; i++)
+            add_edge(u, v, w);
     }
 
+    T operation(T a, T b){
+        return a + b;
+    }
+    
     void dfs(int u, int p = 0){
-        for(auto& v : adj[u]){
+        for(auto& [v, w] : adj[u]){
             if(v == p) continue;
-            dep[v] = dep[u] + 1, anc[v][0] = u;
-            for(int bit = 1; bit < LOG; bit++)
+            dep[v] = dep[u] + 1, anc[v][0] = u, cost[v][0] = w;
+            for(int bit = 1; bit < LOG; bit++){
                 anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+                cost[v][bit] = operation(cost[v][bit - 1], cost[anc[v][bit - 1]][bit - 1]);
+            }
             dfs(v, u);
         }
     }
@@ -94,10 +107,19 @@ template < typename T = int > struct LCA {
                 u = anc[u][bit], v = anc[v][bit];
         return anc[u][0];
     }
-
+    
+    T get_cost(int u, int dist){
+        if(dep[u] < dist) return -1;
+        T ans = 0;
+        for(int bit = 0; bit < LOG; bit++)
+            if(dist & (1 << bit))
+                ans = operation(ans, cost[u][bit]), u = anc[u][bit];
+        return ans;
+    }
+    
     T query(int u, int v){
         int lca = get_lca(u, v);
-        return dep[u] + dep[v] - 2 * dep[lca];
+        return operation(get_cost(u, dep[u] - dep[lca]), get_cost(v, dep[v] - dep[lca]));
     }
 
 };
@@ -105,14 +127,12 @@ template < typename T = int > struct LCA {
 void Solve(){
     
 }
-
+ 
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int test_cases = 1;
-    // cin >> test_cases;
-    for(int tc = 1; tc <= test_cases; tc++){
-        // cout << "Case #" << tc << ": ";
+    int t = 1;
+    //cin >> t;
+    while(t--)
         Solve();
-    }
     return 0;
 }
