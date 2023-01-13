@@ -122,6 +122,10 @@ template < typename T = int > struct LCA {
         return operation(get_cost(u, dep[u] - dep[lca]), get_cost(v, dep[v] - dep[lca]));
     }
 
+    void build(int root = 1){
+        dfs(root);
+    }
+
 };
 
 void Solve(){

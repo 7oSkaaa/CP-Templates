@@ -100,6 +100,10 @@ template < typename T = int > struct LCA {
         return dep[u] + dep[v] - 2 * dep[lca];
     }
 
+    void build(int root = 1){
+        dfs(root);
+    }
+
 };
 
 void Solve(){
