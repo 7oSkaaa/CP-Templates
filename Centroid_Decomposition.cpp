@@ -34,10 +34,10 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Centroid_Decomposition {
+template < typename T = int > struct Centroid_Decomposition {
 
     int n, treeRoot;
-    const vector < vector < int > > adj;
+    const vector < vector < T > > adj;
     vector < int > SubtreeSz, isCentroid;
 
     // Initialize the Centroid Decomposition
@@ -78,6 +78,11 @@ struct Centroid_Decomposition {
         }
     }
     
+    // call this function to decompose the tree
+    void Decompose(){
+        Centroid(treeRoot);
+    }
+
 };
 
 void Solve(){
