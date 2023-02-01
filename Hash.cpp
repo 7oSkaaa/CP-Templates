@@ -32,7 +32,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < int p = 31, int mod = 1000000009, int Mode = 0 > struct Hash {
+template < int Mode = 0, int p = 31, int mod = 1000000009 > struct Hash {
 
     int n, init;
     vector < ll > p_pow, hash;                    
@@ -53,10 +53,10 @@ template < int p = 31, int mod = 1000000009, int Mode = 0 > struct Hash {
         n = s.size();
         p_pow = hash = vector < ll > (n + 1);
         p_pow[0] = 1;
-        for (int i = 1; i <= n; i++)
+        for (int i = 1; i <= n; i++) 
             p_pow[i] = (p_pow[i - 1] * p) % mod;
-        for (int i = 0; i < n; i++)
-            hash[i + 1] = (hash[i] + (s[i] - init + 1) * p_pow[i]) % mod;
+        for (int i = n - 1; i >= 0; i--)
+            hash[i] = ((s[i] - init + 1) + hash[i + 1] * p_pow[1]) % mod;
     }
 
     Hash(vector < ll > const& v){
@@ -64,15 +64,14 @@ template < int p = 31, int mod = 1000000009, int Mode = 0 > struct Hash {
         n = v.size();
         p_pow = hash = vector < ll > (n + 1);
         p_pow[0] = 1;
-        for (int i = 1; i <= n; i++)
+        for (int i = 1; i <= n; i++) 
             p_pow[i] = (p_pow[i - 1] * p) % mod;
-        for (int i = 0; i < n; i++)
-            hash[i + 1] = (hash[i] + (v[i] - init + 1) * p_pow[i]) % mod;
+        for (int i = n - 1; i >= 0; i--)
+            hash[i] = ((v[i] - init + 1) + hash[i + 1] * p_pow[1]) % mod;
     }
 
     ll sub(int l, int r){
-        ll curr_hash = (hash[r] + mod - hash[l - 1]) % mod;
-        return (curr_hash * p_pow[n - l]) % mod;
+        return ((hash[l - 1] - hash[r] * p_pow[r - l + 1]) % mod + mod) % mod;
     }
 
     ll at(int idx){
