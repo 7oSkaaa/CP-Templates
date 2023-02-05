@@ -77,7 +77,7 @@ template < typename T = int > struct Fenwick_Tree {
     }
 
     T query(int l, int r){
-        if(l > r) swap(l, r);
+        if(l > r) return DEFAULT;
         return get_ans(r) - get_ans(l - 1);
     }
 
