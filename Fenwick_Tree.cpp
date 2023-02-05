@@ -42,7 +42,7 @@ template < typename T = int > struct Fenwick_Tree {
 
     Fenwick_Tree(int N){
         n = N + 1, DEFAULT = 0;
-        Tree.assign(n + 10, DEFAULT);
+        Tree = vector < T > (n + 10, DEFAULT);
     }
 
     T operation(T a, T b){
@@ -79,6 +79,10 @@ template < typename T = int > struct Fenwick_Tree {
     T query(int l, int r){
         if(l > r) return DEFAULT;
         return get_ans(r) - get_ans(l - 1);
+    }
+
+    T get(int idx){
+        return query(idx, idx);
     }
 
 };
