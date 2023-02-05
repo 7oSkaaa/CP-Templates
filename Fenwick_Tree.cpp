@@ -40,7 +40,7 @@ template < typename T = int > struct Fenwick_Tree {
     int n;
     T DEFAULT;
 
-    Fenwick_Tree(int N){
+    Fenwick_Tree(int N = 0){
         n = N + 1, DEFAULT = 0;
         Tree = vector < T > (n + 10, DEFAULT);
     }
