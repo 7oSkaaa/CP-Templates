@@ -32,11 +32,12 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Trie {
+template < int Mode = 0 > struct Trie {
+    // Mode [lowercase, uppercase, digits]
     
     struct Node {
 
-        Node* child[26];
+        Node* child[Mode == 2 ? 2 : 26];
         bool is_word;
         int freq;
 
@@ -53,6 +54,8 @@ struct Trie {
     Trie(){
         root = new Node;
         DEFAULT = 'a';
+        if(Mode == 1) DEFAULT = 'A';
+        if(Mode == 2) DEFAULT = '0';
     }
     
     ~Trie(){
@@ -80,7 +83,7 @@ struct Trie {
     }
   
     void erase(string& word, int idx, Node* curr){
-        if(idx == sz(word)) return;
+        if(idx == sz(word)) return void(curr -> is_word = false);
         erase(word, idx + 1, curr -> child[word[idx] - DEFAULT]);
         curr -> child[word[idx] - DEFAULT] -> freq--;
         if(curr -> child[word[idx] - DEFAULT] -> freq == 0){
