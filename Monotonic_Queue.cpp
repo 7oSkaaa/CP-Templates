@@ -93,8 +93,12 @@ template < typename T = int > struct Monotonic_Queue {
         s1.pop();
     }
 
+    T monotonic_val(){
+        return operation(s1.Monotonic_val(), s2.Monotonic_val());
+    }
+
     bool is_good(){
-        return operation(s1.Monotonic_val(), s2.Monotonic_val()) == 1;
+        return monotonic_val() == 1;
     }
 
 };

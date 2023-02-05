@@ -2142,12 +2142,15 @@
 		  "        s1.pop();",
 		  "    }",
 		  "",
-		  "    bool is_good(){",
-		  "        return operation(s1.Monotonic_val(), s2.Monotonic_val()) == 1;",
+		  "    T monotonic_val(){",
+		  "        return operation(s1.Monotonic_val(), s2.Monotonic_val());",
 		  "    }",
 		  "",
-		  "};",
-		  ""
+		  "    bool is_good(){",
+		  "        return monotonic_val() == 1;",
+		  "    }",
+		  "",
+		  "};"
 		],
 		"description": "Monotonic_Queue"
 	},
