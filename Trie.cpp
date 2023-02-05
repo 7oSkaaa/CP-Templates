@@ -2,13 +2,11 @@
 
 using namespace std;
 
-#define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
-#define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define fixed(n) fixed << setprecision(n)
-#define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
-#define fill(vec, value) memset(vec, value, sizeof(vec));
-#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
+#define ceil(n, m) (((n) + (m) - 1) / (m))
 #define add_mod(a, b, m) (((a % m) + (b % m)) % m)
+#define sub_mod(a, b, m) (((a % m) - (b % m) + m) % m)
+#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 #define all(vec) vec.begin(), vec.end()
 #define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
@@ -17,9 +15,9 @@ using namespace std;
 #define se second
 #define ll long long
 #define ull unsigned long long
-#define Mod  1'000'000'007
-#define OO 2'000'000'000
 #define EPS 1e-9
+constexpr int INF = 1 << 30, Mod = 1e9 + 7;
+constexpr ll LINF = 1LL << 62;
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
 vector < string > RET = {"NO", "YES"};
@@ -40,10 +38,12 @@ struct Trie {
 
         Node* child[26];
         bool is_word;
+        int freq;
 
         Node(){
             memset(child, 0, sizeof(child));
             is_word = false;
+            freq = 0;
         }
     };
 
@@ -51,7 +51,7 @@ struct Trie {
     char DEFAULT;
 
     Trie(){
-      	root = new Node;
+        root = new Node;
         DEFAULT = 'a';
     }
     
@@ -70,32 +70,47 @@ struct Trie {
     }
 
     void insert(string& word){
-		Node* curr = root; 
-		for(auto& c : word){
-			if(!curr -> child[c - DEFAULT]) curr -> child[c - DEFAULT] = new Node;
-			curr = curr -> child[c - DEFAULT];
-		}
-		curr -> is_word = true;
+        Node* curr = root; 
+        for(auto& c : word){
+            if(!curr -> child[c - DEFAULT]) curr -> child[c - DEFAULT] = new Node;
+            curr = curr -> child[c - DEFAULT];
+            curr -> freq++;
+        }
+        curr -> is_word = true;
     }
   
-    bool search(string& word){
-		Node* curr = root; 
-		for(auto& c : word){
-			if(!curr -> child[c - DEFAULT]) return false;
-			curr = curr -> child[c - DEFAULT];
-		}
-		return curr -> is_word;
-    }
- 
-    bool is_prefix(string& word){
-        Node* curr = root; 
-		for(auto& c : word){
-			if(!curr -> child[c - DEFAULT]) return false;
-			curr = curr -> child[c - DEFAULT];
-		}
-		return true;
+    void erase(string& word, int idx, Node* curr){
+        if(idx == sz(word)) return;
+        erase(word, idx + 1, curr -> child[word[idx] - DEFAULT]);
+        curr -> child[word[idx] - DEFAULT] -> freq--;
+        if(curr -> child[word[idx] - DEFAULT] -> freq == 0){
+            delete curr -> child[word[idx] - DEFAULT];
+            curr -> child[word[idx] - DEFAULT] = nullptr;
+        }
     }
 
+    bool search(string& word){
+        Node* curr = root; 
+        for(auto& c : word){
+            if(!curr -> child[c - DEFAULT]) return false;
+            curr = curr -> child[c - DEFAULT];
+        }
+        return curr -> is_word;
+    }
+ 
+    void erase(string& word){
+        if(search(word)) 
+            erase(word, 0, root);
+    }
+
+    bool is_prefix(string& word){
+        Node* curr = root; 
+        for(auto& c : word){
+            if(!curr -> child[c - DEFAULT]) return false;
+            curr = curr -> child[c - DEFAULT];
+        }
+        return true;
+    }
 };
 
 void Solve(){
@@ -104,9 +119,11 @@ void Solve(){
 
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int t = 1;
-    //cin >> t;
-    while(t--)
+    int test_cases = 1;
+    // cin >> test_cases;
+    for(int tc = 1; tc <= test_cases; tc++){
+        // cout << "Case #" << tc << ": ";
         Solve();
+    }
     return 0;
 }
