@@ -94,7 +94,7 @@ template < typename T = int > struct Monotonic_Queue {
     }
 
     bool is_good(){
-        return operation(s1.GCD_val(), s2.GCD_val()) == 1;
+        return operation(s1.Monotonic_val(), s2.Monotonic_val()) == 1;
     }
 
 };
