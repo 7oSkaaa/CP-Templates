@@ -102,6 +102,10 @@ template < typename T = int, int Base = 0 > struct MO {
             cout << answers[i] << '\n';
     }
 
+    vector < T > Get_answers(){
+        return answers;
+    }
+
 };
 
 void Solve(){
