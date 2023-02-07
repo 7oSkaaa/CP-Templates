@@ -33,14 +33,15 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 }
 
 template < int Mode = 0 > struct Trie {
-    // Mode [lowercase, uppercase, digits]
-    
-    struct Node {
+    // Mode [lowercase, uppercase, digits, binary]
+    static constexpr int sz[4] = {26, 26, 10, 2};
 
-        Node* child[Mode == 2 ? 2 : 26];
+    struct Node {
+ 
+        Node* child[sz[Mode]];
         bool is_word;
         int freq;
-
+ 
         Node(){
             memset(child, 0, sizeof(child));
             is_word = false;
@@ -53,9 +54,7 @@ template < int Mode = 0 > struct Trie {
 
     Trie(){
         root = new Node;
-        DEFAULT = 'a';
-        if(Mode == 1) DEFAULT = 'A';
-        if(Mode == 2) DEFAULT = '0';
+        DEFAULT = "aA00"[Mode];
     }
     
     ~Trie(){
@@ -75,7 +74,8 @@ template < int Mode = 0 > struct Trie {
     void insert(string& word){
         Node* curr = root; 
         for(auto& c : word){
-            if(!curr -> child[c - DEFAULT]) curr -> child[c - DEFAULT] = new Node;
+            if(!curr -> child[c - DEFAULT]) 
+                curr -> child[c - DEFAULT] = new Node;
             curr = curr -> child[c - DEFAULT];
             curr -> freq++;
         }
@@ -83,10 +83,9 @@ template < int Mode = 0 > struct Trie {
     }
   
     void erase(string& word, int idx, Node* curr){
-        if(idx == sz(word)) return void(curr -> is_word = false);
+        if(idx == sz(word)) return void(curr -> is_word = curr -> freq > 1);
         erase(word, idx + 1, curr -> child[word[idx] - DEFAULT]);
-        curr -> child[word[idx] - DEFAULT] -> freq--;
-        if(curr -> child[word[idx] - DEFAULT] -> freq == 0){
+        if(--curr -> child[word[idx] - DEFAULT] -> freq == 0){
             delete curr -> child[word[idx] - DEFAULT];
             curr -> child[word[idx] - DEFAULT] = nullptr;
         }
