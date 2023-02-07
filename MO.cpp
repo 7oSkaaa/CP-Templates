@@ -34,14 +34,14 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct MO {
+template < typename T = int, int Base = 0 > struct MO {
 
     struct query {
 
         int l, r, query_idx, block_idx;
 
         query(int L = 0, int R = 0, int Query_idx = 0){
-            l = L - 1, r = R - 1, query_idx = Query_idx;
+            l = L - !Base, r = R - !Base, query_idx = Query_idx;
         }
 
         bool operator < (const query& q) const {
@@ -56,7 +56,9 @@ template < typename T = int > struct MO {
 
     MO(int N = 0, int M = 0){
         curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = sqrt(n);
-        queries.resize(m), answers.resize(m), nums.resize(n);
+        queries = vector < query > (m);
+        answers = vector < T > (m);
+        nums = vector < T > (n + Base);
     }
 
     void set_block_id(){
@@ -65,9 +67,13 @@ template < typename T = int > struct MO {
     }
     
     void Get_Data(){
-        cin >> nums;
+        
+        for(int i = Base; i < n + Base; i++)
+            cin >> nums[i];
+
         for(int i = 0, l, r; i < m && cin >> l >> r; i++)
             queries[i] = query(l, r, i);
+        
         set_block_id();
     }
 
