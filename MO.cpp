@@ -66,14 +66,10 @@ template < typename T = int, int Base = 0 > struct MO {
             queries[i].block_idx = queries[i].l / Sqrt_N;
     }
     
-    void Get_Data(){
-        
-        for(int i = Base; i < n + Base; i++)
-            cin >> nums[i];
-
+    void Get_Data(vector < T > &v){
+        nums = v;
         for(int i = 0, l, r; i < m && cin >> l >> r; i++)
             queries[i] = query(l, r, i);
-        
         set_block_id();
     }
 
