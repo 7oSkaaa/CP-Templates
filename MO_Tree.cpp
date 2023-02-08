@@ -161,6 +161,10 @@ template < typename T = int > struct MO_Tree {
 
     void Process(){
         sort(all(queries));
+        
+        // start with the first query
+        curr_l = queries[0].l, curr_r = queries[0].l - 1;
+
         for(int i = 0; i < m; i++){
             set_range(queries[i]);
             // if lca is -1 then the two nodes are in the same subtree
