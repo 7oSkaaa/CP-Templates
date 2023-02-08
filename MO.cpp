@@ -51,14 +51,14 @@ template < typename T = int, int Base = 0 > struct MO {
     };
 
     int curr_l, curr_r, ans, n, m, Sqrt_N;
-    vector < query > queries;
     vector < T > answers, nums;
+    vector < query > queries;
 
     MO(int N = 0, int M = 0){
-        curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = sqrt(n);
+        curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = n / sqrt(m) + 1;
         queries = vector < query > (m);
         answers = vector < T > (m);
-        nums = vector < T > (n + Base);
+        nums = vector < T > (n + 5);
     }
 
     void set_block_id(){
@@ -67,30 +67,41 @@ template < typename T = int, int Base = 0 > struct MO {
     }
     
     void Get_Data(vector < T > &v){
+        // get the array and set the queries
         nums = v;
+
         for(int i = 0, l, r; i < m && cin >> l >> r; i++)
             queries[i] = query(l, r, i);
+        
+        // set the block id for each query
         set_block_id();
     }
 
-    void add(int idx){
-        // fill this function with what problem needs
+    // add the idx to the current range
+    void add(int idx, bool isLeft){
+        
     }
 
-    void remove(int idx){
-        // fill this function with what problem needs
+    // remove the idx from the current range
+    void remove(int idx, bool isLeft){
+        
     }
 
-    void set_range(query q){
-        while(curr_l < q.l) remove(curr_l++);
-        while(curr_l > q.l) add(--curr_l);
-        while(curr_r < q.r) add(++curr_r);
-        while(curr_r > q.r) remove(curr_r--);
+    void set_range(query& q){
+        // add the new range and remove the old range
+        while(curr_l > q.l) add(--curr_l, true);
+        while(curr_r < q.r) add(++curr_r, false);
+        while(curr_l < q.l) remove(curr_l++, true);
+        while(curr_r > q.r) remove(curr_r--, false);
     }
 
     void Process(){
+        
         sort(all(queries));
 
+        // to start with the first query
+        curr_l = queries[0].l, curr_r = queries[0].l - 1;
+        
         for(int i = 0; i < m; i++){
             set_range(queries[i]);
             answers[queries[i].query_idx] = ans;
