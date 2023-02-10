@@ -71,7 +71,7 @@ template < int Mode = 0 > struct Trie {
         }
     }
 
-    void insert(string& word){
+    void insert(const string& word){
         Node* curr = root; 
         for(auto& c : word){
             if(!curr -> child[c - DEFAULT]) 
@@ -82,7 +82,7 @@ template < int Mode = 0 > struct Trie {
         curr -> is_word = true;
     }
   
-    void erase(string& word, int idx, Node* curr){
+    void erase(const string& word, int idx, Node* curr){
         if(idx == sz(word)) return void(curr -> is_word = curr -> freq > 1);
         erase(word, idx + 1, curr -> child[word[idx] - DEFAULT]);
         if(--curr -> child[word[idx] - DEFAULT] -> freq == 0){
@@ -91,7 +91,7 @@ template < int Mode = 0 > struct Trie {
         }
     }
 
-    bool search(string& word){
+    bool search(const string& word){
         Node* curr = root; 
         for(auto& c : word){
             if(!curr -> child[c - DEFAULT]) return false;
@@ -100,12 +100,12 @@ template < int Mode = 0 > struct Trie {
         return curr -> is_word;
     }
  
-    void erase(string& word){
+    void erase(const string& word){
         if(search(word)) 
             erase(word, 0, root);
     }
 
-    bool is_prefix(string& word){
+    bool is_prefix(const string& word){
         Node* curr = root; 
         for(auto& c : word){
             if(!curr -> child[c - DEFAULT]) return false;
