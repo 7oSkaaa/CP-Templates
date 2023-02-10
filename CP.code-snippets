@@ -3027,7 +3027,7 @@
 		  " ",
 		  "    void erase(const T& x){",
 		  "        if(search(x)) ",
-		  "            erase(x, 0, root);",
+		  "            erase(x, LOG, root);",
 		  "    }",
 		  "};",
 		  ""
