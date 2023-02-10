@@ -33,8 +33,8 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 }
 
 template < int Mode = 0 > struct Trie {
-    // Mode [lowercase, uppercase, digits, binary]
-    static constexpr int sz[4] = {26, 26, 10, 2};
+    // Mode [lowercase, uppercase, digits]
+    static constexpr int sz[4] = {26, 26, 10};
 
     struct Node {
  
@@ -54,7 +54,7 @@ template < int Mode = 0 > struct Trie {
 
     Trie(){
         root = new Node;
-        DEFAULT = "aA00"[Mode];
+        DEFAULT = "aA0"[Mode];
     }
     
     ~Trie(){
