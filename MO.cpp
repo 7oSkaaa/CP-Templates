@@ -78,21 +78,21 @@ template < typename T = int, int Base = 0 > struct MO {
     }
 
     // add the idx to the current range
-    void add(int idx, bool isLeft){
+    void add(int idx){
         
     }
 
     // remove the idx from the current range
-    void remove(int idx, bool isLeft){
+    void remove(int idx){
         
     }
 
     void set_range(query& q){
         // add the new range and remove the old range
-        while(curr_l > q.l) add(--curr_l, true);
-        while(curr_r < q.r) add(++curr_r, false);
-        while(curr_l < q.l) remove(curr_l++, true);
-        while(curr_r > q.r) remove(curr_r--, false);
+        while(curr_l > q.l) add(--curr_l);
+        while(curr_r < q.r) add(++curr_r);
+        while(curr_l < q.l) remove(curr_l++);
+        while(curr_r > q.r) remove(curr_r--);
     }
 
     void Process(){
