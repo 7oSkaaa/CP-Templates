@@ -92,7 +92,7 @@ template < typename T = int, int Base = 1 > struct Sparse_Table {
     }
 
     T query(int L, int R, bool overlap = false){
-        return (overlap ? query_1(L, R) : query_log_n(L, R)).val;
+        return (!overlap ? query_1(L, R) : query_log_n(L, R)).val;
     }
 
 };
