@@ -99,7 +99,7 @@ template < typename T = int, int LOG = 30 > struct Trie {
  
     void erase(const T& x){
         if(search(x)) 
-            erase(x, 0, root);
+            erase(x, LOG, root);
     }
 };
 
