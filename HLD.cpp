@@ -95,8 +95,15 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
         if(!VAL_ON_EDGE) // value on nodes
             ret.push_back({pos[v], pos[u]});
         else if(u != v) // don't include the root node
-            ret.push_back({pos[u] + 1, pos[v]});
+            ret.push_back({pos[v] + 1, pos[u]});
         return ret;
+    }
+
+    // get child of a node for problem that value on edges
+    int getChild(int u, int v){
+        if(par[u] == v) 
+            return u;
+        return v;
     }
 
 };
