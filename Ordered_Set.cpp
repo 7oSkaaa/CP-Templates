@@ -51,17 +51,20 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 template < typename T = int , typename CompFunction = std::less_equal < T > > struct Ordered_Multiset {
     
     ordered_multiset < T, CompFunction > mst;
-    
+    int Mode;
+
     // Constructor 
-    Ordered_Multiset() {
+    Ordered_Multiset(bool isSmaller = true) {
         mst.clear();
+        Mode = !isSmaller ? 1 : -1;
     }
     
     // Constructor with vector
-    Ordered_Multiset(vector < T > &vec) {
+    Ordered_Multiset(vector < T > &vec, bool isSmaller = true) {
         mst.clear();
         for (auto &x : vec) 
             mst.insert(x);
+        Mode = !isSmaller ? 1 : -1;
     }
 
     // Insert element
@@ -127,7 +130,7 @@ template < typename T = int , typename CompFunction = std::less_equal < T > > st
 
     // return number of elements < Comp > of val
     int order_of_key(T val){
-        return mst.order_of_key(val);
+        return mst.order_of_key(val - Mode);
     }
 
     // return iterator to element with given index
@@ -145,6 +148,7 @@ template < typename T = int , typename CompFunction = std::less_equal < T > > st
     // Ordered_Multiset < int, greater_equal < int > > mst;
 
 };
+
 
 void Solve(){
     
