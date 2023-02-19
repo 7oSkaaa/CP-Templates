@@ -50,20 +50,6 @@ template < typename T = int, int LOG = 30 > struct Trie {
     Trie(){
         root = new Node;
     }
-    
-    ~Trie(){
-        Delete_Trie(root);
-        delete root;
-    }
-
-    void Delete_Trie(Node* curr){
-        for(auto& new_node : curr -> child){
-            if(new_node){
-                Delete_Trie(new_node);
-                delete new_node;
-            }
-        }
-    }
 
     void insert(const T& x){
         Node* curr = root; 
