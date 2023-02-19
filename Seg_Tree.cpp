@@ -63,15 +63,20 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         intial(n);
     }
 
+    Segment_Tree(const vector < T >& nums){
+        intial(sz(nums) + 5);
+        build(nums);
+    }
+
     // Main operation to do
 
-    Node operation(Node a, Node b){
+    Node operation(const Node& a, const Node& b){
         return Node(a.val + b.val);
     }
     
     // If Mode is 1 so the array is 1-based else the array is 0-based
     
-    void build(vector < T >& nums, int idx, int lx, int rx){
+    void build(const vector < T >& nums, int idx, int lx, int rx){
         if(Mode ? lx >= sz(nums) : lx > sz(nums)) return;
         if(rx == lx) tree[idx] = nums[lx - !Mode];
         else {
@@ -82,7 +87,7 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         }
     }
 
-    void build(vector < T >& nums){
+    void build(const vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
@@ -96,7 +101,7 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         }
     }
 
-    void update(int i, T v){
+    void update(const int i, const T v){
         update(i, v, 1, 1, size);
     }
 
@@ -107,15 +112,15 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
     }
 
-    Node query_Node(int l, int r){
+    Node query_Node(const int l, const int r){
         return query(l, r, 1, 1, size);
     }
 
-    T query(int l, int r){
+    T query(const int l, const int r){
         return query_Node(l, r).val;
     }
 
-    T get(int idx){
+    T get(const int idx){
         return query_Node(idx, idx).val;
     }
 
