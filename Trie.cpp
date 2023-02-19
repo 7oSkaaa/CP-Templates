@@ -57,20 +57,6 @@ template < int Mode = 0 > struct Trie {
         DEFAULT = "aA0"[Mode];
     }
     
-    ~Trie(){
-        Delete_Trie(root);
-        delete root;
-    }
-
-    void Delete_Trie(Node* curr){
-        for(auto& new_node : curr -> child){
-            if(new_node){
-                Delete_Trie(new_node);
-                delete new_node;
-            }
-        }
-    }
-
     void insert(const string& word){
         Node* curr = root; 
         for(auto& c : word){
