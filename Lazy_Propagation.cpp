@@ -55,7 +55,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         intial(n);
     }
 
-    Lazy_Propagation(int n, vector < T > &v){
+    Lazy_Propagation(int n, const vector < T > &v){
         intial(n);
         build(v);
     }
@@ -93,7 +93,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // build the Tree with given vector
-    void build(vector < T >& nums, int idx, int lx, int rx){
+    void build(const vector < T >& nums, int idx, int lx, int rx){
         propagate(idx, lx, rx);
         if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
         if(rx == lx) Tree[idx] = nums[lx - !Base];
@@ -106,7 +106,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // build the Tree with initial value
-    void build(T initial_value, int idx, int lx, int rx){
+    void build(const T initial_value, int idx, int lx, int rx){
         propagate(idx, lx, rx);
         if(rx == lx) Tree[idx] = initial_value;
         else {
@@ -118,12 +118,12 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // build the Tree with initial value
-    void build(T initial_value){
+    void build(const T initial_value){
         build(initial_value, 1, 1, size);
     }
 
     // the vector should be 1-based also the Tree is 1-based
-    void build(vector < T >& nums){
+    void build(const vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
