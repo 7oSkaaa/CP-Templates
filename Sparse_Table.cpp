@@ -34,7 +34,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int, int Base = 1 > struct Sparse_Table {
+template < typename T = int , int Base = 0 > struct Sparse_Table {
 
     struct Node {
 
@@ -54,24 +54,24 @@ template < typename T = int, int Base = 1 > struct Sparse_Table {
     vector < int > Bin_Log;
     Node DEFAULT;
 
-    Sparse_Table(vector < T >& vec){
-        n = sz(vec), DEFAULT = INF, LOG = __lg(n) + 1;
+    Sparse_Table(const vector < T >& vec){
+        n = sz(vec) - Base, DEFAULT = INF, LOG = __lg(n) + 1;
         table = vector < vector < Node > > (n + 10, vector < Node > (LOG));
         Bin_Log = vector < int > (n + 10);
         for(int i = 2; i <= n; i++)
             Bin_Log[i] = Bin_Log[i >> 1] + 1;
-        for(int i = Base; i < n + Base; i++)
-            table[i][0] = vec[i];
+        for(int i = 1; i <= n; i++)
+            table[i][0] = vec[i - !Base];
         Build_Table();
     }
 
-    Node operation(Node a, Node b){
+    Node operation(const Node& a, const Node& b){
         return a.val < b.val ? a : b;
     }
 
     void Build_Table(){
         for(int log = 1; log < LOG; log++)
-            for(int i = Base; i + (1 << log) - 1 < n + Base; i++)
+            for(int i = 1; i + (1 << log) - 1 <= n; i++)
                 table[i][log] = operation(table[i][log - 1], table[i + (1 << (log - 1))][log - 1]);
     }
 
