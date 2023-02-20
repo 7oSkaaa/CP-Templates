@@ -1184,7 +1184,7 @@
 		  "        anc = vector < vector < T > > (N, vector < T > (LOG));",
 		  "    }",
 		  "",
-		  "    LCA(int n, vector < vector < T > > &G) : adj(G){ ",
+		  "    LCA(int n, const vector < vector < T > > &G) : adj(G){ ",
 		  "        N = n + 10, LOG = 0;",
 		  "        while((1 << LOG) <= n) LOG++;",
 		  "        dep = vector < int > (N);",
