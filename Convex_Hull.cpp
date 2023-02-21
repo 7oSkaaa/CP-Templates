@@ -50,6 +50,18 @@ typedef complex < double > point;
 #define rotateA(p, ang, about)  (rotateO(vec(about, p), ang) + about)
 int dcmp(double a, double b) { return fabs(a - b) <= EPS ? 0 : a < b ? -1 : 1; }
 
+istream& operator >> (istream &in, point& p) {
+    double x, y;
+    in >> x >> y;
+    p = point(x, y);
+    return in;
+}
+
+ostream& operator << (ostream &out, const point& p) { 
+    out << p.X << ' ' << p.Y;
+    return out;
+}
+
 struct Converx_Hull {
 
     struct angleCMP {
