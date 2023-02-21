@@ -53,7 +53,7 @@ This template is made for competitive programming using `C++` language.
 
 - [Segment Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Seg_Tree.cpp)&nbsp;<a href='Seg_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Lazy Propagation](https://github.com/7oSkaaa/CP-Templates/blob/main/Lazy_Propagation.cpp)&nbsp;<a href='Lazy_Propagation.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Lazy Propagation](https://github.com/7oSkaaa/CP-Templates/blob/main/Lazy_Propagation.cpp)&nbsp;<a href='Lazy_Propagation.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [Persistent Segment Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/PST.cpp)&nbsp;<a href='PST.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Fenwick Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Fenwick_Tree.cpp)&nbsp;<a href='Fenwick_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Fenwick Tree 2D](https://github.com/7oSkaaa/CP-Templates/blob/main/Fenwick_Tree_2D.cpp)&nbsp;<a href='Fenwick_Tree_2D.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Sparse Table](https://github.com/7oSkaaa/CP-Templates/blob/main/Sparse_Table.cpp)&nbsp;<a href='Sparse_Table.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
