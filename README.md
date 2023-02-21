@@ -13,7 +13,7 @@ This template is made for competitive programming using `C++` language.
 </h3>
 
 ---
-<div align="center" width=100%>
+<div align="center">
   <a href="https://codeforces.com/profile/7oSkaaa"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces" width=6%/></a>
 	  &emsp; 
 	<a href="https://leetcode.com/7oSkaa/"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png" alt="LeetCode" width=%6/></a>
