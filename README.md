@@ -53,6 +53,7 @@ This template is made for competitive programming using `C++` language.
 
 - [Segment Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Seg_Tree.cpp)&nbsp;<a href='Seg_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Lazy Propagation](https://github.com/7oSkaaa/CP-Templates/blob/main/Lazy_Propagation.cpp)&nbsp;<a href='Lazy_Propagation.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [Lazy Propagation](https://github.com/7oSkaaa/CP-Templates/blob/main/Lazy_Propagation.cpp)&nbsp;<a href='Lazy_Propagation.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Fenwick Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Fenwick_Tree.cpp)&nbsp;<a href='Fenwick_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Fenwick Tree 2D](https://github.com/7oSkaaa/CP-Templates/blob/main/Fenwick_Tree_2D.cpp)&nbsp;<a href='Fenwick_Tree_2D.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Sparse Table](https://github.com/7oSkaaa/CP-Templates/blob/main/Sparse_Table.cpp)&nbsp;<a href='Sparse_Table.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
@@ -62,6 +63,7 @@ This template is made for competitive programming using `C++` language.
 - [Monotonic Stacks](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Stacks.cpp)&nbsp;<a href='Monotonic_Stacks.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Ordered Set](https://github.com/7oSkaaa/CP-Templates/blob/main/Ordered_Set.cpp)&nbsp;<a href='Ordered_Set.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie.cpp)&nbsp;<a href='Trie.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [Binary Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie_Binary.cpp)&nbsp;<a href='Trie_Binary.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Monotonic Queue](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Queue.cpp)&nbsp;<a href='Monotonic_Queue.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
 <br><br><br>
