@@ -60,10 +60,10 @@ This template is made for competitive programming using `C++` language.
 - [Disjoint Set Union](https://github.com/7oSkaaa/CP-Templates/blob/main/DSU.cpp)&nbsp;<a href='DSU.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Heavy Light Decomposition](https://github.com/7oSkaaa/CP-Templates/blob/main/HLD.cpp)&nbsp;<a href='HLD.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [SQRT Decomposition + Mo’s Algorithm](https://github.com/7oSkaaa/CP-Templates/blob/main/MO.cpp)&nbsp;<a href='MO.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Monotonic Stacks](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Stacks.cpp)&nbsp;<a href='Monotonic_Stacks.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Ordered Set](https://github.com/7oSkaaa/CP-Templates/blob/main/Ordered_Set.cpp)&nbsp;<a href='Ordered_Set.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie.cpp)&nbsp;<a href='Trie.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Binary Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie_Binary.cpp)&nbsp;<a href='Trie_Binary.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+- [Monotonic Stacks](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Stacks.cpp)&nbsp;<a href='Monotonic_Stacks.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Monotonic Queue](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Queue.cpp)&nbsp;<a href='Monotonic_Queue.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 
 <br><br><br>
