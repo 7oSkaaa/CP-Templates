@@ -34,13 +34,13 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int, int Mode = 0 > struct Segment_Tree {
+template < typename T = int , int Base = 0 > struct Segment_Tree {
 
     struct Node {
 
-        ll val;
+        T val;
 
-        Node(ll V = 0) : val(V) {}
+        Node(T V = 0) : val(V) {}
     
         Node operator = (const T rhs) {
             val = rhs;
@@ -53,36 +53,34 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
     Node DEFAULT;
     vector < Node > tree; 
     
-    void intial(int n){
+    Segment_Tree(int n = 0){
         size = 1, DEFAULT = 0;
         while(size < n) size *= 2;
         tree = vector < Node > (2 * size, DEFAULT);
     }
 
-    Segment_Tree(int n = 0){
-        intial(n);
-    }
-
-    Segment_Tree(const vector < T >& nums){
-        intial(sz(nums) + 5);
+    Segment_Tree(int n, const vector < T >& nums){
+        size = 1, DEFAULT = 0;
+        while(size < n) size *= 2;
+        tree = vector < Node > (2 * size, DEFAULT);
         build(nums);
     }
 
     // Main operation to do
 
     Node operation(const Node& a, const Node& b){
-        return Node(a.val + b.val);
+        return a.val + b.val;
     }
     
-    // If Mode is 1 so the array is 1-based else the array is 0-based
+    // If Base is 1 so the array is 1-based else the array is 0-based
     
     void build(const vector < T >& nums, int idx, int lx, int rx){
-        if(Mode ? lx >= sz(nums) : lx > sz(nums)) return;
-        if(rx == lx) tree[idx] = nums[lx - !Mode];
+        if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
+        if(rx == lx) tree[idx] = nums[lx - !Base];
         else {
-            int m = (rx + lx) / 2;
-            build(nums, 2 * idx, lx, m);
-            build(nums, 2 * idx + 1, m + 1, rx);
+            int mx = (rx + lx) / 2;
+            build(nums, 2 * idx, lx, mx);
+            build(nums, 2 * idx + 1, mx + 1, rx);
             tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
         }
     }
@@ -91,25 +89,25 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
         build(nums, 1, 1, size);
     }
 
-    void update(int i, T v, int idx, int lx, int rx){
+    void update(int index, T v, int idx, int lx, int rx){
         if(rx == lx) tree[idx] = v;
         else {  
-            int m = (rx + lx) / 2;
-            if(i <= m) update(i, v, 2 * idx, lx, m);
-            else update(i, v, 2 * idx + 1, m + 1, rx);
+            int mx = (rx + lx) / 2;
+            if(index <= mx) update(index, v, 2 * idx, lx, mx);
+            else update(index, v, 2 * idx + 1, mx + 1, rx);
             tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
         }
     }
 
-    void update(const int i, const T v){
-        update(i, v, 1, 1, size);
+    void update(const int index, const T v){
+        update(index, v, 1, 1, size);
     }
 
     Node query(int l, int r, int idx, int lx, int rx){
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
-        int m = (lx + rx) / 2;
-        return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
+        int mx = (lx + rx) / 2;
+        return operation(query(l, r, 2 * idx, lx, mx), query(l, r, 2 * idx + 1, mx + 1, rx));
     }
 
     Node query_Node(const int l, const int r){
@@ -125,7 +123,7 @@ template < typename T = int, int Mode = 0 > struct Segment_Tree {
     }
 
     friend ostream& operator << (ostream &out, const Node &node) {
-        out << node.val;
+        out << node.val << ' ';
         return out;
     }
     
