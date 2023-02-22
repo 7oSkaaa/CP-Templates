@@ -38,12 +38,12 @@ template < typename T = int > struct Centroid_Decomposition {
 
     int n, treeRoot;
     const vector < vector < T > > adj;
-    vector < int > SubtreeSz, isCentroid;
+    vector < T > SubtreeSz, isCentroid;
 
     // Initialize the Centroid Decomposition
-    Centroid_Decomposition(int N, const vector <vector <int> > &G, int Root = 1) : adj(G){
+    Centroid_Decomposition(int N, const vector <vector < T > > &G, int Root = 1) : adj(G){
         n = N, treeRoot = Root;
-        SubtreeSz = isCentroid = vector < int > (n + 5, 0);
+        SubtreeSz = isCentroid = vector < T > (n + 5, 0);
     }
 
     // update subtree size of each node
