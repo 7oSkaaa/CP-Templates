@@ -34,17 +34,17 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < int MOD = 1000000007 > struct ModInt {
+template < int MOD = 1000000007, typename T = int > struct ModInt {
 
-    int val;
+    T val;
 
-    ModInt(int V = 0) : val(V) { val %= MOD; }
+    ModInt(T V = 0) : val(V) { val %= MOD; }
 
     ModInt& operator += (const ModInt& rhs) {
         if ((val += rhs.val) >= MOD) val -= MOD;
         return *this;
     }
-    ModInt& operator += (const int rhs) {
+    ModInt& operator += (const T rhs) {
         if ((val += rhs) >= MOD) val -= MOD;
         return *this;
     }
@@ -53,67 +53,70 @@ template < int MOD = 1000000007 > struct ModInt {
         if ((val += MOD - rhs.val) >= MOD) val -= MOD; 
         return *this; 
     }
-    ModInt& operator -= (const int rhs) { 
+    ModInt& operator -= (const T rhs) { 
         if ((val += MOD - rhs) >= MOD) val -= MOD; 
         return *this; 
     }
 
     ModInt& operator *= (const ModInt& rhs) { val = (1ll * val * rhs.val) % MOD; return *this; }
-    ModInt& operator *= (const int rhs) { val = (1ll * val * rhs) % MOD; return *this; }
+    ModInt& operator *= (const T rhs) { val = (1ll * val * rhs) % MOD; return *this; }
 
     ModInt& operator /= (const ModInt& rhs) { return *this *= rhs.inverse(); }
-    ModInt& operator /= (const int rhs) { return *this *= ModInt(rhs).inverse(); }
+    ModInt& operator /= (const T rhs) { return *this *= ModInt(rhs).inverse(); }
 
     ModInt& operator %= (const ModInt& rhs) { val %= rhs.val; return *this; }
-    ModInt& operator %= (const int rhs) { val %= rhs; return *this; }
+    ModInt& operator %= (const T rhs) { val %= rhs; return *this; }
 
     ModInt& operator ++() { return *this += 1; }
     ModInt& operator --() { return *this -= 1; }
  
-    ModInt operator ++(int unused) { ModInt res(*this); ++*this; return res; }
-    ModInt operator --(int unused) { ModInt res(*this); --*this; return res; }
+    ModInt operator ++(T unused) { ModInt res(*this); ++*this; return res; }
+    ModInt operator --(T unused) { ModInt res(*this); --*this; return res; }
     
     ModInt operator + (const ModInt& rhs) const { ModInt res(*this); return res += rhs; }
-    ModInt operator + (const int rhs) const { ModInt res(*this); return res += rhs; }
+    ModInt operator + (const T rhs) const { ModInt res(*this); return res += rhs; }
 
     ModInt operator % (const ModInt& rhs) const { ModInt res(*this); return res %= rhs; }
-    ModInt operator % (const int rhs) const { ModInt res(*this); return res %= rhs; }
+    ModInt operator % (const T rhs) const { ModInt res(*this); return res %= rhs; }
 
     ModInt operator - (const ModInt& rhs) const { ModInt res(*this); return res -= rhs; }
-    ModInt operator - (const int rhs) const { ModInt res(*this); return res -= rhs; }
+    ModInt operator - (const T rhs) const { ModInt res(*this); return res -= rhs; }
 
     ModInt operator * (const ModInt& rhs) const { ModInt res(*this); return res *= rhs; }
-    ModInt operator * (const int rhs) const { ModInt res(*this); return res *= rhs; }
+    ModInt operator * (const T rhs) const { ModInt res(*this); return res *= rhs; }
 
     ModInt operator / (const ModInt& rhs) const { ModInt res(*this); return res /= rhs; }
-    ModInt operator / (const int rhs) const { ModInt res(*this); return res /= rhs; }
+    ModInt operator / (const T rhs) const { ModInt res(*this); return res /= rhs; }
 
     ModInt& operator = (const ModInt& rhs) { val = rhs.val; return *this; }
-    ModInt& operator = (const int rhs) { val = rhs; return *this; }
+    ModInt& operator = (const T rhs) { val = rhs; return *this; }
+
+    T operator ~ () { return ~val; }
+    bool operator ! () { return !val; }
 
     bool operator == (const ModInt& rhs) const { return val == rhs.val; }
-    bool operator == (const int rhs) const { return val == rhs; }
+    bool operator == (const T rhs) const { return val == rhs; }
 
     bool operator != (const ModInt& rhs) const { return val != rhs.val; }
-    bool operator != (const int rhs) const { return val != rhs; }
+    bool operator != (const T rhs) const { return val != rhs; }
 
     bool operator < (const ModInt& rhs) const { return val < rhs.val; }
-    bool operator < (const int rhs) const { return val < rhs; }
+    bool operator < (const T rhs) const { return val < rhs; }
 
     bool operator <= (const ModInt& rhs) const { return val <= rhs.val; }
-    bool operator <= (const int rhs) const { return val <= rhs; }
+    bool operator <= (const T rhs) const { return val <= rhs; }
 
     bool operator > (const ModInt& rhs) const { return val > rhs.val; }
-    bool operator > (const int rhs) const { return val > rhs; }
+    bool operator > (const T rhs) const { return val > rhs; }
 
     bool operator >= (const ModInt& rhs) const { return val >= rhs.val; }
-    bool operator >= (const int rhs) const { return val >= rhs; }
+    bool operator >= (const T rhs) const { return val >= rhs; }
 
-    int operator () () const { return val; }
+    T operator () () const { return val; }
 
     ModInt inverse() const { return power(MOD - 2); }
 
-    ModInt power(ll n) const {
+    ModInt power(T n) const {
         ModInt a = *this, res = 1;
         while (n > 0) {
             if (n & 1) res *= a;
@@ -124,7 +127,7 @@ template < int MOD = 1000000007 > struct ModInt {
 
     ModInt power(ModInt n) const {
         ModInt a = *this, res = 1;
-        int e = n();
+        T e = n();
         while (e > 0) {
             if (e & 1) res *= a;
             a *= a, e >>= 1;
@@ -132,7 +135,7 @@ template < int MOD = 1000000007 > struct ModInt {
         return res;
     }
 
-    friend ModInt operator ^ (ModInt rhs, ll n) { return rhs.power(n); }
+    friend ModInt operator ^ (ModInt rhs, T n) { return rhs.power(n); }
     friend ModInt operator ^ (ModInt rhs, ModInt n) { return rhs.power(n); }
 
     friend std::istream& operator>>(std::istream& is, ModInt& x) noexcept { return is >> x.val; }
