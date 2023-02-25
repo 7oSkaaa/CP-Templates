@@ -101,6 +101,14 @@ template < typename T = int > struct Monotonic_Queue {
         return monotonic_val() == 1;
     }
 
+    bool empty(){
+        return s1.empty() && s2.empty();
+    }
+
+    T size(){
+        return s1.size() + s2.size();
+    }
+
 };
 
 void Solve(){
