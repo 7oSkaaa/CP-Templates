@@ -41,7 +41,7 @@ template < typename T = int > struct LCA {
     
     LCA(int n = 0){
         N = n + 10, LOG = 0;
-        while((1 << LOG) <= n) LOG++;
+        while((1 << LOG) <= N) LOG++;
         dep = vector < int > (N);
         adj = vector < vector < T > > (N);
         anc = vector < vector < T > > (N, vector < T > (LOG));
@@ -49,7 +49,7 @@ template < typename T = int > struct LCA {
 
     LCA(int n, const vector < vector < T > > &G) : adj(G){ 
         N = n + 10, LOG = 0;
-        while((1 << LOG) <= n) LOG++;
+        while((1 << LOG) <= N) LOG++;
         dep = vector < int > (N);
         anc = vector < vector < T > > (N, vector < T > (LOG));
     }
