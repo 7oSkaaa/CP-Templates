@@ -38,9 +38,9 @@ template < typename T = int > struct LCA {
     
     struct Edge {
 
-        ll v, w;
+        T v, w;
 
-        Edge(ll V = 0, ll W = 0) : v(V), w(W) {}
+        Edge(T V = 0, T W = 0) : v(V), w(W) {}
 
         bool operator < (const Edge &rhs) const {
             return w < rhs.w;
@@ -55,7 +55,7 @@ template < typename T = int > struct LCA {
     
     LCA(int n){
         N = n + 10, LOG = 0;
-        while((1 << LOG) <= n) LOG++;
+        while((1 << LOG) <= N) LOG++;
         dep = vector < int > (N);
         adj = vector < vector < Edge > > (N);
         anc = cost = vector < vector < T > > (N, vector < T > (LOG));
