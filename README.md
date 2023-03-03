@@ -105,7 +105,7 @@ This template is made for competitive programming using `C++` language.
 
 - [Sieve of Eratosthenes](https://github.com/7oSkaaa/CP-Templates/blob/main/Seive.cpp)&nbsp;<a href='Seive.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 - [Factors](https://github.com/7oSkaaa/CP-Templates/blob/main/Factors.cpp)&nbsp;<a href='Factors.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-
+- [Miller Robin](https://github.com/7oSkaaa/CP-Templates/blob/main/Miller_Robin.cpp)&nbsp;<a href='Miller_Robin.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
 <br><br><br>
 
 ### Math & Computational Geometry
