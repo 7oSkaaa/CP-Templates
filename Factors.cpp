@@ -49,6 +49,7 @@ struct Factorization {
     // Get the number of factors for each number
 
     void factorization(int n){ 
+        factors[0] = 0, factors[1] = 1;
         for (ll i = 2; i <= n; i++) {  
             for (ll j = i * 2; j <= n; j += i) factors[j]++;
         }
