@@ -78,6 +78,11 @@ template < typename T = int > struct Coordinate_Compression {
         return ret;
     }
 
+    int size(){
+        if(!is_build) build();
+        return sz(compressed);
+    }
+
 };
 
 void Solve(){
