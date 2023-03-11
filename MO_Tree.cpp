@@ -58,7 +58,7 @@ template < typename T = int > struct MO_Tree {
     int curr_l, curr_r, ans, n, m, Sqrt_N, timer, LOG;
     vector < T > answers, val;
     vector < vector < T > > adj, anc;
-    vector < int > dep, S, E, FT, node_freq;
+    vector < T > dep, S, E, FT, node_freq;
     vector < query > queries;
 
     MO_Tree() { }
@@ -72,8 +72,8 @@ template < typename T = int > struct MO_Tree {
         
         queries = vector < query > (m);
         answers = vector < T > (m);
-        node_freq = S = E = dep = val_freq = vector < int > (n + 5);
-        FT = vector < int > (2 * n + 5);
+        node_freq = S = E = dep = val_freq = vector < T > (n + 5);
+        FT = vector < T > (2 * n + 5);
         anc = vector < vector < T > > (n + 5, vector < T > (LOG));
         adj = G, val = V;
 
