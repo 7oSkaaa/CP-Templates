@@ -3379,5 +3379,47 @@
 		  "};"
 		],
 		"description": "Miller_Rabin"
+	},
+	"graph_rep": {
+		"prefix": "graph_rep",
+		"body": [
+		  "// ----------------------------------------------------------- //",
+		  "",
+		  "#define adj_loop(u, v, e) for(int e = head[u], v; ~e && (v = edges[e].to, 1); e = edges[e].nxt)",
+		  "",
+		  "template < typename T = int > struct edgeData {",
+		  "",
+		  "    T to, nxt, cost;",
+		  "",
+		  "    edgeData(T TO = 0, T NXT = 0, T COST = 0) : to(TO), nxt(NXT), cost(COST) {}",
+		  "",
+		  "};",
+		  "",
+		  "int edge_count;",
+		  "vector < edgeData < int > > edges;",
+		  "vector < int > head;",
+		  "",
+		  "void init(int n, int m){",
+		  "    edges = vector < edgeData < int > > (2 * m + 5);",
+		  "    head = vector < int > (n + 5, -1);",
+		  "    edge_count = 1;",
+		  "}",
+		  "",
+		  "void addEdge(int u, int v, int c = 0){",
+		  "    edges[edge_count].to = v;",
+		  "    edges[edge_count].cost = c;",
+		  "    edges[edge_count].nxt = head[u];",
+		  "    head[u] = edge_count++;",
+		  "}",
+		  "",
+		  "void AddBiEdge(int u, int v, int c = 0){",
+		  "    addEdge(u, v, c);",
+		  "    addEdge(v, u, c);",
+		  "}",
+		  "",
+		  "// ----------------------------------------------------------- //",
+		  ""
+		],
+		"description": "graph_rep"
 	}
 }
