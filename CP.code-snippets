@@ -2615,7 +2615,7 @@
 		],
 		"description": "Trie"
 	},
-	"Coordinate Compression": {
+	"Coordinate_Compression": {
 		"prefix": "Coordinate_Compression",
 		"body": [
 		  "template < typename T = int > struct Coordinate_Compression {",
@@ -2662,9 +2662,14 @@
 		  "        return ret;",
 		  "    }",
 		  "",
+		  "    int size(){",
+		  "        if(!is_build) build();",
+		  "        return sz(compressed);",
+		  "    }",
+		  "",
 		  "};"
 		],
-		"description": "Coordinate Compression"
+		"description": "Coordinate_Compression"
 	},
 	"Converx_Hull": {
 		"prefix": "Converx_Hull",
