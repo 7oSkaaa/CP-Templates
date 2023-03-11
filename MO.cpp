@@ -50,7 +50,7 @@ template < typename T = int, int Base = 0 > struct MO {
 
     };
 
-    int curr_l, curr_r, ans, n, m, Sqrt_N;
+    T curr_l, curr_r, ans, n, m, Sqrt_N;
     vector < T > answers, nums;
     vector < query > queries;
 
