@@ -38,7 +38,7 @@ template < typename T = int > struct MO_Tree {
 
         int l, r, lca, query_idx, block_idx;
 
-        query(vector < int > &S, vector < int > &E, int L = 0, int R = 0, int Query_idx = 0, int LCA = 0){
+        query(vector < T > &S, vector < T > &E, int L = 0, int R = 0, int Query_idx = 0, int LCA = 0){
             if(S[L] > S[R])
                 swap(L, R);
             if(LCA == L)
@@ -55,7 +55,7 @@ template < typename T = int > struct MO_Tree {
 
     };
 
-    int curr_l, curr_r, ans, n, m, Sqrt_N, timer, LOG;
+    T curr_l, curr_r, ans, n, m, Sqrt_N, timer, LOG;
     vector < T > answers, val;
     vector < vector < T > > adj, anc;
     vector < T > dep, S, E, FT, node_freq;
@@ -72,7 +72,7 @@ template < typename T = int > struct MO_Tree {
         
         queries = vector < query > (m);
         answers = vector < T > (m);
-        node_freq = S = E = dep = val_freq = vector < T > (n + 5);
+        node_freq = S = E = dep = vector < T > (n + 5);
         FT = vector < T > (2 * n + 5);
         anc = vector < vector < T > > (n + 5, vector < T > (LOG));
         adj = G, val = V;
@@ -188,6 +188,7 @@ template < typename T = int > struct MO_Tree {
     }
 
 };
+
 
 void Solve(){
     
