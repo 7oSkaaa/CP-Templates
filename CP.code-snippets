@@ -2087,12 +2087,12 @@
 		  "",
 		  "    void build_partial(int queries){",
 		  "        while(queries--){",
-		  "            Pair < T > p1, p2;",
-		  "            cin >> p1.fi >> p1.se >> p2.fi >> p2.se;",
-		  "            if(p1.fi > p2.fi) swap(p1.fi, p2.fi);",
-		  "            if(p1.se > p2.se) swap(p1.se, p2.se);",
-		  "            partial[p2.fi][p2.se]++, partial[p2.fi][p1.se - 1]--; ",
-		  "            partial[p1.fi - 1][p2.se]--, partial[p1.fi - 1][p1.se - 1]++;",
+		  "            int x1, y1, x2, y2, k = 1;",
+		  "            cin >> x1 >> y1 >> x2 >> y2;",
+		  "            if(x1 > x2) swap(x1, x2);",
+		  "            if(y1 > y2) swap(y1, y2);",
+		  "            partial[x2][y2] += k, partial[x2][y1 - 1] -= k; ",
+		  "            partial[x1 - 1][y2] -= k, partial[x1 - 1][y1 - 1] += k;",
 		  "        }",
 		  "        for(int i = n; i >= 0; i--)",
 		  "            for(int j = m; j >= 0; j--)",
@@ -2111,7 +2111,8 @@
 		  "            for(int j = 1; j <= m && cout << partial[i][j] << \" \"; j++);",
 		  "    }",
 		  "",
-		  "};"
+		  "};",
+		  ""
 		],
 		"description": "Partial_2D"
 	},
