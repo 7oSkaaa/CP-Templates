@@ -37,41 +37,59 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 struct Factorization {
     
     int n;
-    vector < int > factors;
-    vector < int > prime_factors;
+    vector < int > factors_cnt, prime_factors_cnt;
+    vector < vector < int > > factors, prime_factors;
 
     Factorization(int N){
         n = N;
-        factors.assign(n + 10, 2);
-        prime_factors.resize(n + 10);
+        factors_cnt = vector < int > (n + 5, 2);
+        prime_factors_cnt = vector < int > (n + 5);
+        factors = vector < vector < int > > (n + 5);
+        prime_factors = vector < vector < int > > (n + 5);
+        factorization(n);
+        prime_factorization(n);
     }
 
     // Get the number of factors for each number
-
-    void factorization(int n){ 
-        factors[0] = 0, factors[1] = 1;
-        for (ll i = 2; i <= n; i++) {  
-            for (ll j = i * 2; j <= n; j += i) factors[j]++;
-        }
+    void factorization(){ 
+        factors_cnt[0] = 0, factors_cnt[1] = 1;
+        for (int i = 2; i <= n; i++)  
+            for (int j = i + i; j <= n; j += i){
+                factors_cnt[j]++;
+                factors[j].push_back(i);
+            }
     }
 
-    ll get_factors(ll n){
+    // get the number of factors of n
+    int get_factors(int x){
+        return factors_cnt[x];
+    }
+
+    // get the factors of n
+    vector < int > get_factors(){
         return factors[n];
     }
 
     // Get the number of prime factors for each number
-
-    void prime_factorization(int n){
-        for (ll i = 2; i <= n; i++){ 
-            if (!prime_factors[i]) { 
-                for (ll j = 2 * i; j <= n; j += i) prime_factors[j]++;
-                prime_factors[i] = 1; 
+    void prime_factorization(){
+        for (int i = 2; i <= n; i++){ 
+            if (!prime_factors[i]) {
+                for (int j = i; j <= n; j += i){ 
+                    prime_factors[j]++;
+                    prime_factors[j].push_back(i);
+                }
             }
         }
     }
 
-    ll get_prime_factors(ll n){
-        return prime_factors[n];
+    // get the number of prime factors of n
+    int get_prime_factors(int x){
+        return prime_factors[x];
+    }
+
+    // get the prime factors of n
+    vector < int > get_prime_factors(int x){
+        return prime_factors[x];
     }
 };
 
