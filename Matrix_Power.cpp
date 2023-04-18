@@ -32,63 +32,37 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int , const T MOD = 1000000007, T N = 2 >  struct Matrix {
+template < typename T = int >  struct Matrix {
 
+    // The matrix
+    int N;
     vector < vector < T > > Mat;
 
-    // add two elements
-    static T add(const T& a, const T& b){
-        return (a + b) % MOD;
-    }
-
-    // multiplicatate two element
-    static T mul(const T& a, const T& b){
-        return ((a % MOD) * (b % MOD)) % MOD;
-    }
-
     // Constructor to fill the matrix with this value
-    Matrix(T val = 0) {
+    Matrix(int n = 0, T val = 0) {
+        N = n;
         Mat.assign(N, vector < T > (N, val));
+
     }
 
     // Constructor to make matrix with this 2D Vector
     Matrix(const vector < vector < T > > & b){
+        N = b.size();
         Mat = b;
     }
 
     // Overloaded the = operator
     Matrix& operator = (const Matrix& b){
         Mat = b.Mat;
+        N = b.Mat.size();
         return *this;
     }
 
     // Overloaded the = operator
     Matrix& operator = (const vector < vector < T > > & b){
         Mat = b;
+        N = b.size();
         return *this;
-    }
-
-    // Get Transition matrix
-    static vector < vector < T > > GetTrans(){
-        vector < vector < T > > Trans {
-            {0, 1},
-            {3, 2}
-        };
-        return Trans;
-    }
-
-    // Get the identity matrix
-    static vector < vector < T > > GetIdentity(){
-        vector < vector < T > > Identity(N, vector < T > (N));
-        for(int i = 0; i < N; i++)
-            Identity[i][i] = 1;
-        return Identity;
-    }
-
-    // Get the zero matrix
-    static vector < vector < T > > GetZero(){
-        vector < vector < T > > Zero(N, vector < T > (N));
-        return Zero;
     }
 
     // Overload the [][] operator
@@ -101,62 +75,68 @@ template < typename T = int , const T MOD = 1000000007, T N = 2 >  struct Matrix
         return Mat[index];
     }
 
-    // Overload the * operator
-    Matrix friend operator * (const Matrix& a, const Matrix& b){
-        Matrix res = GetZero();
-        for(int i = 0; i < N; i++)
-            for(int j = 0; j < N; j++)
-                for(int k = 0; k < N; k++)
-                    res[i][j] = add(res[i][j], mul(a[i][k], b[k][j]));
-        return res;
-    }
-
-    // Overload the ^ operator
-    Matrix friend operator ^ (Matrix b, ll e){
-        Matrix Trans = GetTrans();
-        while(e){
-            if(e & 1) b *= Trans;
-            Trans *= Trans;
-            e >>= 1;
-        }
-        return b;
-    }
-
-    // Overload the + operator
-    Matrix friend operator + (const Matrix& a, const Matrix& b){
-        Matrix res = GetZero();
-        for(int i = 0; i < N; i++)
-            for(int j = 0; j < N; j++)
-                res[i][j] = add(a[i][j], b[i][j]);
-        return res;
-    }
-
-    // Overload the += operator
-    Matrix friend operator += (Matrix& a, const Matrix& b){
-        a = a + b;
-        return a;
-    }
-
-    // Overload the *= operator
-    Matrix friend operator *= (Matrix& a, const Matrix& b){
-        a = a * b;
-        return a;
-    }
-
-    // Overload the ^= operator
-    Matrix friend operator ^= (Matrix& a, ll b){
-        a = a ^ b;
-        return a;
-    }
-
-    // Get the n-th term
-    T n_th(T n){
-        if(n <= 1) return 0;
-        Matrix < T >  Ans = GetTrans();
-        Ans ^= (n - 1);
-        return Ans[0][0];
-    }
 };
+
+// Get Transition matrix
+template < typename T = long long > Matrix < T > GetTrans(){
+    vector < vector < T > > Trans = {
+        {0, 1},
+        {1, 1}
+    };
+    return Matrix < T > (Trans);
+}
+
+// Get the identity matrix
+template < typename T = long long > Matrix < T > GetIdentity(const int N){
+    vector < vector < T > > Identity(N, vector < T > (N));
+    for(int i = 0; i < N; i++)
+        Identity[i][i] = 1;
+    return Matrix < T > (Identity);
+}
+
+// Get the zero matrix
+template < typename T = long long > Matrix < T > GetZero(const int N){
+    vector < vector < T > > Zero(N, vector < T > (N));
+    return Matrix < T > (Zero);
+}
+
+// Overload the * operator
+template < typename T = long long > Matrix < T > operator * (const Matrix < T >& a, const Matrix < T >& b){
+    int N = a.N;
+    Matrix res = GetZero(N);
+    for(int i = 0; i < N; i++)
+        for(int j = 0; j < N; j++)
+            for(int k = 0; k < N; k++)
+                res[i][j] = add_mod(res[i][j], mul_mod(a[i][k], b[k][j], Mod), Mod);
+    return res;
+}
+
+// Overload the *= operator
+template < typename T = long long >  Matrix < T > operator *= (Matrix < T >& a, const Matrix < T >& b){
+    a = a * b;
+    return a;
+}
+
+// Overload the ^ operator
+template < typename T = long long >  Matrix < T > Power(Matrix < T >& b, ll e){
+    Matrix < T > Trans = GetTrans();
+    while(e){
+        if(e & 1) b *= Trans;
+        Trans *= Trans;
+        e >>= 1;
+    }
+    return b;
+}
+
+// Get the k-th term
+template < typename T = long long > T k_th(T k, int N){
+    // base case to change
+    if(N <= 0) return 0;
+    if(N <= 1) return 1;
+    Matrix < T >  matrix = GetIdentity(N);
+    matrix = Power(matrix, k + 1);
+    return matrix[0][0];
+}
 
 void Solve(){
     
