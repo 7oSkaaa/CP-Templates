@@ -516,6 +516,10 @@
 		  "    int get_size(int u){",
 		  "        return Gsize[find_leader(u)];",
 		  "    }",
+		  "",
+		  "    int get_components_number(){",
+		  "        return sz(roots) - Base;",
+		  "    }",
 		  "};"
 		],
 		"description": "DSU"
