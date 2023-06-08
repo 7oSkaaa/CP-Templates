@@ -39,12 +39,12 @@ template < typename T = int > struct Monotonic_Stack {
     vector < T > st, Monotonic;
     T DEFAULT = 0;
 
-    Stack() {
-        Monotonic = {DEFAULT}, st = {};
+    Monotonic_Stack() {
+        Monotonic = { DEFAULT }, st = { };
     }
 
-    T operation(T a, T b){
-        return __gcd(a, b);
+    static T operation(T a, T b){
+        return max(a, b);
     }
 
     void push(T x){
@@ -71,6 +71,10 @@ template < typename T = int > struct Monotonic_Stack {
         return Monotonic.back();
     }
 
+    int size(){
+        return st.size();
+    }
+
 };
 
 template < typename T = int > struct Monotonic_Queue {
@@ -94,7 +98,7 @@ template < typename T = int > struct Monotonic_Queue {
     }
 
     T monotonic_val(){
-        return Monotonic_Stack < T > :: operation(s1.Monotonic_val(), s2.Monotonic_val());
+        return Monotonic_Stack < T > ::operation(s1.Monotonic_val(), s2.Monotonic_val());
     }
 
     bool is_good(){
