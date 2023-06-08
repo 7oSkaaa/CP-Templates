@@ -81,7 +81,7 @@ template < typename T = int, int Base = 1 > struct DSU {
         return Gsize[find_leader(u)];
     }
 
-    int get_components(){
+    int get_components_number(){
         return sz(roots) - Base;
     }
 };
