@@ -80,6 +80,10 @@ template < typename T = int, int Base = 1 > struct DSU {
     int get_size(int u){
         return Gsize[find_leader(u)];
     }
+
+    int get_components(){
+        return sz(roots) - Base;
+    }
 };
 
 void Solve(){
