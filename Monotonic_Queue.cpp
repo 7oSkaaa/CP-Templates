@@ -109,7 +109,7 @@ template < typename T = int > struct Monotonic_Queue {
         return s1.empty() && s2.empty();
     }
 
-    T size(){
+    int size(){
         return s1.size() + s2.size();
     }
 
