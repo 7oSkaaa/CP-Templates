@@ -298,6 +298,14 @@ struct Math {
         return result;
     }
 
+    // get the power of prime factor in n
+    ll FactN_PrimePowers(ll n, ll p){
+        ll powers = 0;
+        for(ll i = p; i <= n; i *= p)
+            powers += n / i;
+        return powers;
+    }
+
     // Convert Decimal to any base
 
     string decimal_to_any_base(ll decimal, ll base){
