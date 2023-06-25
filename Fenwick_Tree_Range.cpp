@@ -38,9 +38,9 @@ template < typename T = int > struct Fenwick_Tree_Range {
     T DEFAULT;
     vector < T > M, C;
 
-    Fenwick_Range(int n){
-        N = n + 1, DEFAULT = 0;
-        M = C = vector < T > (n + 10);
+    Fenwick_Tree_Range(int sz = 0){
+        N = sz + 1, DEFAULT = 0;
+        M = C = vector < T > (N + 10);
     }
 
     int lowest_bit(int idx){

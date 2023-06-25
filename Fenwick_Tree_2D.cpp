@@ -40,8 +40,8 @@ template < typename T = int > struct Fenwick_Tree {
     int n, m;
     T DEFAULT;
 
-    Fenwick_Tree(int N, int M){
-        n = N + 1, m = M + 1, DEFAULT = 0;
+    Fenwick_Tree(int rows = 0, int cols = 0){
+        n = rows + 1, m = cols + 1, DEFAULT = 0;
         Tree.assign(n + 10, vector < ll > (m + 10, DEFAULT));
     }
 
