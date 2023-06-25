@@ -59,6 +59,15 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
         }
     }
 
+    int get_lca(int u, int v){
+        while (root[u] != root[v]){
+            if (dep[root[u]] < dep[root[v]]) 
+                swap(u, v);
+            u = par[root[u]];
+        }
+        return dep[u] < dep[v] ? u : v;
+    }
+
     void build(int u, bool newChain = true){
         root[u] = newChain ? u : root[par[u]];
         pos[u] = nxtPos++;
