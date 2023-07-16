@@ -89,10 +89,10 @@ template < typename T = int, int Base = 0 > struct MO {
 
     void set_range(query& q){
         // add the new range and remove the old range
-        while(curr_l > q.l) add(--curr_l);
-        while(curr_r < q.r) add(++curr_r);
-        while(curr_l < q.l) remove(curr_l++);
-        while(curr_r > q.r) remove(curr_r--);
+        while (curr_l > q.l) curr_l--, add(curr_l);
+        while (curr_r < q.r) curr_r++, add(curr_r);
+        while (curr_l < q.l) remove(curr_l), curr_l++;
+        while (curr_r > q.r) remove(curr_r), curr_r--;
     }
 
     void Process(){
