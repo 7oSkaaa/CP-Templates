@@ -1,145 +1,135 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Competitive Programming Templates</title>
   <link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f1f1f1;
+      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background-color: #f2f2f2;
+    }
+
+    header {
+      background-color: #3498db;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
     }
 
     h1 {
-      color: #444;
-      text-align: center;
+      font-size: 36px;
+      margin: 0;
     }
 
     h3 {
-      color: #333;
+      display: flex;
+      align-items: center;
+      font-size: 24px;
+      margin: 30px 0 20px;
+    }
+
+    h3 img {
+      margin-right: 10px;
+    }
+
+    .profiles {
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 30px 0;
+      margin-bottom: 30px;
     }
 
-    h3 span {
-      margin-left: 10px;
+    .profiles img {
+      width: 40px;
+      height: 40px;
+      margin: 0 10px;
     }
 
-    p {
-      text-align: center;
-    }
-
-    .profile-links img {
-      margin: 10px;
-    }
-
-    .contest-templates {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin: 30px 0;
-    }
-
-    .contest-templates a {
-      margin: 5px;
-      padding: 5px 10px;
-      background-color: #007bff;
-      color: #fff;
+    .profiles a {
+      color: #000;
       text-decoration: none;
+      display: inline-block;
+      transition: color 0.3s ease;
+    }
+
+    .profiles a:hover {
+      color: #3498db;
+    }
+
+    .content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       border-radius: 5px;
     }
 
-    .contest-templates a img {
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-
-    .section-heading {
-      font-size: 20px;
-      font-weight: bold;
-      color: #555;
+    .section {
       margin-top: 30px;
     }
 
-    .code-links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
+    .section h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
     }
 
-    .code-links a {
-      margin: 10px;
-      padding: 5px 10px;
-      background-color: #17a2b8;
-      color: #fff;
+    .section ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .section li {
+      margin-bottom: 5px;
+    }
+
+    .section a {
+      color: #3498db;
       text-decoration: none;
-      border-radius: 5px;
+      display: inline-block;
+      transition: color 0.3s ease;
     }
 
-    .code-links a img {
-      vertical-align: middle;
-      margin-right: 5px;
-    }
-
-    .additional-files {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      margin-top: 30px;
-    }
-
-    .additional-files a {
-      margin: 10px;
-      padding: 5px 10px;
-      background-color: #28a745;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 5px;
-    }
-
-    .additional-files a img {
-      vertical-align: middle;
-      margin-right: 5px;
+    .section a:hover {
+      color: #2980b9;
     }
   </style>
 </head>
+
 <body>
-  <h1>Competitive Programming Templates</h1>
+  <header>
+    <h1>Competitive Programming Templates</h1>
+  </header>
 
-  <h3>
-    <img src="https://media4.giphy.com/media/dMLmQfCO7lCA2gX3tw/giphy.gif?cid=ecf05e47ak6mwfu812269zzr8ydv529109qzpb8rszwnja9e&rid=giphy.gif&ct=s" width="50" />
-    <span>My Competitive Programming Profiles</span>
-  </h3>
+  <div class="content">
+    <h3>
+      <img src="https://media4.giphy.com/media/dMLmQfCO7lCA2gX3tw/giphy.gif?cid=ecf05e47ak6mwfu812269zzr8ydv529109qzpb8rszwnja9e&rid=giphy.gif&ct=s" width="40px">
+      My Competitive Programming Profiles
+    </h3>
+    <div class="profiles">
+      <a href="https://codeforces.com/profile/7oSkaaa" target="_blank"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces"></a>
+      <a href="https://leetcode.com/7oSkaa/" target="_blank"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png" alt="LeetCode"></a>
+      <!-- Add other profile icons here -->
+    </div>
 
-  <p align="center" class="profile-links">
-    <!-- Add your profile links here -->
-  </p>
+    <div class="section">
+      <h2>Contest templates</h2>
+      <ul>
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp" target="_blank">My template C++</a></li>
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp" target="_blank">Google template C++</a></li>
+        <!-- Add other contest templates here -->
+      </ul>
+    </div>
 
-  <div class="contest-templates">
-    <!-- Add your contest templates links here -->
+    <!-- Add other sections for different categories of templates -->
+
   </div>
-
-  <div class="section-heading">Graph</div>
-  <div class="code-links">
-    <!-- Add your graph-related code links here -->
-  </div>
-
-  <div class="section-heading">Data Structures</div>
-  <div class="code-links">
-    <!-- Add your data structures-related code links here -->
-  </div>
-
-  <div class="section-heading">Dynamic Programming</div>
-  <div class="code-links">
-    <!-- Add your dynamic programming-related code links here -->
-  </div>
-
-  <!-- Add more sections for other topics as needed -->
-
-  <div class="additional-files">
-    <!-- Add links to additional files here -->
-  </div>
-
 </body>
+
 </html>
