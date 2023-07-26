@@ -1,143 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Competitive Programming Templates</title>
-    <link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
-    <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      background-color: #003441;
-    }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Competitive Programming Templates</title>
+        <link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #003441;
+        }
+        
+        header {
+            background-color: #1B7B94;
+            color: #FFFFFF;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        
+        .profiles img {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+        }
+        
+        .profiles a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+        
+        .profiles a:hover {
+            color: #FFFFFF;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #BF8148;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 20px;
+        }
+        
+        .section h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+        
+        .section ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .section li {
+            margin-bottom: 10px;
+        }
+        
+        .section a {
+            color: #1B7B94;
+            text-decoration: none;
+        }
+        
+        .section a:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #FFFFFF;
+        }
+    </style>
+    </head>
 
-    header {
-      background-color: #BF8148;
-      color: #FFFFFF;
-      padding: 20px;
-      text-align: center;
-    }
+    <body>
+        <header>
+            <h1>Competitive Programming Templates</h1>
+            <div class="profiles">
+                <a href="https://codeforces.com/profile/7oSkaaa"><img
+                        src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png"
+                        alt="Code Forces"></a>
+                <a href="https://leetcode.com/7oSkaa/"><img
+                        src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png"
+                        alt="LeetCode"></a>
+                <!-- Add other profile icons here -->
+            </div>
+        </header>
 
-    h1 {
-      font-size: 36px;
-      margin-bottom: 10px;
-    }
+        <div class="container">
+            <div class="section">
+                <h2>Contest Templates</h2>
+                <ul>
+                    <li><a
+                            href="https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp">My
+                            template C++</a></li>
+                    <li><a
+                            href="https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp">Google
+                            template C++</a></li>
+                    <!-- Add other contest templates here -->
+                </ul>
+            </div>
 
-    .profiles img {
-      width: 30px;
-      height: 30px;
-      margin-right: 10px;
-    }
+            <div class="section">
+                <h2>Graph</h2>
+                <ul>
+                    <li><a
+                            href="https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp">Graph
+                            Traversing (DFS, BFS)</a></li>
+                    <li><a
+                            href="https://github.com/7oSkaaa/CP-Templates/blob/main/Dijkstra.cpp">Dijkstra</a></li>
+                    <li><a
+                            href="https://github.com/7oSkaaa/CP-Templates/blob/main/Floyd.cpp">Floyd</a></li>
+                    <!-- Add other graph templates here -->
+                </ul>
+            </div>
 
-    .profiles a {
-      color: #FFFFFF;
-      text-decoration: none;
-    }
+            <!-- Add other sections for different categories of templates -->
 
-    .profiles a:hover {
-      color: #BF8148;
-    }
+        </div>
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: #1B7B94;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      border-radius: 5px;
-    }
-
-    .section {
-      margin-bottom: 30px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 20px;
-    }
-
-    .section h2 {
-      font-size: 28px;
-      margin-bottom: 15px;
-    }
-
-    .section ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    .section li {
-      margin-bottom: 10px;
-    }
-
-    .section a {
-      color: #BF8148;
-      text-decoration: none;
-    }
-
-    .section a:hover {
-      text-decoration: underline;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 20px;
-      color: #FFFFFF;
-    }
-  </style>
-  </head>
-
-  <body>
-    <header>
-      <h1>Competitive Programming Templates</h1>
-      <div class="profiles">
-        <a href="https://codeforces.com/profile/7oSkaaa"><img
-            src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png"
-            alt="Code Forces"></a>
-        <a href="https://leetcode.com/7oSkaa/"><img
-            src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png"
-            alt="LeetCode"></a>
-        <!-- Add other profile icons here -->
-      </div>
-    </header>
-
-    <div class="container">
-      <div class="section">
-        <h2>Contest Templates</h2>
-        <ul>
-          <li><a
-              href="https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp">My
-              template C++</a></li>
-          <li><a
-              href="https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp">Google
-              template C++</a></li>
-          <!-- Add other contest templates here -->
-        </ul>
-      </div>
-
-      <div class="section">
-        <h2>Graph</h2>
-        <ul>
-          <li><a
-              href="https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp">Graph
-              Traversing (DFS, BFS)</a></li>
-          <li><a
-              href="https://github.com/7oSkaaa/CP-Templates/blob/main/Dijkstra.cpp">Dijkstra</a></li>
-          <li><a
-              href="https://github.com/7oSkaaa/CP-Templates/blob/main/Floyd.cpp">Floyd</a></li>
-          <!-- Add other graph templates here -->
-        </ul>
-      </div>
-
-      <!-- Add other sections for different categories of templates -->
-
-    </div>
-
-    <div class="footer">
-      <p>Made with ❤️ by [Your Name]</p>
-    </div>
-  </body>
+        <div class="footer">
+            <p>Made with ❤️ by [Your Name]</p>
+        </div>
+    </body>
 
 </html>
