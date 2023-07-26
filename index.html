@@ -1,112 +1,145 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="UTF-8">
-    <title>Competitive Programming Templates</title>
-    <link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
+  <link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f1f1f1;
+    }
 
-        h1 {
-            color: #333;
-            text-align: center;
-        }
+    h1 {
+      color: #444;
+      text-align: center;
+    }
 
-        h3 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #333;
-            margin-bottom: 40px;
-        }
+    h3 {
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 30px 0;
+    }
 
-        h3 img {
-            width: 10%;
-            margin-right: 10px;
-        }
+    h3 span {
+      margin-left: 10px;
+    }
 
-        p {
-            text-align: center;
-        }
+    p {
+      text-align: center;
+    }
 
-        .profile-icons {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
+    .profile-links img {
+      margin: 10px;
+    }
 
-        .profile-icons a {
-            margin: 0 10px;
-        }
+    .contest-templates {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 30px 0;
+    }
 
-        .template-list {
-            list-style: none;
-            padding: 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
+    .contest-templates a {
+      margin: 5px;
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
 
-        .template-list-item {
-            border: 1px solid #ccc;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            transition: transform 0.3s ease-in-out;
-        }
+    .contest-templates a img {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
 
-        .template-list-item:hover {
-            transform: translateY(-5px);
-        }
+    .section-heading {
+      font-size: 20px;
+      font-weight: bold;
+      color: #555;
+      margin-top: 30px;
+    }
 
-        .template-list-item img {
-            width: 20px;
-            vertical-align: middle;
-            margin-left: 10px;
-        }
-    </style>
+    .code-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .code-links a {
+      margin: 10px;
+      padding: 5px 10px;
+      background-color: #17a2b8;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .code-links a img {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+
+    .additional-files {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .additional-files a {
+      margin: 10px;
+      padding: 5px 10px;
+      background-color: #28a745;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+    }
+
+    .additional-files a img {
+      vertical-align: middle;
+      margin-right: 5px;
+    }
+  </style>
 </head>
-
 <body>
-    <h1>Competitive Programming Templates</h1>
+  <h1>Competitive Programming Templates</h1>
 
-    <h3>
-        <img src="https://media4.giphy.com/media/dMLmQfCO7lCA2gX3tw/giphy.gif?cid=ecf05e47ak6mwfu812269zzr8ydv529109qzpb8rszwnja9e&rid=giphy.gif&ct=s" width="10%">
-        <span>My Competitive Programming Profiles</span>
-    </h3>
+  <h3>
+    <img src="https://media4.giphy.com/media/dMLmQfCO7lCA2gX3tw/giphy.gif?cid=ecf05e47ak6mwfu812269zzr8ydv529109qzpb8rszwnja9e&rid=giphy.gif&ct=s" width="50" />
+    <span>My Competitive Programming Profiles</span>
+  </h3>
 
-    <p class="profile-icons">
-        <a href="https://codeforces.com/profile/7oSkaaa">
-            <img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces" width="6%">
-        </a>&emsp;
-        <!-- Add other profile icons here -->
-    </p>
+  <p align="center" class="profile-links">
+    <!-- Add your profile links here -->
+  </p>
 
-    <ul class="template-list">
-        <li class="template-list-item">
-            <a href="Template.cpp">My template C++</a>
-            <a href="Template.cpp">
-                <img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px" />
-            </a>
-        </li>
-        <li class="template-list-item">
-            <a href="Google_Template.cpp">Google template C++</a>
-            <a href="Google_Template.cpp">
-                <img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px" />
-            </a>
-        </li>
-        <!-- Add other templates here -->
-    </ul>
+  <div class="contest-templates">
+    <!-- Add your contest templates links here -->
+  </div>
 
-    <!-- Add other sections and templates here -->
+  <div class="section-heading">Graph</div>
+  <div class="code-links">
+    <!-- Add your graph-related code links here -->
+  </div>
+
+  <div class="section-heading">Data Structures</div>
+  <div class="code-links">
+    <!-- Add your data structures-related code links here -->
+  </div>
+
+  <div class="section-heading">Dynamic Programming</div>
+  <div class="code-links">
+    <!-- Add your dynamic programming-related code links here -->
+  </div>
+
+  <!-- Add more sections for other topics as needed -->
+
+  <div class="additional-files">
+    <!-- Add links to additional files here -->
+  </div>
+
 </body>
-
 </html>
