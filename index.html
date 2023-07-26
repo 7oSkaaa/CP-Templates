@@ -12,7 +12,7 @@
       line-height: 1.6;
       margin: 0;
       padding: 0;
-      background-color: #f2f2f2;
+      background-color: #f9f9f9;
     }
 
     header {
@@ -24,46 +24,26 @@
 
     h1 {
       font-size: 36px;
-      margin: 0;
-    }
-
-    h3 {
-      display: flex;
-      align-items: center;
-      font-size: 24px;
-      margin: 30px 0 20px;
-    }
-
-    h3 img {
-      margin-right: 10px;
-    }
-
-    .profiles {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 30px;
+      margin-bottom: 10px;
     }
 
     .profiles img {
-      width: 40px;
-      height: 40px;
-      margin: 0 10px;
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
     }
 
     .profiles a {
       color: #000;
       text-decoration: none;
-      display: inline-block;
-      transition: color 0.3s ease;
     }
 
     .profiles a:hover {
       color: #3498db;
     }
 
-    .content {
-      max-width: 800px;
+    .container {
+      max-width: 900px;
       margin: 0 auto;
       padding: 20px;
       background-color: #fff;
@@ -72,32 +52,39 @@
     }
 
     .section {
-      margin-top: 30px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 20px;
     }
 
     .section h2 {
-      font-size: 24px;
-      margin-bottom: 10px;
+      font-size: 28px;
+      margin-bottom: 15px;
     }
 
     .section ul {
       list-style: none;
       padding: 0;
+      margin: 0;
     }
 
     .section li {
-      margin-bottom: 5px;
+      margin-bottom: 10px;
     }
 
     .section a {
       color: #3498db;
       text-decoration: none;
-      display: inline-block;
-      transition: color 0.3s ease;
     }
 
     .section a:hover {
-      color: #2980b9;
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      color: #666;
     }
   </style>
 </head>
@@ -105,30 +92,39 @@
 <body>
   <header>
     <h1>Competitive Programming Templates</h1>
+    <div class="profiles">
+      <a href="https://codeforces.com/profile/7oSkaaa"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces"></a>
+      <a href="https://leetcode.com/7oSkaa/"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png" alt="LeetCode"></a>
+      <!-- Add other profile icons here -->
+    </div>
   </header>
 
-  <div class="content">
-    <h3>
-      <img src="https://media4.giphy.com/media/dMLmQfCO7lCA2gX3tw/giphy.gif?cid=ecf05e47ak6mwfu812269zzr8ydv529109qzpb8rszwnja9e&rid=giphy.gif&ct=s" width="40px">
-      My Competitive Programming Profiles
-    </h3>
-    <div class="profiles">
-      <a href="https://codeforces.com/profile/7oSkaaa" target="_blank"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces"></a>
-      <a href="https://leetcode.com/7oSkaa/" target="_blank"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png" alt="LeetCode"></a>
-      <!-- Add other profile icons here -->
+  <div class="container">
+    <div class="section">
+      <h2>Contest Templates</h2>
+      <ul>
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp">My template C++</a></li>
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp">Google template C++</a></li>
+        <!-- Add other contest templates here -->
+      </ul>
     </div>
 
     <div class="section">
-      <h2>Contest templates</h2>
+      <h2>Graph</h2>
       <ul>
-        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp" target="_blank">My template C++</a></li>
-        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp" target="_blank">Google template C++</a></li>
-        <!-- Add other contest templates here -->
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp">Graph Traversing (DFS, BFS)</a></li>
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Dijkstra.cpp">Dijkstra</a></li>
+        <li><a href="https://github.com/7oSkaaa/CP-Templates/blob/main/Floyd.cpp">Floyd</a></li>
+        <!-- Add other graph templates here -->
       </ul>
     </div>
 
     <!-- Add other sections for different categories of templates -->
 
+  </div>
+
+  <div class="footer">
+    <p>Made with ❤️ by [Your Name]</p>
   </div>
 </body>
 
