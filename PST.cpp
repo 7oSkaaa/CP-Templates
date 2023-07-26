@@ -32,57 +32,86 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct PST {
-
+template < typename T = int , int Base = 0 > struct PST {
+ 
     struct Node {
        
-        T val;
+        T val, prefix;
         Node *left, *right;
-
-        Node() {
-            val = 0;
+ 
+        Node(T _val = 0) {
+            this -> val = _val;
+            this -> prefix = max(0ll, _val);
             left = right = this;
         }
-
-        Node(T v, Node *l = new Node, Node *r = new Node) : val(v), left(l), right(r) {}
-
+ 
+        Node(Node* node, Node* l = new Node, Node* r = new Node) {
+            val = node -> val;
+            prefix = node -> prefix;
+            left = l;
+            right = r;
+        }
     };
-
+ 
     vector < Node* > roots;
-    int N, Lx, Rx;
-
+    T N, Lx, Rx;
+ 
     PST(int n = 0, T lx = -1e9, T rx = 1e9) : N(n), Lx(lx), Rx(rx) {
         roots = vector < Node* > (n + 5, new Node);
     }
 
-    T operation(T a, T b) {
-        return a + b;
+    Node* build(const vector < T >& nums, T l, T r){
+        if(l == r) return new Node(nums[l - !Base]);
+        T mx = l + (r - l) / 2;
+        Node* L = build(nums, l, mx);
+        Node* R = build(nums, mx + 1, r);
+        return new Node(operation(L, R), L, R);
     }
 
-    Node* insert(Node* root, T val, T lx, T rx){
-        if(val < lx || val > rx) return root;
-        if(lx == rx) return new Node(root -> val + 1);
+    void build(const vector < T >& nums){
+        roots[0] = build(nums, Lx, Rx);
+    }
+ 
+    Node* operation(Node* a, Node* b){
+        Node* Merged = new Node();
+        Merged -> val = a -> val + b -> val;
+        Merged -> prefix = max(a -> prefix, a -> val + b -> prefix);
+        return Merged;
+    }
+ 
+    Node* update(Node* root, int idx, T val, T lx, T rx){
+        if(idx < lx || idx > rx) return root;
+        if(lx == rx) return new Node(val);
         T mx = lx + (rx - lx) / 2;
-        Node* L = insert(root -> left, val, lx, mx);
-        Node* R = insert(root -> right, val, mx + 1, rx);
-        return new Node(operation(L -> val, R -> val), L, R);
+        Node* L = update(root -> left, idx, val, lx, mx);
+        Node* R = update(root -> right, idx, val, mx + 1, rx);
+        return new Node(operation(L, R), L, R);
     }
   
-    void insert(int idx, int prev, T val){
-        roots[idx] = insert(roots[prev], val, Lx, Rx);
+    void insert(int idx, T val, int curr_time, int prev_time){
+        roots[curr_time] = update(roots[prev_time], idx, val, Lx, Rx);
     }
 
-    T query(Node* l, Node* r, T k, T lx, T rx){
-        if(lx == rx) return lx;
-        T mx = lx + (rx - lx) / 2;
-        T cnt = r -> left -> val - l -> left -> val;
-        if(cnt >= k) 
-            return query(l -> left, r -> left, k, lx, mx);
-        return query(l -> right, r -> right, k - cnt, mx + 1, rx);
+    void update(int idx, T val, int curr_time){
+        roots[curr_time] = update(roots[curr_time], idx, val, Lx, Rx);
+    }
+ 
+    Node* query(Node* root, int l, int r, T lx, T rx){
+        if (root == nullptr) return new Node(); // Base case for null pointer
+        if (lx > r || l > rx) return new Node(); // Base case for out-of-range interval
+        if(lx >= l && rx <= r) return root;
+        int mx = (lx + rx) / 2;
+        Node* L = query(root -> left, l, r, lx, mx);
+        Node* R = query(root -> right, l, r, mx + 1, rx);
+        return operation(L, R);
     }
     
-    T query(int l, int r, T k){
-        return query(roots[l - 1], roots[r], k, Lx, Rx);
+    T query(int l, int r, int time){
+        return query(roots[time], l, r, Lx, Rx) -> prefix;
+    }
+
+    T get(int time, int idx){
+        return query(idx, idx, time) -> prefix;
     }
 };
 
