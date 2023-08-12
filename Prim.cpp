@@ -34,13 +34,13 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Prim {
+template < typename T = int > struct Prim {
 
     struct Edge {
 
-        ll v, w;
+        T v, w;
 
-        Edge(ll V = 0, ll W = 0) : v(V), w(W) {}
+        Edge(T V = 0, T W = 0) : v(V), w(W) {}
 
         bool operator < (const Edge &e) const {
             return w < e.w;
@@ -49,11 +49,11 @@ struct Prim {
     };
 
     vector < vector < Edge > > adj;
-    vector < ll > marked;
+    vector < T > marked;
 
-    Prim(ll n = 0){
+    Prim(int n = 0){
         adj = vector < vector < Edge > > (n + 10);
-        marked = vector < ll > (n + 10, 0);
+        marked = vector < T > (n + 10, 0);
     }
 
     void build_adj(int edges, bool is_directed = false){
@@ -64,8 +64,8 @@ struct Prim {
         }
     }
 
-    ll get_cost(int root){
-        ll cost = 0;
+    T get_cost(int root){
+        T cost = 0;
         priority_queue < Edge > pq;
         pq.push(Edge(root, 0));
         while(!pq.empty()){
@@ -82,7 +82,6 @@ struct Prim {
         }
         return cost;
     }
-
 };
 
 void Solve(){

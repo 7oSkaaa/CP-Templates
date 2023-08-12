@@ -42,18 +42,81 @@ void FAST_IO(){
     #endif
 }
 
+// -------------------------- Trie Binary -----------------------------
+
+template < typename T = int, int LOG = 30 > struct Trie {
+
+    struct Node {
+ 
+        Node* child[2];
+        int freq;
+ 
+        Node(){
+            memset(child, 0, sizeof(child));
+            freq = 0;
+        }
+    };
+
+    Node* root;
+
+    Trie(){
+        root = new Node;
+    }
+
+    void insert(const T& x){
+        Node* curr = root; 
+        for(int bit = LOG; bit >= 0; --bit){
+            int bit_val = (x >> bit) & 1;
+            if(!curr -> child[bit_val]) 
+                curr -> child[bit_val] = new Node;
+            curr = curr -> child[bit_val];
+            ++curr -> freq;
+        }
+    }
+  
+    void erase(const T& x, int bit, Node* curr){
+        if(bit < 0) return;
+        int bit_val = (x >> bit) & 1;
+        erase(x, bit - 1, curr -> child[bit_val]);
+        if(--curr -> child[bit_val] -> freq == 0){
+            delete curr -> child[bit_val];
+            curr -> child[bit_val] = nullptr;
+        }
+    }
+
+    bool search(const T& x){
+        Node* curr = root; 
+        for(int bit = LOG; bit >= 0; --bit){
+            int bit_val = (x >> bit) & 1;
+            if(!curr -> child[bit_val]) 
+                return false;
+            curr = curr -> child[bit_val];
+        }
+        return true;
+    }
+ 
+    void erase(const T& x){
+        if(search(x)) 
+            erase(x, LOG, root);
+    }
+};
+
 // -------------------------- Trie -----------------------------
  
-struct Trie {
-    
+template < int Mode = 0 > struct Trie {
+    // Mode [lowercase, uppercase, digits]
+    static constexpr int sz[4] = {26, 26, 10};
+
     struct Node {
-
-        Node* child[26];
+ 
+        Node* child[sz[Mode]];
         bool is_word;
-
+        int freq;
+ 
         Node(){
             memset(child, 0, sizeof(child));
             is_word = false;
+            freq = 0;
         }
     };
 
@@ -62,33 +125,30 @@ struct Trie {
 
     Trie(){
         root = new Node;
-        DEFAULT = 'a';
+        DEFAULT = "aA0"[Mode];
     }
     
-    ~Trie(){
-        Delete_Trie(root);
-        delete root;
-    }
-
-    void Delete_Trie(Node* curr){
-        for(auto& new_node : curr -> child){
-            if(new_node){
-                Delete_Trie(new_node);
-                delete new_node;
-            }
-        }
-    }
-
-    void insert(string& word){
+    void insert(const string& word){
         Node* curr = root; 
         for(auto& c : word){
-            if(!curr -> child[c - DEFAULT]) curr -> child[c - DEFAULT] = new Node;
+            if(!curr -> child[c - DEFAULT]) 
+                curr -> child[c - DEFAULT] = new Node;
             curr = curr -> child[c - DEFAULT];
+            curr -> freq++;
         }
         curr -> is_word = true;
     }
   
-    bool search(string& word){
+    void erase(const string& word, int idx, Node* curr){
+        if(idx == sz(word)) return void(curr -> is_word = curr -> freq > 1);
+        erase(word, idx + 1, curr -> child[word[idx] - DEFAULT]);
+        if(--curr -> child[word[idx] - DEFAULT] -> freq == 0){
+            delete curr -> child[word[idx] - DEFAULT];
+            curr -> child[word[idx] - DEFAULT] = nullptr;
+        }
+    }
+
+    bool search(const string& word){
         Node* curr = root; 
         for(auto& c : word){
             if(!curr -> child[c - DEFAULT]) return false;
@@ -97,7 +157,12 @@ struct Trie {
         return curr -> is_word;
     }
  
-    bool is_prefix(string& word){
+    void erase(const string& word){
+        if(search(word)) 
+            erase(word, 0, root);
+    }
+
+    bool is_prefix(const string& word){
         Node* curr = root; 
         for(auto& c : word){
             if(!curr -> child[c - DEFAULT]) return false;
@@ -105,7 +170,91 @@ struct Trie {
         }
         return true;
     }
+};
 
+// -------------------------- PST -----------------------------
+
+template < typename T = int , int Base = 0 > struct PST {
+ 
+    struct Node {
+       
+        T val, prefix;
+        Node *left, *right;
+ 
+        Node(T _val = 0) {
+            this -> val = _val;
+            this -> prefix = max(0ll, _val);
+            left = right = this;
+        }
+ 
+        Node(Node* node, Node* l = new Node, Node* r = new Node) {
+            val = node -> val;
+            prefix = node -> prefix;
+            left = l;
+            right = r;
+        }
+    };
+ 
+    vector < Node* > roots;
+    T N, Lx, Rx;
+ 
+    PST(int n = 0, T lx = -1e9, T rx = 1e9) : N(n), Lx(lx), Rx(rx) {
+        roots = vector < Node* > (n + 5, new Node);
+    }
+
+    Node* build(const vector < T >& nums, T l, T r){
+        if(l == r) return new Node(nums[l - !Base]);
+        T mx = l + (r - l) / 2;
+        Node* L = build(nums, l, mx);
+        Node* R = build(nums, mx + 1, r);
+        return new Node(operation(L, R), L, R);
+    }
+
+    void build(const vector < T >& nums){
+        roots[0] = build(nums, Lx, Rx);
+    }
+ 
+    Node* operation(Node* a, Node* b){
+        Node* Merged = new Node();
+        Merged -> val = a -> val + b -> val;
+        Merged -> prefix = max(a -> prefix, a -> val + b -> prefix);
+        return Merged;
+    }
+ 
+    Node* update(Node* root, int idx, T val, T lx, T rx){
+        if(idx < lx || idx > rx) return root;
+        if(lx == rx) return new Node(val);
+        T mx = lx + (rx - lx) / 2;
+        Node* L = update(root -> left, idx, val, lx, mx);
+        Node* R = update(root -> right, idx, val, mx + 1, rx);
+        return new Node(operation(L, R), L, R);
+    }
+  
+    void insert(int idx, T val, int curr_time, int prev_time){
+        roots[curr_time] = update(roots[prev_time], idx, val, Lx, Rx);
+    }
+
+    void update(int idx, T val, int curr_time){
+        roots[curr_time] = update(roots[curr_time], idx, val, Lx, Rx);
+    }
+ 
+    Node* query(Node* root, int l, int r, T lx, T rx){
+        if (root == nullptr) return new Node(); // Base case for null pointer
+        if (lx > r || l > rx) return new Node(); // Base case for out-of-range interval
+        if(lx >= l && rx <= r) return root;
+        int mx = (lx + rx) / 2;
+        Node* L = query(root -> left, l, r, lx, mx);
+        Node* R = query(root -> right, l, r, mx + 1, rx);
+        return operation(L, R);
+    }
+    
+    T query(int l, int r, int time){
+        return query(roots[time], l, r, Lx, Rx) -> prefix;
+    }
+
+    T get(int time, int idx){
+        return query(idx, idx, time) -> prefix;
+    }
 };
 
 // -------------------------- Seive -----------------------------
@@ -143,13 +292,13 @@ template < typename T = int > struct Seive {
 
 // -------------------------- Segment Tree -----------------------------
 
-template < typename T = int, const int Base = 0 > struct Segment_Tree {
+template < typename T = int , int Base = 0 > struct Segment_Tree {
 
     struct Node {
 
-        ll val;
+        T val;
 
-        Node(ll V = 0) : val(V) {}
+        Node(T V = 0) : val(V) {}
     
         Node operator = (const T rhs) {
             val = rhs;
@@ -160,68 +309,79 @@ template < typename T = int, const int Base = 0 > struct Segment_Tree {
 
     int size; 
     Node DEFAULT;
-    vector < Node > Tree; 
+    vector < Node > tree; 
     
-    void intial(int n){
+    Segment_Tree(int n = 0){
         size = 1, DEFAULT = 0;
         while(size < n) size *= 2;
-        Tree = vector < Node > (2 * size, DEFAULT);
+        tree = vector < Node > (2 * size, DEFAULT);
     }
 
-    Segment_Tree(int n){
-        intial(n);
+    Segment_Tree(int n, const vector < T >& nums){
+        size = 1, DEFAULT = 0;
+        while(size < n) size *= 2;
+        tree = vector < Node > (2 * size, DEFAULT);
+        build(nums);
     }
 
     // Main operation to do
 
-    Node operation(Node a, Node b){
+    Node operation(const Node& a, const Node& b){
         return a.val + b.val;
     }
     
     // If Base is 1 so the array is 1-based else the array is 0-based
     
-    void build(vector < T >& nums, int idx, int lx, int rx){
+    void build(const vector < T >& nums, int idx, int lx, int rx){
         if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
-        if(rx == lx) Tree[idx] = nums[lx - !Base];
+        if(rx == lx) tree[idx] = nums[lx - !Base];
         else {
-            int m = (rx + lx) / 2;
-            build(nums, 2 * idx, lx, m);
-            build(nums, 2 * idx + 1, m + 1, rx);
-            Tree[idx] = operation(Tree[2 * idx], Tree[2 * idx + 1]);
+            int mx = (rx + lx) / 2;
+            build(nums, 2 * idx, lx, mx);
+            build(nums, 2 * idx + 1, mx + 1, rx);
+            tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
         }
     }
 
-    void build(vector < T >& nums){
+    void build(const vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
-    void update(int i, T v, int idx, int lx, int rx){
-        if(rx == lx) Tree[idx] = v;
+    void update(int index, T v, int idx, int lx, int rx){
+        if(rx == lx) tree[idx] = v;
         else {  
-            int m = (rx + lx) / 2;
-            if(i <= m) update(i, v, 2 * idx, lx, m);
-            else update(i, v, 2 * idx + 1, m + 1, rx);
-            Tree[idx] = operation(Tree[2 * idx], Tree[2 * idx + 1]);
+            int mx = (rx + lx) / 2;
+            if(index <= mx) update(index, v, 2 * idx, lx, mx);
+            else update(index, v, 2 * idx + 1, mx + 1, rx);
+            tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
         }
     }
 
-    void update(int i, T v){
-        update(i, v, 1, 1, size);
+    void update(const int index, const T v){
+        update(index, v, 1, 1, size);
     }
 
     Node query(int l, int r, int idx, int lx, int rx){
         if(lx > r || l > rx) return DEFAULT;
-        if(lx >= l && rx <= r) return Tree[idx];
-        int m = (lx + rx) / 2;
-        return operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
+        if(lx >= l && rx <= r) return tree[idx];
+        int mx = (lx + rx) / 2;
+        return operation(query(l, r, 2 * idx, lx, mx), query(l, r, 2 * idx + 1, mx + 1, rx));
     }
 
-    T query(int l, int r){
-        return query(l, r, 1, 1, size).val;
+    Node query_Node(const int l, const int r){
+        return query(l, r, 1, 1, size);
+    }
+
+    T query(const int l, const int r){
+        return query_Node(l, r).val;
+    }
+
+    T get(const int idx){
+        return query_Node(idx, idx).val;
     }
 
     friend ostream& operator << (ostream &out, const Node &node) {
-        out << node.val;
+        out << node.val << ' ';
         return out;
     }
     
@@ -250,7 +410,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         intial(n);
     }
 
-    Lazy_Propagation(int n, vector < T > &v){
+    Lazy_Propagation(int n, const vector < T > &v){
         intial(n);
         build(v);
     }
@@ -288,7 +448,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // build the Tree with given vector
-    void build(vector < T >& nums, int idx, int lx, int rx){
+    void build(const vector < T >& nums, int idx, int lx, int rx){
         propagate(idx, lx, rx);
         if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
         if(rx == lx) Tree[idx] = nums[lx - !Base];
@@ -301,7 +461,7 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // build the Tree with initial value
-    void build(T initial_value, int idx, int lx, int rx){
+    void build(const T initial_value, int idx, int lx, int rx){
         propagate(idx, lx, rx);
         if(rx == lx) Tree[idx] = initial_value;
         else {
@@ -313,12 +473,12 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // build the Tree with initial value
-    void build(T initial_value){
+    void build(const T initial_value){
         build(initial_value, 1, 1, size);
     }
 
     // the vector should be 1-based also the Tree is 1-based
-    void build(vector < T >& nums){
+    void build(const vector < T >& nums){
         build(nums, 1, 1, size);
     }
 
@@ -362,6 +522,40 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
 };
+
+// -------------------------- Ternary Search -----------------------------
+
+ll F(ll m){
+    // to do function to compare the two halves in the range [L, R]
+    return m;
+}
+
+ll Ternary_Search(ll L, ll R){
+    while(R - L >= 10){
+        ll m1 = L + (R - L) / 3, m2 = R - (R - L) / 3;
+        (F(m1) < F(m1) ? R = m2 : L = m1);
+    }
+    ll ans = LINF;
+    for(ll i = L; i <= R; i++) 
+        ans = min(ans, F(i));
+    return ans;
+}
+
+double F(double m){
+    // to do function to compare the two halves in the range [L, R]
+    return m;
+}
+
+double Ternary_Search(double L, double R){
+    double ans = LINF;
+    while(R - L >= EPS){
+        double m1 = L + (R - L) / 3, m2 = R - (R - L) / 3;
+        double f1 = F(m1), f2 = F(m1);
+        (f1 < f2 ? R = m2 : L = m1);
+        ans = min({ans, f1, f2});
+    }
+    return ans;
+}
 
 // -------------------------- Prefix Sum 2D -----------------------------
 
@@ -410,12 +604,12 @@ template < typename T = int > struct Partial_2D {
 
     void build_partial(int queries){
         while(queries--){
-            Pair < T > p1, p2;
-            cin >> p1.fi >> p1.se >> p2.fi >> p2.se;
-            if(p1.fi > p2.fi) swap(p1.fi, p2.fi);
-            if(p1.se > p2.se) swap(p1.se, p2.se);
-            partial[p2.fi][p2.se]++, partial[p2.fi][p1.se - 1]--; 
-            partial[p1.fi - 1][p2.se]--, partial[p1.fi - 1][p1.se - 1]++;
+            int x1, y1, x2, y2, k = 1;
+            cin >> x1 >> y1 >> x2 >> y2;
+            if(x1 > x2) swap(x1, x2);
+            if(y1 > y2) swap(y1, y2);
+            partial[x2][y2] += k, partial[x2][y1 - 1] -= k; 
+            partial[x1 - 1][y2] -= k, partial[x1 - 1][y1 - 1] += k;
         }
         for(int i = n; i >= 0; i--)
             for(int j = m; j >= 0; j--)
@@ -433,7 +627,234 @@ template < typename T = int > struct Partial_2D {
         for(int i = 1; i <= n; i++, cout << "\n")
             for(int j = 1; j <= m && cout << partial[i][j] << " "; j++);
     }
+};
 
+// -------------------------- Matrix Power -----------------------------
+
+template < typename T = int >  struct Matrix {
+
+    // The matrix
+    int N;
+    vector < vector < T > > Mat;
+
+    // Constructor to fill the matrix with this value
+    Matrix(int n = 0, T val = 0) {
+        N = n;
+        Mat.assign(N, vector < T > (N, val));
+
+    }
+
+    // Constructor to make matrix with this 2D Vector
+    Matrix(const vector < vector < T > > & b){
+        N = b.size();
+        Mat = b;
+    }
+
+    // Overloaded the = operator
+    Matrix& operator = (const Matrix& b){
+        Mat = b.Mat;
+        N = b.Mat.size();
+        return *this;
+    }
+
+    // Overloaded the = operator
+    Matrix& operator = (const vector < vector < T > > & b){
+        Mat = b;
+        N = b.size();
+        return *this;
+    }
+
+    // Overload the [][] operator
+    vector < T >& operator[](T index) {
+        return Mat[index];
+    }
+
+    // Overload the [][] operator
+    const vector < T >& operator[](T index) const {
+        return Mat[index];
+    }
+
+};
+
+// Get Transition matrix
+template < typename T = long long > Matrix < T > GetTrans(){
+    vector < vector < T > > Trans = {
+        {0, 1},
+        {1, 1}
+    };
+    return Matrix < T > (Trans);
+}
+
+// Get the identity matrix
+template < typename T = long long > Matrix < T > GetIdentity(const int N){
+    vector < vector < T > > Identity(N, vector < T > (N));
+    for(int i = 0; i < N; i++)
+        Identity[i][i] = 1;
+    return Matrix < T > (Identity);
+}
+
+// Get the zero matrix
+template < typename T = long long > Matrix < T > GetZero(const int N){
+    vector < vector < T > > Zero(N, vector < T > (N));
+    return Matrix < T > (Zero);
+}
+
+// Overload the * operator
+template < typename T = long long > Matrix < T > operator * (const Matrix < T >& a, const Matrix < T >& b){
+    int N = a.N;
+    Matrix res = GetZero(N);
+    for(int i = 0; i < N; i++)
+        for(int j = 0; j < N; j++)
+            for(int k = 0; k < N; k++)
+                res[i][j] = add_mod(res[i][j], mul_mod(a[i][k], b[k][j], Mod), Mod);
+    return res;
+}
+
+// Overload the *= operator
+template < typename T = long long >  Matrix < T > operator *= (Matrix < T >& a, const Matrix < T >& b){
+    a = a * b;
+    return a;
+}
+
+// Overload the ^ operator
+template < typename T = long long >  Matrix < T > Power(Matrix < T >& b, ll e){
+    Matrix < T > Trans = GetTrans();
+    while(e){
+        if(e & 1) b *= Trans;
+        Trans *= Trans;
+        e >>= 1;
+    }
+    return b;
+}
+
+// Get the k-th term
+template < typename T = long long > T k_th(T k, int N){
+    // base case to change
+    if(N <= 0) return 0;
+    if(N <= 1) return 1;
+    Matrix < T >  matrix = GetIdentity(N);
+    matrix = Power(matrix, k + 1);
+    return matrix[0][0];
+}
+
+// -------------------------- Binary Search Tree -----------------------------
+
+struct BST {
+
+    int data;
+    BST *left, *right;
+
+    BST(int data = 0){
+        this -> data = data;
+        left = right = nullptr;
+    }
+
+    // Insert New node
+
+    BST* Insert(BST* root, int val){
+        if(!root) return new BST(val);
+        if(val > root -> data)
+            root -> right = Insert(root -> right, val);
+        else
+            root -> left = Insert(root -> left, val);
+        return root;
+    }
+
+    // Inorder Traverse (LRR)
+
+    void Inorder(BST* root){
+        if(!root) return;
+        Inorder(root -> left);
+        cout << root -> data << " ";
+        Inorder(root -> right);
+    }
+
+    // Preorde Traverse (RLR)
+
+    void Preorder(BST* root){
+        if(!root) return;
+        cout << root -> data << " ";
+        Preorder(root -> left);
+        Preorder(root -> right);
+    }
+
+    // Postorder Traverse (LRR)
+
+    void Postorder(BST* root){
+        if(!root) return;
+        Postorder(root -> left);
+        Postorder(root -> right);
+        cout << root -> data << " ";
+
+    }
+
+    // Traverse each level
+
+    void Level_Order(BST* root){
+        if(!root) return;
+        queue < BST* > bfs;
+        bfs.push(root);
+        while(!bfs.empty()){
+            BST* curr = bfs.front();
+            bfs.pop();
+            cout << curr -> data << " ";
+            if(curr -> left)
+                bfs.push(curr -> left);
+            if(curr -> right)
+                bfs.push(curr -> right);
+        }
+    }
+
+    // Search on a node
+
+    bool Search(BST* root, int val){
+        if(!root) return false;
+        if(root -> data == val) return true;
+        if(val > root -> data) return Search(root -> right, val);
+        else return Search(root -> left, val);
+    }
+
+    // Get minimum node in BST
+
+    BST* minValueNode(BST* node){
+        BST* current = node;
+        while (current && current -> left != nullptr) current = current -> left;
+        return current;
+    }
+
+    // Get maximum node in BST
+
+    BST* maxValueNode(BST* node){
+        BST* current = node;
+        while (current && current -> right != nullptr) current = current -> right;
+        return current;
+    }
+
+    // Delete Node
+
+    BST* Delete_Node(BST* root, int key){
+        if(!root) return root;
+        if(key < root -> data)
+            root -> left = Delete_Node(root -> left, key);
+        else if(key > root -> data)
+            root -> right = Delete_Node(root -> right, key);
+        else {
+            if(!root -> left && !root -> right) return nullptr;
+            else if(!root -> left){
+                BST* temp = root -> right;
+                free(root);
+                return temp;
+            }else if(!root -> right){
+                BST* temp = root -> left;
+                free(root);
+                return temp;
+            }
+            BST* temp = minValueNode(root -> right);
+            root -> data = temp -> data;
+            root -> right = Delete_Node(root -> right, temp -> data);
+        }
+        return root;
+    }
 };
 
 // -------------------------- Power inverse -----------------------------
@@ -623,6 +1044,18 @@ struct Math {
         ll sq = sqrt(n);
         return sum_divisors + (sq * sq == n ? sq : 0);
     }
+    
+    // sum of divisor of number in range [1 ... n]
+    ll divisorSum(ll num){
+        ll sum = 0;
+        for (ll i = 1; i <= sqrt(num); i++) {
+            ll t1 = i * (num / i - i + 1);
+            ll t2 = (((num / i) * (num / i + 1)) / 2) - ((i * (i + 1)) / 2);
+            sum += t1 + t2;
+        }
+        return sum;
+    }
+
 
     // get vector with the divisors for n
 
@@ -719,6 +1152,30 @@ struct Math {
         return sq * sq == n;
     }
 
+    // number of coprime witn n from 1 to n
+    
+    ll phi(ll n) {
+        ll result = n;
+        for (ll i = 2; i * i <= n; i++) {
+            if (n % i == 0) {   
+                while (n % i == 0)
+                    n /= i;
+                result -= result / i;
+            }
+        }
+        if (n > 1)
+            result -= result / n;
+        return result;
+    }
+
+    // get the power of prime factor in n
+    ll FactN_PrimePowers(ll n, ll p){
+        ll powers = 0;
+        for(ll i = p; i <= n; i *= p)
+            powers += n / i;
+        return powers;
+    }
+
     // Convert Decimal to any base
 
     string decimal_to_any_base(ll decimal, ll base){
@@ -748,15 +1205,15 @@ struct Math {
 
 };
 
-// -------------------------- LCA -----------------------------
+// -------------------------- LCA Weighted -----------------------------
 
 template < typename T = int > struct LCA {
     
     struct Edge {
 
-        ll v, w;
+        T v, w;
 
-        Edge(ll V = 0, ll W = 0) : v(V), w(W) {}
+        Edge(T V = 0, T W = 0) : v(V), w(W) {}
 
         bool operator < (const Edge &rhs) const {
             return w < rhs.w;
@@ -771,7 +1228,7 @@ template < typename T = int > struct LCA {
     
     LCA(int n){
         N = n + 10, LOG = 0;
-        while((1 << LOG) <= n) LOG++;
+        while((1 << LOG) <= N) LOG++;
         dep = vector < int > (N);
         adj = vector < vector < Edge > > (N);
         anc = cost = vector < vector < T > > (N, vector < T > (LOG));
@@ -838,7 +1295,121 @@ template < typename T = int > struct LCA {
         return operation(get_cost(u, dep[u] - dep[lca]), get_cost(v, dep[v] - dep[lca]));
     }
 
+    void build(int root = 1){
+        dfs(root);
+    }
+
 };
+
+// -------------------------- LCA -----------------------------
+
+template < typename T = int > struct LCA {
+    
+    int N, LOG;
+    vector < vector < T > > anc;
+    vector < vector < T > > adj;
+    vector < int > dep;
+    
+    LCA(int n = 0){
+        N = n + 10, LOG = 0;
+        while((1 << LOG) <= N) LOG++;
+        dep = vector < int > (N);
+        adj = vector < vector < T > > (N);
+        anc = vector < vector < T > > (N, vector < T > (LOG));
+    }
+
+    LCA(int n, const vector < vector < T > > &G) : adj(G){ 
+        N = n + 10, LOG = 0;
+        while((1 << LOG) <= N) LOG++;
+        dep = vector < int > (N);
+        anc = vector < vector < T > > (N, vector < T > (LOG));
+    }
+
+    void add_edge(int u, int v){
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    void build_adj(int edges){
+        for(int i = 0, u, v; i < edges && cin >> u >> v; i++)
+            add_edge(u, v);
+    }
+
+    void dfs(int u, int p = 0){
+        for(auto& v : adj[u]){
+            if(v == p) continue;
+            dep[v] = dep[u] + 1, anc[v][0] = u;
+            for(int bit = 1; bit < LOG; bit++)
+                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+            dfs(v, u);
+        }
+    }
+    
+    int kth_ancestor(int u, int k){
+        if(dep[u] < k) 
+            return -1;
+        for(int bit = LOG - 1; bit >= 0; bit--)
+            if(k & (1 << bit))
+                u = anc[u][bit];
+        return u;
+    }
+    
+    int get_lca(int u, int v){
+        if(dep[u] < dep[v])
+            swap(u, v);
+        u = kth_ancestor(u, dep[u] - dep[v]);
+        if(u == v)
+            return u;
+        for(int bit = LOG - 1; bit >= 0; bit--)
+            if(anc[u][bit] != anc[v][bit])
+                u = anc[u][bit], v = anc[v][bit];
+        return anc[u][0];
+    }
+
+    T query(int u, int v){
+        int lca = get_lca(u, v);
+        return dep[u] + dep[v] - 2 * dep[lca];
+    }
+
+    void build(int root = 1){
+        dfs(root);
+    }
+
+};
+
+// -------------------------- Graph  Representation -----------------------------
+
+#define adj_loop(u, v, e) for(int e = head[u], v; ~e && (v = edges[e].to, 1); e = edges[e].nxt)
+
+template < typename T = int > struct edgeData {
+
+    T to, nxt, cost;
+
+    edgeData(T TO = 0, T NXT = 0, T COST = 0) : to(TO), nxt(NXT), cost(COST) {}
+
+};
+
+int edge_count;
+vector < edgeData < int > > edges;
+vector < int > head;
+
+void init(int n, int m){
+    edges = vector < edgeData < int > > (2 * m + 5);
+    head = vector < int > (n + 5, -1);
+    edge_count = 1;
+}
+
+void addEdge(int u, int v, int c = 0){
+    edges[edge_count].to = v;
+    edges[edge_count].cost = c;
+    edges[edge_count].nxt = head[u];
+    head[u] = edge_count++;
+}
+
+void AddBiEdge(int u, int v, int c = 0){
+    addEdge(u, v, c);
+    addEdge(v, u, c);
+}
 
 // -------------------------- Graph -----------------------------
 
@@ -1003,9 +1574,9 @@ template < typename T = int > struct Fenwick_Tree {
     int n;
     T DEFAULT;
 
-    Fenwick_Tree(int N){
-        n = N + 1, DEFAULT = 0;
-        Tree.assign(n + 10, DEFAULT);
+    Fenwick_Tree(int sz = 0){
+        n = sz + 1, DEFAULT = 0;
+        Tree = vector < T > (n + 10, DEFAULT);
     }
 
     T operation(T a, T b){
@@ -1040,8 +1611,12 @@ template < typename T = int > struct Fenwick_Tree {
     }
 
     T query(int l, int r){
-        if(l > r) swap(l, r);
+        if(l > r) return DEFAULT;
         return get_ans(r) - get_ans(l - 1);
+    }
+
+    T get(int idx){
+        return query(idx, idx);
     }
 
 };
@@ -1054,8 +1629,8 @@ template < typename T = int > struct Fenwick_Tree {
     int n, m;
     T DEFAULT;
 
-    Fenwick_Tree(int N, int M){
-        n = N + 1, m = M + 1, DEFAULT = 0;
+    Fenwick_Tree(int rows = 0, int cols = 0){
+        n = rows + 1, m = cols + 1, DEFAULT = 0;
         Tree.assign(n + 10, vector < ll > (m + 10, DEFAULT));
     }
 
@@ -1109,49 +1684,251 @@ template < typename T = int > struct Fenwick_Tree {
 
 };
 
+// -------------------------- Fenwick Tree Range -----------------------------
+
+template < typename T = int > struct Fenwick_Tree_Range {
+    
+    int N;
+    T DEFAULT;
+    vector < T > M, C;
+
+    Fenwick_Tree_Range(int sz = 0){
+        N = sz + 1, DEFAULT = 0;
+        M = C = vector < T > (N + 10);
+    }
+
+    int lowest_bit(int idx){
+        return (idx & -idx);
+    }
+
+    void build(vector < T >& nums){
+        for(int i = 0; i < sz(nums); i++)
+            add(i, i, nums[i]);
+    }
+
+    void add_range(int idx, T addM, T addC){
+        idx++;
+        while(idx <= N){
+            M[idx] += addM;
+            C[idx] += addC;
+            idx += lowest_bit(idx);
+        }
+    }
+
+    void add(int l, int r, T val) {
+        add_range(l, val, -val * (l - 1));
+        add_range(r + 1, -val, val * r);
+    }
+
+    T get(int idx){
+        T ans = DEFAULT;
+        int pos = idx++;
+        while(idx){
+            ans += pos * M[idx] + C[idx];
+            idx -= lowest_bit(idx);
+        }
+        return ans;
+    }
+
+    T query(int L, int R){
+        if(L > R) return DEFAULT;
+        return get(R) - get(L - 1);
+    }
+};
+
+// -------------------------- Seive Prime Factorization -----------------------------
+
+// Vector to store smallest prime factor of numbers from 1 to N.
+vector < int > SPF;
+
+// Vector to store prime factors of numbers from 1 to N.
+vector < vector < int > > primeFactors;
+
+// Function to calculate prime factors of a number.
+vector < int > PrimeFactors(int x){
+    vector < int > ret;
+    while(x > 1){
+        ret.push_back(SPF[x]);
+        x /= SPF[x];
+    }
+    return ret;
+}
+
+// Function to calculate smallest prime factors of numbers from 1 to N using Sieve of Eratosthenes.
+void Seive(int N){
+    // Initializing vector SPF to store smallest prime factor of numbers from 1 to N.
+    SPF = vector < int > (N + 5);
+
+    // Initializing vector primeFactors to store prime factors of numbers from 1 to N.
+    primeFactors = vector < vector < int > > (N + 5);
+
+    // Initializing SPF vector with i for all numbers.
+    for(int i = 1; i <= N; i++)
+        SPF[i] = i;
+
+    // Updating SPF vector for even numbers.
+    for(int i = 2; i <= N; i += 2)
+        SPF[i] = 2;
+
+    // Updating SPF vector for odd numbers.
+    for(int i = 3; i * i <= N; i++){
+        if(SPF[i] == i){
+            for(int j = i * i; j <= N; j += i)
+                if(SPF[j] == j)
+                    SPF[j] = i;
+        }
+    }
+
+    // Calculating prime factors of numbers from 1 to N.
+    for(int i = 1; i <= N; i++)
+        primeFactors[i] = PrimeFactors(i);
+}
+
 // -------------------------- Seive Factorization -----------------------------
 
 struct Factorization {
     
     int n;
-    vector < int > factors;
-    vector < int > prime_factors;
+    vector < int > factors_cnt, prime_factors_cnt;
+    vector < vector < int > > factors, prime_factors;
 
     Factorization(int N){
         n = N;
-        factors.assign(n + 10, 2);
-        prime_factors.resize(n + 10);
+        factors_cnt = vector < int > (n + 5, 2);
+        prime_factors_cnt = vector < int > (n + 5);
+        factors = vector < vector < int > > (n + 5);
+        prime_factors = vector < vector < int > > (n + 5);
+        factorization(n);
+        prime_factorization(n);
     }
 
     // Get the number of factors for each number
-
-    void factorization(int n){ 
-        for (ll i = 2; i <= n; i++) {  
-            for (ll j = i * 2; j <= n; j += i) factors[j]++;
-        }
+    void factorization(){ 
+        factors_cnt[0] = 0, factors_cnt[1] = 1;
+        for (int i = 2; i <= n; i++)  
+            for (int j = i + i; j <= n; j += i){
+                factors_cnt[j]++;
+                factors[j].push_back(i);
+            }
     }
 
-    ll get_factors(ll n){
+    // get the number of factors of n
+    int get_factors(int x){
+        return factors_cnt[x];
+    }
+
+    // get the factors of n
+    vector < int > get_factors(){
         return factors[n];
     }
 
     // Get the number of prime factors for each number
-
-    void prime_factorization(int n){
-        for (ll i = 2; i <= n; i++){ 
-            if (!prime_factors[i]) { 
-                for (ll j = 2 * i; j <= n; j += i) prime_factors[j]++;
-                prime_factors[i] = 1; 
+    void prime_factorization(){
+        for (int i = 2; i <= n; i++){ 
+            if (!prime_factors[i]) {
+                for (int j = i; j <= n; j += i){ 
+                    prime_factors[j]++;
+                    prime_factors[j].push_back(i);
+                }
             }
         }
     }
 
-    ll get_prime_factors(ll n){
-        return prime_factors[n];
+    // get the number of prime factors of n
+    int get_prime_factors(int x){
+        return prime_factors[x];
+    }
+
+    // get the prime factors of n
+    vector < int > get_prime_factors(int x){
+        return prime_factors[x];
     }
 };
 
-// -------------------------- Next & Prev Element -----------------------------
+// -------------------------- Monotonic Deque -----------------------------
+
+template < typename T = int > struct Monotonic_Stack {
+    
+    vector < T > st, Monotonic;
+    T DEFAULT = 0;
+
+    Monotonic_Stack() {
+        Monotonic = { DEFAULT }, st = { };
+    }
+
+    static T operation(T a, T b){
+        return max(a, b);
+    }
+
+    void push(T x){
+        st.emplace_back(x);
+        Monotonic.push_back(operation(Monotonic.back(), x));
+    }
+
+    T pop(){
+        T res = st.back();
+        st.pop_back();
+        Monotonic.pop_back();
+        return res;
+    }
+    
+    bool empty(){
+        return st.empty();
+    }
+    
+    T top(){
+        return st.back();
+    }
+
+    T Monotonic_val(){
+        return Monotonic.back();
+    }
+
+    int size(){
+        return st.size();
+    }
+
+};
+
+template < typename T = int > struct Monotonic_Queue {
+
+    Monotonic_Stack < T > s1, s2;
+
+    Monotonic_Queue () {
+        s1 = Monotonic_Stack < T > (), s2 = Monotonic_Stack < T > ();
+    }
+
+    void push(T x){
+        s2.push(x);
+    }
+
+    void pop(){
+        if(s1.empty()){
+            while(!s2.empty())
+                s1.push(s2.pop());
+        }
+        s1.pop();
+    }
+
+    T monotonic_val(){
+        return Monotonic_Stack < T > ::operation(s1.Monotonic_val(), s2.Monotonic_val());
+    }
+
+    bool is_good(){
+        return monotonic_val() == 1;
+    }
+
+    bool empty(){
+        return s1.empty() && s2.empty();
+    }
+
+    int size(){
+        return s1.size() + s2.size();
+    }
+
+};
+
+// -------------------------- Monotonic Stacks -----------------------------
 
 struct Monotonic_Stacks {
 
@@ -1207,9 +1984,76 @@ struct Monotonic_Stacks {
 
 };
 
+// -------------------------- SQRT Decomposition -----------------------------
+
+template < typename T = int, int Base = 0 > struct Sqrt_Decomp {
+
+    int n, len;
+    vector < T > a; 
+    vector < vector < T > > b;
+    T U_Default, Q_Default;
+
+    // calculate the length of each block
+    T calc_sq(int N){
+        int sq = sqrt(N);
+        return sq * sq == N ? sq : sq + 1;
+    }
+
+    Sqrt_Decomp(int N = 0){
+        n = N, len = calc_sq(n), U_Default = 0, Q_Default = 0;
+        a = vector < T > (n + 5, U_Default);
+        b = vector < vector < T > > (len + 5);
+    }
+
+    Sqrt_Decomp(int N, const vector < T >& vec){
+        n = N, len = calc_sq(n), U_Default = 0, Q_Default = 0;
+        a = vec;
+        b = vector < vector < T > > (len + 5);
+        build();
+    }
+
+    // build each block
+    void build(){
+        for(int i = 1; i <= n; i++)
+            b[i / len].push_back(a[i - !Base]);
+        for(int i = 0; i <= len; i++)
+            sort(all(b[i]));
+    }
+
+    // just update this index in the block O(1)
+    void update(int idx, T val){
+        int idx2 = lower_bound(all(b[idx / len]), a[idx - !Base]) - b[idx / len].begin();
+        b[idx / len][idx2] = a[idx - !Base] = val;
+        sort(all(b[idx / len]));
+    }
+
+    // re-calculate the block again O(sqrt(n))
+    void update_range(int idx, T val){
+        a[idx - !Base] = val;
+        b[idx / len].clear();
+        for(int i = idx / len * len; i < min(n, (idx / len + 1) * len); i++)
+            b[idx / len].push_back(a[i - !Base]);
+        sort(all(b[idx / len]));
+    }
+
+    // query on the range from L to R
+    T query(int l, int r, T x){
+        T res = Q_Default;
+        while(l < r && l % len != 0)
+            res += a[l++ - !Base] >= x;
+        while(l + len <= r){
+            res += sz(b[l / len]) - (lower_bound(all(b[l / len]), x) - b[l / len].begin());
+            l += len;
+        }
+        while(l <= r)
+            res += a[l++ - !Base] >= x;
+        return res;
+    }
+};
+
 // -------------------------- Sparse Table -----------------------------
 
-template < typename T = int > struct Sparse_Table {
+template < typename T = int , int Base = 0 > struct Sparse_Table {
 
     struct Node {
 
@@ -1229,26 +2073,24 @@ template < typename T = int > struct Sparse_Table {
     vector < int > Bin_Log;
     Node DEFAULT;
 
-    Sparse_Table(vector < T >& vec){
-        n = sz(vec), DEFAULT = 0, LOG = __lg(n) + 1;
+    Sparse_Table(const vector < T >& vec){
+        n = sz(vec) - Base, DEFAULT = INF, LOG = __lg(n) + 1;
         table = vector < vector < Node > > (n + 10, vector < Node > (LOG));
         Bin_Log = vector < int > (n + 10);
         for(int i = 2; i <= n; i++)
             Bin_Log[i] = Bin_Log[i >> 1] + 1;
-        for(int i = 0; i < n; i++)
-            table[i][0] = vec[i];
+        for(int i = 1; i <= n; i++)
+            table[i][0] = vec[i - !Base];
         Build_Table();
     }
 
-    Node operation(Node a, Node b){
-        Node res;
-        res.val = a.val + b.val;
-        return res;
+    Node operation(const Node& a, const Node& b){
+        return a.val < b.val ? a : b;
     }
 
     void Build_Table(){
         for(int log = 1; log < LOG; log++)
-            for(int i = 0; i + (1 << log) - 1 < n; i++)
+            for(int i = 1; i + (1 << log) - 1 <= n; i++)
                 table[i][log] = operation(table[i][log - 1], table[i + (1 << (log - 1))][log - 1]);
     }
 
@@ -1269,7 +2111,7 @@ template < typename T = int > struct Sparse_Table {
     }
 
     T query(int L, int R, bool overlap = false){
-        return (overlap ? query_1(L, R) : query_log_n(L, R)).val;
+        return (!overlap ? query_1(L, R) : query_log_n(L, R)).val;
     }
 
 };
@@ -1354,13 +2196,13 @@ string longestPalSubstring(string& s){
 
 // -------------------------- Prim MST -----------------------------
 
-struct Prim {
+template < typename T = int > struct Prim {
 
     struct Edge {
 
-        ll v, w;
+        T v, w;
 
-        Edge(ll V = 0, ll W = 0) : v(V), w(W) {}
+        Edge(T V = 0, T W = 0) : v(V), w(W) {}
 
         bool operator < (const Edge &e) const {
             return w < e.w;
@@ -1369,11 +2211,11 @@ struct Prim {
     };
 
     vector < vector < Edge > > adj;
-    vector < ll > marked;
+    vector < T > marked;
 
-    Prim(ll n = 0){
+    Prim(int n = 0){
         adj = vector < vector < Edge > > (n + 10);
-        marked = vector < ll > (n + 10, 0);
+        marked = vector < T > (n + 10, 0);
     }
 
     void build_adj(int edges, bool is_directed = false){
@@ -1384,8 +2226,8 @@ struct Prim {
         }
     }
 
-    ll get_cost(int root){
-        ll cost = 0;
+    T get_cost(int root){
+        T cost = 0;
         priority_queue < Edge > pq;
         pq.push(Edge(root, 0));
         while(!pq.empty()){
@@ -1402,23 +2244,23 @@ struct Prim {
         }
         return cost;
     }
-
 };
 
 // -------------------------- Disjoint Set Union -----------------------------
 
-struct DSU {
+template < typename T = int, int Base = 1 > struct DSU {
     
-    vector < int > parent, Gsize;
+    vector < T > parent, Gsize, nxt, tail, pos, roots;
 
     DSU(int MaxNodes){
-        parent.resize(MaxNodes + 5);
-        Gsize.resize(MaxNodes + 5);
-        for(int i = 1; i <= MaxNodes; i++)
-          parent[i] = i, Gsize[i] = 1;
+        parent = Gsize = roots = tail = pos = nxt = vector < T > (MaxNodes + Base);
+        for(int i = Base; i < MaxNodes + Base; i++){
+            parent[i] = roots[i] = pos[i] = tail[i] = i;
+            nxt[i] = -1, Gsize[i] = 1;
+        }
     }
     
-    int find_leader(int node){
+    T find_leader(int node){
         return parent[node] = (parent[node] == node ? node : find_leader(parent[node]));
     }
 
@@ -1429,24 +2271,44 @@ struct DSU {
     void union_sets(int u, int v){
         int leader_u = find_leader(u), leader_v = find_leader(v);
         if(leader_u == leader_v) return;
-        if(Gsize[leader_u] < Gsize[leader_v]) swap(leader_u, leader_v);
-        Gsize[leader_u] += Gsize[leader_v], parent[leader_v] = leader_u;
+        // make leader_u is the leader with the larger component
+        if(Gsize[leader_u] < Gsize[leader_v]) 
+            swap(leader_u, leader_v);
+        int p = pos[leader_v];
+        Gsize[leader_u] += Gsize[leader_v];
+        parent[leader_v] = leader_u;
+        roots[p] = roots.back();
+        pos[roots[p]] = p;
+        roots.pop_back();
+        nxt[tail[leader_u]] = leader_v;
+        tail[leader_u] = tail[leader_v];
     }
 
-    int get_size(int node){
-        return Gsize[find_leader(node)];
+    void print(){
+        for(int root = Base; root < sz(roots); root++){
+            for(int u = roots[root]; ~u ; u = nxt[u])
+                cout << u << " \n"[!~nxt[u]];
+        }
+    }
+
+    int get_size(int u){
+        return Gsize[find_leader(u)];
+    }
+
+    int get_components_number(){
+        return sz(roots) - Base;
     }
 };
 
 // -------------------------- Dijkstra -----------------------------
 
-struct Dijkstra {
+template < typename T = int > struct Dijkstra {
     
     struct Edge {
 
-        ll v, w;
+        T v, w;
         
-        Edge(ll V = 0, ll W = 0): v(V), w(W) {}
+        Edge(T V = 0, T W = 0): v(V), w(W) {}
         
         bool operator < (const Edge& e) const {
             return w > e.w;
@@ -1465,9 +2327,9 @@ struct Dijkstra {
         }
     }
 
-    ll Min_Cost(int src, int dest){
+    T Min_Cost(int src, int dest){
         int n = sz(adj);
-        vector < ll > dist(n, LLONG_MAX);
+        vector < T > dist(n, LLONG_MAX);
         dist[src] = 0;
         priority_queue < Edge > Dij;
         Dij.push(Edge(src, 0));
@@ -1484,9 +2346,9 @@ struct Dijkstra {
         return (dist[dest] == LLONG_MAX ? -1 : dist[dest]);
     }
 
-    vector < ll > get_dist(int src){
+    vector < T > get_dist(int src){
         int n = sz(adj);
-        vector < ll > dist(n, LLONG_MAX);
+        vector < T > dist(n, LLONG_MAX);
         dist[src] = 0;
         priority_queue < Edge > Dij;
         Dij.push(Edge(src, 0));
@@ -1502,7 +2364,6 @@ struct Dijkstra {
         }
         return dist;
     }
-
 };
 
 // -------------------------- Floyd -----------------------------
@@ -1587,12 +2448,12 @@ template < typename T = int > struct Kadane {
 
 };
 
-
 // -------------------------- Coordinate Compression -----------------------------
 
 template < typename T = int > struct Coordinate_Compression {
 
     vector < T > compressed;
+    bool is_build = true;
 
     Coordinate_Compression(){}
 
@@ -1603,18 +2464,22 @@ template < typename T = int > struct Coordinate_Compression {
 
     void add(T x) {
         compressed.push_back(x);
+        is_build = false;
     }
 
     void build() {
         sort(all(compressed));
         compressed.resize(unique(all(compressed)) - compressed.begin());
+        is_build = true;
     }
 
     T get(T x) {
+        if(!is_build) build();
         return upper_bound(all(compressed), x) - compressed.begin();
     }
 
     vector < T > get_compressed(vector < T > &vec) {
+        if(!is_build) build();
         vector < T > ret;
         for (auto &x : vec) 
             ret.push_back(get(x));
@@ -1622,39 +2487,125 @@ template < typename T = int > struct Coordinate_Compression {
     }
 
     vector < T > get_mapping(vector < T > &vec) {
+        if(!is_build) build();
         vector < T > ret(sz(compressed) + 5);
         for (auto &x : vec)
             ret[get(x)] = x;
         return ret;
     }
 
+    int size(){
+        if(!is_build) build();
+        return sz(compressed);
+    }
+
 };
 
-// -------------------------- MO -----------------------------
+// -------------------------- MO Tree -----------------------------
 
-template < typename T = int > struct MO {
+template < typename T = int > struct MO_Tree {
+
+    static inline int64_t gilbertOrder(int x, int y, int pow, int rotate) {
+        if (pow == 0) return 0;
+        int hpow = 1 << (pow - 1);
+        int seg = (x < hpow) ? ((y < hpow) ? 0 : 3) : ((y < hpow) ? 1 : 2);
+        seg = (seg + rotate) & 3;
+        const int rotateDelta[4] = {3, 0, 0, 1};
+        int nx = x & (x ^ hpow), ny = y & (y ^ hpow);
+        int nrot = (rotate + rotateDelta[seg]) & 3;
+        int64_t subSquareSize = int64_t(1) << (2 * pow - 2);
+        int64_t ordd = seg * subSquareSize;
+        int64_t add = gilbertOrder(nx, ny, pow - 1, nrot);
+        ordd += (seg == 1 || seg == 2) ? add : (subSquareSize - add - 1);
+        return ordd;
+    }
 
     struct query {
 
-        int l, r, query_idx, block_idx;
+        int l, r, lca, query_idx;
+        int64_t ord;
 
-        query(int L = 0, int R = 0, int Query_idx = 0){
-            l = L - 1, r = R - 1, query_idx = Query_idx;
+        query(vector < T > &S, vector < T > &E, int L = 0, int R = 0, int Query_idx = 0, int LCA = 0){
+            if(S[L] > S[R])
+                swap(L, R);
+            if(LCA == L)
+                l = S[L], r = S[R], lca = -1, query_idx = Query_idx;
+            else
+                l = E[L], r = S[R], lca = LCA, query_idx = Query_idx;
+            calcOrder();
         }
 
-        bool operator < (const query& q) const {
-            return (block_idx < q.block_idx) || (block_idx == q.block_idx && r < q.r);
+        query() {}
+
+        inline void calcOrder() {
+            constexpr int K = 19;
+            // K should be minimum such that 2^K >= n
+            ord = gilbertOrder(l, r, K, 0);
         }
 
+        bool operator < (const query & rhs) const {
+            return ord < rhs.ord;
+        }
     };
 
-    int curr_l, curr_r, ans, n, m, Sqrt_N;
+    T curr_l, curr_r, ans, n, m, Sqrt_N, timer, LOG;
+    vector < T > answers, val;
+    vector < vector < T > > adj, anc;
+    vector < T > dep, S, E, FT, node_freq;
     vector < query > queries;
-    vector < T > answers, nums;
 
-    MO(int N = 0, int M = 0){
+    MO_Tree() { }
+    
+    MO_Tree(int N, int M, vector < vector < T > > &G, vector < T >& V, int root = 1){
+        
         curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = sqrt(n);
-        queries.resize(m), answers.resize(m), nums.resize(n);
+        LOG = 0, timer = 1;
+
+        while((1 << LOG) <= n) LOG++;
+        
+        queries = vector < query > (m);
+        answers = vector < T > (m);
+        node_freq = S = E = dep = vector < T > (n + 5);
+        FT = vector < T > (2 * n + 5);
+        anc = vector < vector < T > > (n + 5, vector < T > (LOG));
+        adj = G, val = V;
+
+        dfs(root);
+    }
+
+    void dfs(int u, int p = -1){
+        S[u] = timer;
+        FT[timer++] = u;
+        for(auto& v : adj[u]){
+            if(v == p) continue;
+            dep[v] = dep[u] + 1, anc[v][0] = u;
+            for(int bit = 1; bit < LOG; bit++)
+                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+            dfs(v, u);
+        }
+        E[u] = timer;
+        FT[timer++] = u;
+    }
+
+    int kth_ancestor(int u, int k){
+        if(dep[u] < k) 
+            return -1;
+        for(int bit = LOG - 1; bit >= 0; bit--)
+            if(k & (1 << bit))
+                u = anc[u][bit];
+        return u;
+    }
+    
+    int get_lca(int u, int v){
+        if(dep[u] < dep[v])
+            swap(u, v);
+        u = kth_ancestor(u, dep[u] - dep[v]);
+        if(u == v)
+            return u;
+        for(int bit = LOG - 1; bit >= 0; bit--)
+            if(anc[u][bit] != anc[v][bit])
+                u = anc[u][bit], v = anc[v][bit];
+        return anc[u][0];
     }
 
     void set_block_id(){
@@ -1663,30 +2614,158 @@ template < typename T = int > struct MO {
     }
     
     void Get_Data(){
-        cin >> nums;
-        for(int i = 0, l, r; i < m && cin >> l >> r; i++)
-            queries[i] = query(l, r, i);
+        for(int i = 0, u, v; i < m && cin >> u >> v; i++)
+            queries[i] = query(S, E, u, v, i, get_lca(u, v));
         set_block_id();
     }
 
     void add(int idx){
         // fill this function with what problem needs
-    }
+        int u = FT[idx];
+        node_freq[u]++;
+        if(node_freq[u] == 1){
+            // add u to the path (u is in the path)
 
+        }else {
+            // remove u from the path (u is not in the path anymore)
+
+        }
+    }
+ 
     void remove(int idx){
         // fill this function with what problem needs
+        int u = FT[idx];
+        node_freq[u]--;
+        if(node_freq[u] == 1){
+            // add u to the path (u is in the path)
+
+        }else {
+            // remove u from the path (u is not in the path anymore)
+
+        }
     }
 
-    void set_range(query q){
-        while(curr_l < q.l) remove(curr_l++);
-        while(curr_l > q.l) add(--curr_l);
-        while(curr_r < q.r) add(++curr_r);
-        while(curr_r > q.r) remove(curr_r--);
+    void set_range(query& q){
+        while (curr_l > q.l) curr_l--, add(curr_l);
+        while (curr_r < q.r) curr_r++, add(curr_r);
+        while (curr_l < q.l) remove(curr_l), curr_l++;
+        while (curr_r > q.r) remove(curr_r), curr_r--;
     }
 
     void Process(){
         sort(all(queries));
+        
+        // start with the first query
+        curr_l = queries[0].l, curr_r = queries[0].l - 1;
 
+        for(int i = 0; i < m; i++){
+            set_range(queries[i]);
+            // if lca is -1 then the two nodes are in the same subtree
+            if(queries[i].lca != -1)
+                add(S[queries[i].lca]);
+            
+            answers[queries[i].query_idx] = ans;
+            
+            if(queries[i].lca != -1)
+                remove(S[queries[i].lca]);
+        }
+    }
+
+    void Print_queries_answers(){
+        for(int i = 0; i < m; i++)
+            cout << answers[i] << '\n';
+    }
+
+    vector < T > get_answers(){
+        return answers;
+    }
+
+};
+
+// -------------------------- MO -----------------------------
+
+template < typename T = int, int Base = 0 > struct MO {
+
+    static inline int64_t gilbertOrder(int x, int y, int pow, int rotate) {
+        if (pow == 0) return 0;
+        int hpow = 1 << (pow - 1);
+        int seg = (x < hpow) ? ((y < hpow) ? 0 : 3) : ((y < hpow) ? 1 : 2);
+        seg = (seg + rotate) & 3;
+        const int rotateDelta[4] = {3, 0, 0, 1};
+        int nx = x & (x ^ hpow), ny = y & (y ^ hpow);
+        int nrot = (rotate + rotateDelta[seg]) & 3;
+        int64_t subSquareSize = int64_t(1) << (2 * pow - 2);
+        int64_t ordd = seg * subSquareSize;
+        int64_t add = gilbertOrder(nx, ny, pow - 1, nrot);
+        ordd += (seg == 1 || seg == 2) ? add : (subSquareSize - add - 1);
+        return ordd;
+    }
+
+    struct query {
+
+        int l, r, query_idx;
+        int64_t ord;
+
+        query(int L = 0, int R = 0, int Query_idx = 0){
+            l = L - !Base, r = R - !Base, query_idx = Query_idx, calcOrder();
+        }
+
+        inline void calcOrder() {
+            constexpr int K = 19;
+            // K should be minimum such that 2^K >= n
+            ord = gilbertOrder(l, r, K, 0);
+        }
+
+        bool operator < (const query & rhs) const{
+            return ord < rhs.ord;
+        }
+    };
+
+    T curr_l, curr_r, ans, n, m, Sqrt_N;
+    vector < T > answers, nums;
+    vector < query > queries;
+
+    MO(int N = 0, int M = 0){
+        curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = n / sqrt(m) + 1;
+        queries = vector < query > (m);
+        answers = vector < T > (m);
+        nums = vector < T > (n + 5);
+    }
+    
+    void Get_Data(const vector < T > &v){
+        // get the array and set the queries
+        nums = v;
+
+        for(int i = 0, l, r; i < m && cin >> l >> r; i++)
+            queries[i] = query(l, r, i);
+        
+    }
+
+    // add the idx to the current range
+    void add(int idx){
+
+    }
+
+    // remove the idx from the current range
+    void remove(int idx){
+
+    }
+
+    void set_range(const query& q){
+        // add the new range and remove the old range
+        while (curr_l > q.l) curr_l--, add(curr_l);
+        while (curr_r < q.r) curr_r++, add(curr_r);
+        while (curr_l < q.l) remove(curr_l), curr_l++;
+        while (curr_r > q.r) remove(curr_r), curr_r--;
+    }
+
+    void Process(){
+        
+        sort(all(queries));
+
+        // to start with the first query
+        curr_l = queries[0].l, curr_r = queries[0].l - 1;
+        
         for(int i = 0; i < m; i++){
             set_range(queries[i]);
             answers[queries[i].query_idx] = ans;
@@ -1698,21 +2777,25 @@ template < typename T = int > struct MO {
             cout << answers[i] << '\n';
     }
 
+    vector < T > Get_answers(){
+        return answers;
+    }
+
 };
 
 // -------------------------- Int Mod -----------------------------
 
-template < int MOD = 1000000007 > struct ModInt {
+template < int MOD = 1000000007, typename T = int > struct ModInt {
 
-    int val;
+    T val;
 
-    ModInt(int V = 0) : val(V) { val %= MOD; }
+    ModInt(T V = 0) : val(V) { val %= MOD; }
 
     ModInt& operator += (const ModInt& rhs) {
         if ((val += rhs.val) >= MOD) val -= MOD;
         return *this;
     }
-    ModInt& operator += (const int rhs) {
+    ModInt& operator += (const T rhs) {
         if ((val += rhs) >= MOD) val -= MOD;
         return *this;
     }
@@ -1721,67 +2804,70 @@ template < int MOD = 1000000007 > struct ModInt {
         if ((val += MOD - rhs.val) >= MOD) val -= MOD; 
         return *this; 
     }
-    ModInt& operator -= (const int rhs) { 
+    ModInt& operator -= (const T rhs) { 
         if ((val += MOD - rhs) >= MOD) val -= MOD; 
         return *this; 
     }
 
     ModInt& operator *= (const ModInt& rhs) { val = (1ll * val * rhs.val) % MOD; return *this; }
-    ModInt& operator *= (const int rhs) { val = (1ll * val * rhs) % MOD; return *this; }
+    ModInt& operator *= (const T rhs) { val = (1ll * val * rhs) % MOD; return *this; }
 
     ModInt& operator /= (const ModInt& rhs) { return *this *= rhs.inverse(); }
-    ModInt& operator /= (const int rhs) { return *this *= ModInt(rhs).inverse(); }
+    ModInt& operator /= (const T rhs) { return *this *= ModInt(rhs).inverse(); }
 
     ModInt& operator %= (const ModInt& rhs) { val %= rhs.val; return *this; }
-    ModInt& operator %= (const int rhs) { val %= rhs; return *this; }
+    ModInt& operator %= (const T rhs) { val %= rhs; return *this; }
 
     ModInt& operator ++() { return *this += 1; }
     ModInt& operator --() { return *this -= 1; }
  
-    ModInt operator ++(int unused) { ModInt res(*this); ++*this; return res; }
-    ModInt operator --(int unused) { ModInt res(*this); --*this; return res; }
+    ModInt operator ++(T unused) { ModInt res(*this); ++*this; return res; }
+    ModInt operator --(T unused) { ModInt res(*this); --*this; return res; }
     
     ModInt operator + (const ModInt& rhs) const { ModInt res(*this); return res += rhs; }
-    ModInt operator + (const int rhs) const { ModInt res(*this); return res += rhs; }
+    ModInt operator + (const T rhs) const { ModInt res(*this); return res += rhs; }
 
     ModInt operator % (const ModInt& rhs) const { ModInt res(*this); return res %= rhs; }
-    ModInt operator % (const int rhs) const { ModInt res(*this); return res %= rhs; }
+    ModInt operator % (const T rhs) const { ModInt res(*this); return res %= rhs; }
 
     ModInt operator - (const ModInt& rhs) const { ModInt res(*this); return res -= rhs; }
-    ModInt operator - (const int rhs) const { ModInt res(*this); return res -= rhs; }
+    ModInt operator - (const T rhs) const { ModInt res(*this); return res -= rhs; }
 
     ModInt operator * (const ModInt& rhs) const { ModInt res(*this); return res *= rhs; }
-    ModInt operator * (const int rhs) const { ModInt res(*this); return res *= rhs; }
+    ModInt operator * (const T rhs) const { ModInt res(*this); return res *= rhs; }
 
     ModInt operator / (const ModInt& rhs) const { ModInt res(*this); return res /= rhs; }
-    ModInt operator / (const int rhs) const { ModInt res(*this); return res /= rhs; }
+    ModInt operator / (const T rhs) const { ModInt res(*this); return res /= rhs; }
 
     ModInt& operator = (const ModInt& rhs) { val = rhs.val; return *this; }
-    ModInt& operator = (const int rhs) { val = rhs; return *this; }
+    ModInt& operator = (const T rhs) { val = rhs; return *this; }
+
+    T operator ~ () { return ~val; }
+    bool operator ! () { return !val; }
 
     bool operator == (const ModInt& rhs) const { return val == rhs.val; }
-    bool operator == (const int rhs) const { return val == rhs; }
+    bool operator == (const T rhs) const { return val == rhs; }
 
     bool operator != (const ModInt& rhs) const { return val != rhs.val; }
-    bool operator != (const int rhs) const { return val != rhs; }
+    bool operator != (const T rhs) const { return val != rhs; }
 
     bool operator < (const ModInt& rhs) const { return val < rhs.val; }
-    bool operator < (const int rhs) const { return val < rhs; }
+    bool operator < (const T rhs) const { return val < rhs; }
 
     bool operator <= (const ModInt& rhs) const { return val <= rhs.val; }
-    bool operator <= (const int rhs) const { return val <= rhs; }
+    bool operator <= (const T rhs) const { return val <= rhs; }
 
     bool operator > (const ModInt& rhs) const { return val > rhs.val; }
-    bool operator > (const int rhs) const { return val > rhs; }
+    bool operator > (const T rhs) const { return val > rhs; }
 
     bool operator >= (const ModInt& rhs) const { return val >= rhs.val; }
-    bool operator >= (const int rhs) const { return val >= rhs; }
+    bool operator >= (const T rhs) const { return val >= rhs; }
 
-    int operator () () const { return val; }
+    T operator () () const { return val; }
 
     ModInt inverse() const { return power(MOD - 2); }
 
-    ModInt power(ll n) const {
+    ModInt power(T n) const {
         ModInt a = *this, res = 1;
         while (n > 0) {
             if (n & 1) res *= a;
@@ -1792,7 +2878,7 @@ template < int MOD = 1000000007 > struct ModInt {
 
     ModInt power(ModInt n) const {
         ModInt a = *this, res = 1;
-        int e = n();
+        T e = n();
         while (e > 0) {
             if (e & 1) res *= a;
             a *= a, e >>= 1;
@@ -1800,7 +2886,7 @@ template < int MOD = 1000000007 > struct ModInt {
         return res;
     }
 
-    friend ModInt operator ^ (ModInt rhs, ll n) { return rhs.power(n); }
+    friend ModInt operator ^ (ModInt rhs, T n) { return rhs.power(n); }
     friend ModInt operator ^ (ModInt rhs, ModInt n) { return rhs.power(n); }
 
     friend std::istream& operator>>(std::istream& is, ModInt& x) noexcept { return is >> x.val; }
@@ -1808,224 +2894,6 @@ template < int MOD = 1000000007 > struct ModInt {
 
 };
 using Mint = ModInt < 998244353 >;
-
-// -------------------------- Big Integer -----------------------------
-
-struct BigInt {
-
-    const int BASE = 1000000000;
-    vector < int > v;
-    
-    BigInt() {}
-
-    BigInt(const long long &val) {
-        *this = val;
-    }
-    
-    BigInt(const string &val) {
-        *this = val;
-    
-    }
-    
-    int size() const { return v.size(); }
-    
-    bool zero() const { return v.empty(); }
-    
-    BigInt& operator = (long long val) {
-        v.clear();
-        while (val) {
-            v.push_back(val % BASE);
-            val /= BASE;
-        }
-        return *this;
-    }
-
-    BigInt& operator = (const BigInt &a) {
-        v = a.v;
-        return *this;
-    }
-
-    BigInt& operator = (const vector < int > &a) {
-        v = a;
-        return *this;
-    }
-
-    BigInt& operator = (const string &s) {
-        *this = 0;
-        for (const char &ch : s)
-            *this = *this * 10 + (ch - '0');
-        return *this;
-    }
-    
-    bool operator < (const BigInt &a) const {
-        if (a.size() != size())
-            return size() < a.size();
-        for (int i = size() - 1; i >= 0; i--)
-            if (v[i] != a.v[i])
-                return v[i] < a.v[i];
-        return false;
-    }
-
-    bool operator > (const BigInt &a) const {
-        return a < *this;
-    }
-
-    bool operator == (const BigInt &a) const {
-        return (!(*this < a) && !(a < *this));
-    }
-
-    bool operator <= (const BigInt &a) const {
-        return ((*this < a) || !(a < *this));
-    }
-    
-    ll val(){
-        ll ans = 0;
-        for (int i = 0; i < size(); i++)
-            ans = ans * 10 + v[i];
-        return ans;
-    }
-
-    BigInt operator + (const BigInt &a) const {
-        BigInt res = *this;
-        int idx = 0, carry = 0;
-        while (idx < a.size() || carry) {
-            if (idx < a.size())
-                carry += a.v[idx];
-            if (idx == res.size())
-                res.v.push_back(0);
-            res.v[idx] += carry;
-            carry = res.v[idx] / BASE;
-            res.v[idx] %= BASE;
-            idx++;
-        }
-        return res;
-    }
-    
-    BigInt& operator += (const BigInt &a) {
-        *this = *this + a;
-        return *this;
-    }
-    
-    BigInt operator * (const BigInt &a) const {
-        BigInt res;
-        if (this -> zero() || a.zero())
-            return res;
-        res.v.resize(size() + a.size());
-        for (int i = 0; i < size(); i++) {
-            if (v[i] == 0)
-                continue;
-            long long carry = 0;
-            for (int j = 0; carry || j < a.size(); j++) {
-                carry += 1LL * v[i] * (j < a.size() ? a.v[j] : 0);
-                while (i + j >= res.size())
-                    res.v.push_back(0);
-                carry += res.v[i + j];
-                res.v[i + j] = carry % BASE;
-                carry /= BASE;
-            }
-        }
-        while (!res.v.empty() && res.v.back() == 0)
-            res.v.pop_back();
-        return res;
-    }
-
-    BigInt& operator *= (const BigInt &a) {
-        *this = *this * a;
-        return *this;
-    }
-
-    BigInt& operator -= (const BigInt &b){
-        if(*this < b)
-            throw("UNDERFLOW");
-        int n = this -> size(), m = b.size();
-        int i, t = 0, s;
-        for (i = 0; i < n;i++){
-            if(i < m)
-                s = this -> v[i] - b.v[i]+ t;
-            else
-                s = this -> v[i] + t;
-            if(s < 0)
-                s += 10,
-                t = -1;
-            else
-                t = 0;
-            this -> v[i] = s;
-        }
-        while(n > 1 && this -> v[n - 1] == 0)
-            this -> v.pop_back(),
-            n--;
-        return *this;
-    }
-
-    BigInt operator - (const BigInt&b){
-        BigInt a = *this;
-        a -= b;
-        return a;
-    }
-
-    BigInt operator -- (const int){
-        *this -= BigInt(1);
-        return *this;
-    }
-
-    BigInt operator ++ (const int){
-        *this += BigInt(1);
-        return *this;
-    }
-
-    BigInt& operator /=(const ll a) {
-        ll carry = 0;
-        for (int i = (int) v.size() - 1; i >= 0; i--) {
-            ll cur = v[i] + carry * BASE;
-            v[i] = cur / a;
-            carry = cur % a;
-        }
-        while (!v.empty() && v.back() == 0)
-            v.pop_back();
-        return *this;
-    }
-    
-    BigInt operator / (const ll a) {
-        ll carry = 0;
-        vector < int > res = this -> v;
-        for (int i = (int) res.size() - 1; i >= 0; i--) {
-            ll cur = res[i] + carry * BASE;
-            res[i] = cur / a;
-            carry = cur % a;
-        }
-        BigInt ans;
-        ans = res;
-        return ans;
-    }
-    
-    BigInt operator % (const ll a){
-        ll res = 0;
-        for (int i = (int) v.size() - 1; i >= 0; i--)
-            res = (res * 10 + v[i]) % a;
-        BigInt ans = res;
-        return ans;
-    }
-
-    BigInt& operator %= (const ll a) {
-        *this = *this % a;
-        return *this;
-    }
-
-    friend ostream& operator<<(ostream &out, const BigInt &a) {
-        out << (a.zero() ? 0 : a.v.back());
-        for (int i = (int) a.v.size() - 2; i >= 0; i--)
-            out << setfill('0') << setw(9) << a.v[i];
-        return out;
-    }
-
-    friend istream& operator>>(istream &in, BigInt &a) {
-        string s;
-        in >> s;
-        a = s;
-        return in;
-    }
-
-};
 
 // -------------------------- Ordered Set -----------------------------
 
@@ -2054,17 +2922,20 @@ using ordered_multiset = ordered_multimap<K, null_type, Comp>;
 template < typename T = int , typename CompFunction = std::less_equal < T > > struct Ordered_Multiset {
     
     ordered_multiset < T, CompFunction > mst;
-    
+    int Mode;
+
     // Constructor 
-    Ordered_Multiset() {
+    Ordered_Multiset(bool isSmaller = true) {
         mst.clear();
+        Mode = !isSmaller ? 1 : -1;
     }
     
     // Constructor with vector
-    Ordered_Multiset(vector < T > &vec) {
+    Ordered_Multiset(vector < T > &vec, bool isSmaller = true) {
         mst.clear();
         for (auto &x : vec) 
             mst.insert(x);
+        Mode = !isSmaller ? 1 : -1;
     }
 
     // Insert element
@@ -2130,7 +3001,7 @@ template < typename T = int , typename CompFunction = std::less_equal < T > > st
 
     // return number of elements < Comp > of val
     int order_of_key(T val){
-        return mst.order_of_key(val);
+        return mst.order_of_key(val - Mode);
     }
 
     // return iterator to element with given index
@@ -2176,6 +3047,15 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
         }
     }
 
+    int get_lca(int u, int v){
+        while (root[u] != root[v]){
+            if (dep[root[u]] < dep[root[v]]) 
+                swap(u, v);
+            u = par[root[u]];
+        }
+        return dep[u] < dep[v] ? u : v;
+    }
+
     void build(int u, bool newChain = true){
         root[u] = newChain ? u : root[par[u]];
         pos[u] = nxtPos++;
@@ -2212,8 +3092,15 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
         if(!VAL_ON_EDGE) // value on nodes
             ret.push_back({pos[v], pos[u]});
         else if(u != v) // don't include the root node
-            ret.push_back({pos[u] + 1, pos[v]});
+            ret.push_back({pos[v] + 1, pos[u]});
         return ret;
+    }
+
+    // get child of a node for problem that value on edges
+    int getChild(int u, int v){
+        if(par[u] == v) 
+            return u;
+        return v;
     }
 
 };
@@ -2329,6 +3216,59 @@ struct Hashed_Deque {
 
 };
 
+// -------------------------- Miller Robin -----------------------------
+
+template < typename T = long long , int Rounds = 10 > struct Miller_Rabin {
+
+    T BinMul(T b, T e, T mod) {
+        T res = 0;
+        while (e > 0) {
+            if (e & 1)
+                res = ((res % mod) + (b % mod)) % mod;
+            e >>= 1;
+            b = ((b % mod) + (b % mod)) % mod;
+        }
+        return res;
+    }
+
+    T BinPow(T b, T e, T mod) {
+        T res = 1;
+        while (e > 0) {
+            if (e & 1)
+                res = BinMul(res, b, mod);
+            e >>= 1;
+            b = BinMul(b, b, mod);
+        }
+        return res;
+    }
+
+    bool is_prime(T num){
+        // Handling base cases:
+        if(num < 2) return false;
+        if(num != 2 && num % 2 == 0) return false;
+
+        // Now our num is odd number greater than 1
+        T d = num - 1;
+
+        while (d % 2 == 0)
+            d >>= 1;
+        
+        for (int loop = 1; loop <= Rounds; loop++) {
+            T a = rand() % (num - 1) + 1, temp = d;
+            T x = BinPow(a, temp, num);
+            while (temp != num - 1 && x != 1 && x != num - 1) {
+                x = BinMul(x, x, num);
+                temp <<= 1;
+            }
+            if (x != num - 1 && temp % 2 == 0)
+                return false;
+        }
+        // If we reach here, then the number is prime
+        return true; 
+    }
+
+};
+
 // -------------------------- Convex Hull -----------------------------
 
 typedef complex < double > point;
@@ -2345,6 +3285,18 @@ typedef complex < double > point;
 #define rotateO(p, ang)          ((p) * exp(point(0, ang)))
 #define rotateA(p, ang, about)  (rotateO(vec(about, p), ang) + about)
 int dcmp(double a, double b) { return fabs(a - b) <= EPS ? 0 : a < b ? -1 : 1; }
+
+istream& operator >> (istream &in, point& p) {
+    double x, y;
+    in >> x >> y;
+    p = point(x, y);
+    return in;
+}
+
+ostream& operator << (ostream &out, const point& p) { 
+    out << p.X << ' ' << p.Y;
+    return out;
+}
 
 struct Converx_Hull {
 
@@ -2404,53 +3356,135 @@ struct Converx_Hull {
 
 // -------------------------- Convex Hull Trick -----------------------------
 
-struct Convex_Hull_Trick {
+struct Line {
 
-    struct Line {
+    mutable ll m, c, p;
 
-        ll slope, yIntercept;
+    bool operator < (const Line &o) const { 
+        return m < o.m; 
+    }
 
-        Line(ll S, ll Y) : slope(S), yIntercept(Y) {}
+    bool operator < (ll x) const { 
+        return p < x; 
+    }
 
-        ll val(ll x){
-            return slope * x + yIntercept;
-        }
+    ll val(ll x) const { 
+        return m * x + c; 
+    }
+};
 
-        ll inersect(Line other){
-            return (other.yIntercept - yIntercept + (slope - other.slope - 1)) / (slope - other.slope);
-        }
-
-    };
+template < typename T = int, T Mode = -1 > class CHT : multiset < Line, less < > > {
+private:
     
-    deque < pair < Line, ll > > lines;
+    static constexpr T LLimit = numeric_limits < T > :: min(), RLimit = numeric_limits < T > :: max();
 
-    void insert(ll slope, ll yIntercept){
-        
-        Line newLine = Line(slope, yIntercept);
-        
-        while (sz(lines) > 1 && lines.back().second >= lines.back().first.inersect(newLine)) 
-            lines.pop_back();
-        
-        if (lines.empty()) 
-            lines.push_back({newLine, 0});
-        else 
-            lines.push_back({newLine, lines.back().first.inersect(newLine)});
+    T div(T a, T b) { // floored division
+        return a / b - ((a ^ b) < 0 && a % b);
     }
 
-    ll query(ll x){
-            
-        while (sz(lines) > 1 && lines[1].second <= x) 
-            lines.pop_front();
-        
-        return lines[0].first.val(x);
+    bool is_intersect(iterator x, iterator y) {
+        if (y == end()) return x -> p = RLimit, 0;
+        if (x -> m == y -> m) x -> p = (x -> c > y -> c ? RLimit : LLimit);
+        else x -> p = div(y -> c - x -> c, x -> m - y -> m);
+        return x -> p >= y -> p;
     }
 
-    ll query_bs(ll x){
-        auto query = *lower_bound(all(lines), make_pair(Line(0, 0), x), 
-            [&](const pair < Line, ll >& a, const pair < Line, ll >& b){
-                return a.second > b.second;
-        });
-        return query.first.val(x);
+public:
+    
+    void add(T m, T c) {
+        m *= Mode, c *= Mode;
+        auto z = insert({m, c, 0}), y = z++, x = y;
+        while (is_intersect(y, z)) z = erase(z);
+        if (x != begin() && is_intersect(--x, y)) is_intersect(x, y = erase(y));
+        while ((y = x) != begin() && (--x) -> p >= y -> p) is_intersect(x, erase(y));
+    }
+
+    T query(T x) {
+        assert(!empty());
+        auto l = *lower_bound(x);
+        return Mode * l.val(x);
+    }
+
+};
+
+// -------------------------- Hashing -----------------------------
+
+template < typename T = long long , int Base = 0 > struct Hash {
+    
+    int n;
+    vector < T > pow1, pow2, h1, h2;
+    const T p1 = 313, p2 = 1013;
+    const T m1 = 1e9 + 7, m2 = 1e9 + 9;
+ 
+    Hash(const string& s){
+        n = s.size();
+        h1 = h2 = pow1 = pow2 = vector < T > (n + 5);
+
+        // calulcate the powers
+        pow1[0] = pow2[0] = 1;
+        for(int i = 1; i <= n; i++) {
+            pow1[i] = (pow1[i - 1] * p1) % m1;
+            pow2[i] = (pow2[i - 1] * p2) % m2;
+        }
+
+        // calculate the hashes
+        h1[0] = h2[0] = 1;
+        for(int i = 1; i <= n; i++) {
+            h1[i] = (h1[i - 1] * p1 + s[i - !Base]) % m1;
+            h2[i] = (h2[i - 1] * p2 + s[i - !Base]) % m2;
+        }
+    }
+
+    Hash(const vector < T >& vec){
+        n = vec.size();
+        h1 = h2 = pow1 = pow2 = vector < T > (n + 5);
+        
+        // calulcate the powers
+        pow1[0] = pow2[0] = 1;
+        for(int i = 1; i <= n; i++) {
+            pow1[i] = (pow1[i - 1] * p1) % m1;
+            pow2[i] = (pow2[i - 1] * p2) % m2;
+        }
+
+        // calculate the hashes
+        h1[0] = h2[0] = 1;
+        for(int i = 1; i <= n; i++) {
+            h1[i] = (h1[i - 1] * p1 + vec[i - !Base]) % m1;
+            h2[i] = (h2[i - 1] * p2 + vec[i - !Base]) % m2;
+        }
+    }
+
+    // get the hash of substring [i, j]
+    pair < T, T > sub(int l, int r) {
+        // first hash
+        T F = h1[r];
+        F -= h1[l - 1] * pow1[r - l + 1];
+        F = ((F % m1) + m1) % m1;
+        
+        // second hash
+        T S = h2[r];
+        S -= h2[l - 1] * pow2[r - l + 1];
+        S = ((S % m2) + m2) % m2;
+        
+        return {F, S};
+    }
+ 
+    // merge two substrings
+    pair < T, T > merge_hash(int l1, int r1, int l2, int r2) {
+        auto a = sub(l1, r1), b = sub(l2, r2);
+        ll F = ((a.first * pow1[r2 - l2 + 1]) + b.first) % m1;
+        ll S = ((a.second * pow2[r2 - l2 + 1]) + b.second) % m2;
+        return {F, S};
+    }
+ 
+    // get the hash of the idx'th character
+    pair < T, T > at(int idx){
+        return sub(idx, idx);
+    }
+
+    // check if two parts are equals
+    bool equal(int l1, int r1, int l2, int r2) {
+        return sub(l1, r1) == sub(l2, r2);
     }
 
 };
@@ -2461,12 +3495,12 @@ template < typename T = int > struct Centroid_Decomposition {
 
     int n, treeRoot;
     const vector < vector < T > > adj;
-    vector < int > SubtreeSz, isCentroid;
+    vector < T > SubtreeSz, isCentroid;
 
     // Initialize the Centroid Decomposition
-    Centroid_Decomposition(int N, const vector <vector <int> > &G, int Root = 1) : adj(G){
+    Centroid_Decomposition(int N, const vector <vector < T > > &G, int Root = 1) : adj(G){
         n = N, treeRoot = Root;
-        SubtreeSz = isCentroid = vector < int > (n + 5, 0);
+        SubtreeSz = isCentroid = vector < T > (n + 5, 0);
     }
 
     // update subtree size of each node
@@ -2507,7 +3541,6 @@ template < typename T = int > struct Centroid_Decomposition {
     }
 
 };
-
 
 // -------------------------- Optimizations -----------------------------
 

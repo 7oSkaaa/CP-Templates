@@ -69,7 +69,6 @@ template < typename T = int > struct Partial_2D {
         for(int i = 1; i <= n; i++, cout << "\n")
             for(int j = 1; j <= m && cout << partial[i][j] << " "; j++);
     }
-
 };
 
 void Solve(){

@@ -34,13 +34,13 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Dijkstra {
+template < typename T = int > struct Dijkstra {
     
     struct Edge {
 
-        ll v, w;
+        T v, w;
         
-        Edge(ll V = 0, ll W = 0): v(V), w(W) {}
+        Edge(T V = 0, T W = 0): v(V), w(W) {}
         
         bool operator < (const Edge& e) const {
             return w > e.w;
@@ -59,9 +59,9 @@ struct Dijkstra {
         }
     }
 
-    ll Min_Cost(int src, int dest){
+    T Min_Cost(int src, int dest){
         int n = sz(adj);
-        vector < ll > dist(n, LLONG_MAX);
+        vector < T > dist(n, LLONG_MAX);
         dist[src] = 0;
         priority_queue < Edge > Dij;
         Dij.push(Edge(src, 0));
@@ -78,9 +78,9 @@ struct Dijkstra {
         return (dist[dest] == LLONG_MAX ? -1 : dist[dest]);
     }
 
-    vector < ll > get_dist(int src){
+    vector < T > get_dist(int src){
         int n = sz(adj);
-        vector < ll > dist(n, LLONG_MAX);
+        vector < T > dist(n, LLONG_MAX);
         dist[src] = 0;
         priority_queue < Edge > Dij;
         Dij.push(Edge(src, 0));
@@ -96,7 +96,6 @@ struct Dijkstra {
         }
         return dist;
     }
-
 };
 
 void Solve(){
