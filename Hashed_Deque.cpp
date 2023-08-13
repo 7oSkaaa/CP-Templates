@@ -36,69 +36,69 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
 
-// N is the larget size of the container
-// base is the minimum prime number larger than the maximum value of the container
-const int N = 5e5 + 5, base = 1e9 + 7;
-
-ll rand(ll l, ll r){
-    return uniform_int_distribution < ll >(l, r)(rng);
-}
-
-vector < ll > mod;
-vector < vector < ll > > p, inv;
-
-bool is_prime(ll x){
-    if(x < 2 || (x % 2 == 0 && x != 2)) return false;
-    for(int i = 3; i <= sqrt(x); i += 2)
-        if(x % i == 0) 
-            return false;
-    return true;
-}
-
-ll nxt_prime(ll x){
-    while(!is_prime(x)) x++;
-    return x;
-}
-
-void get_mods(){
-    mod[0] = nxt_prime(rand(9e8, 1e9 + 9));
-    mod[1] = nxt_prime(rand(9e8, 1e9 + 9));
-    while(mod[1] == mod[0])
-        mod[1] = nxt_prime(rand(9e8, 1e9 + 9));
-}
-
-ll fast_power(ll b, ll md){
-    ll e = md - 2, res = 1;
-    while(e) {
-        if(e & 1)
-            res = ((res % md) * (b % md)) % md;
-        b = ((b % md) * (b % md)) % md;
-        e >>= 1;
-    }
-    return res;
-}
-
-void init(){
-    mod = vector < ll > (2);
-    p = inv = vector < vector < ll > > (N, vector < ll > (2, 1));
-    get_mods();
-    for(int i = 1; i < N;++i) 
-        for(int j = 0;j < 2; ++j){
-            p[i][j] = 1ll * p[i - 1][j] * base % mod[j];
-            inv[i][j] = fast_power(p[i][j], mod[j]);
-        }
-}
-
 struct Hashed_Deque {
 
     int len;
     vector < int > val; 
     deque < int > curr;
+    // N is the larget size of the container
+    // base is the minimum prime number larger than the maximum value of the container
+    const int N = 5e5 + 5, base = 1e9 + 7;
 
     Hashed_Deque(){
         val = vector < int > (2);
         curr.clear();
         len = 0;
+        initial();
+    }
+
+    ll rand(ll l, ll r){
+        return uniform_int_distribution < ll >(l, r)(rng);
+    }
+
+    vector < ll > mod;
+    vector < vector < ll > > p, inv;
+
+    bool is_prime(ll x){
+        if(x < 2 || (x % 2 == 0 && x != 2)) return false;
+        for(int i = 3; i <= sqrt(x); i += 2)
+            if(x % i == 0) 
+                return false;
+        return true;
+    }
+
+    ll nxt_prime(ll x){
+        while(!is_prime(x)) x++;
+        return x;
+    }
+
+    void get_mods(){
+        mod[0] = nxt_prime(rand(9e8, 1e9 + 9));
+        mod[1] = nxt_prime(rand(9e8, 1e9 + 9));
+        while(mod[1] == mod[0])
+            mod[1] = nxt_prime(rand(9e8, 1e9 + 9));
+    }
+
+    ll fast_power(ll b, ll md){
+        ll e = md - 2, res = 1;
+        while(e) {
+            if(e & 1)
+                res = ((res % md) * (b % md)) % md;
+            b = ((b % md) * (b % md)) % md;
+            e >>= 1;
+        }
+        return res;
+    }
+
+    void initial(){
+        mod = vector < ll > (2);
+        p = inv = vector < vector < ll > > (N, vector < ll > (2, 1));
+        get_mods();
+        for(int i = 1; i < N;++i) 
+            for(int j = 0;j < 2; ++j){
+                p[i][j] = 1ll * p[i - 1][j] * base % mod[j];
+                inv[i][j] = fast_power(p[i][j], mod[j]);
+            }
     }
 
     void push_back(int x){
@@ -149,7 +149,6 @@ void Solve(){
 
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    init();
     int t = 1;
     cin >> t;
     while(t--)
