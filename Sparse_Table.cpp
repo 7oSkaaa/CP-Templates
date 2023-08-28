@@ -38,9 +38,9 @@ template < typename T = int , int Base = 0 > struct Sparse_Table {
 
     struct Node {
 
-        ll val;
+        T val;
 
-        Node(ll V = 0) : val(V) {}
+        Node(T V = 0) : val(V) {}
     
         Node operator = (const T& rhs) {
             val = rhs;

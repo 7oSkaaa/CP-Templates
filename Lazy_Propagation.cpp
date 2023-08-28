@@ -36,19 +36,28 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
-    int size;
-    T Lazy_default, Tree_default;
-    vector < T > Tree, Lazy; 
-    vector < bool > is_Lazy;
+    struct Node {
+        T val, update;
+        bool is_lazy;
+        Node(T V = 0) : val(V), update(0), is_lazy(false) {}
+        Node operator = (const T &other){
+            this -> val = other;
+            return *this;
+        }
+    };
     
+    int size;
+    T query_default, init_default;
+    vector < Node > Tree;
+    #define LEFT (idx << 1)
+    #define RIGHT ((idx << 1) | 1)
+
     // initial Lazy and Tree
     void intial(int n){
         size = 1;
-        Tree_default = 0, Lazy_default = 0;
+        query_default = 0, init_default = 0;
         while(size <= n) size *= 2;
-        Tree = vector < T > (size * 2, Tree_default);
-        Lazy = vector < T > (size * 2, Lazy_default);
-        is_Lazy = vector < bool > (size * 2, false);
+        Tree = vector < Node > (2 * size, Node(init_default));
     }
 
     Lazy_Propagation(int n){
@@ -62,34 +71,29 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
 
     // the function that will be used to update the Tree
     T Lazy_operation(T a, T b){
-        return b;
+        return a + b;
     }
 
     // the function that will be used to query on the Tree
-    T Tree_operation(T a, T b){
-        return min(a, b);
+    Node Tree_operation(const Node& a, const Node& b){
+        return Node(a.val + b.val);
     }
 
     // push Lazy value to children in Lazy
     void propagate(int idx, int lx, int rx){
-        if(!is_Lazy[idx]) return;
-        Tree[idx] = Lazy_operation(Tree[idx], Lazy[idx]);
+        if(!Tree[idx].is_lazy) return;
+        Tree[idx].val = Lazy_operation(Tree[idx].val, (rx - lx + 1) * Tree[idx].update);
         if(lx != rx){
-            Lazy[2 * idx] = Lazy_operation(Lazy[2 * idx], Lazy[idx]);
-            Lazy[2 * idx + 1] = Lazy_operation(Lazy[2 * idx + 1], Lazy[idx]);
-            is_Lazy[2 * idx] = is_Lazy[2 * idx + 1] = true;
+            Tree[LEFT].update = Lazy_operation(Tree[LEFT].update, Tree[idx].update);
+            Tree[RIGHT].update = Lazy_operation(Tree[RIGHT].update, Tree[idx].update);
+            Tree[LEFT].is_lazy = Tree[RIGHT].is_lazy = true;
         }
-        Lazy[idx] = Lazy_default, is_Lazy[idx] = false;
+        Tree[idx].update = init_default, Tree[idx].is_lazy = false;
     }
 
-    // push value to children int Lazy
-    void propagate(int idx, int lx, int rx, T v){
-        Tree[idx] = Lazy_operation(Tree[idx], v);
-        if(lx != rx){
-            Lazy[2 * idx] = Lazy_operation(Lazy[2 * idx], v);
-            Lazy[2 * idx + 1] = Lazy_operation(Lazy[2 * idx + 1], v);
-            is_Lazy[2 * idx] = is_Lazy[2 * idx + 1] = true;
-        }
+    void update_lazy(int idx, T v){
+        Tree[idx].update = Lazy_operation(Tree[idx].update, v);
+        Tree[idx].is_lazy = true;
     }
 
     // build the Tree with given vector
@@ -98,10 +102,10 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
         if(rx == lx) Tree[idx] = nums[lx - !Base];
         else {
-            int m = (rx + lx) / 2;
-            build(nums, 2 * idx, lx, m);
-            build(nums, 2 * idx + 1, m + 1, rx);
-            Tree[idx] = Tree_operation(Tree[2 * idx], Tree[2 * idx + 1]);
+            int mx = (rx + lx) / 2;
+            build(nums, LEFT, lx, mx), build(nums, RIGHT, mx + 1, rx);
+            propagate(LEFT, lx, mx), propagate(RIGHT, mx + 1, rx);
+            Tree[idx] = Tree_operation(Tree[LEFT], Tree[RIGHT]);
         }
     }
 
@@ -110,10 +114,10 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
         propagate(idx, lx, rx);
         if(rx == lx) Tree[idx] = initial_value;
         else {
-            int m = (rx + lx) / 2;
-            build(initial_value, 2 * idx, lx, m);
-            build(initial_value, 2 * idx + 1, m + 1, rx);
-            Tree[idx] = Tree_operation(Tree[2 * idx], Tree[2 * idx + 1]);
+            int mx = (rx + lx) / 2;
+            build(initial_value, LEFT, lx, mx), build(initial_value, RIGHT, mx + 1, rx);
+            propagate(LEFT, lx, mx), propagate(RIGHT, mx + 1, rx);
+            Tree[idx] = Tree_operation(Tree[LEFT], Tree[RIGHT]);
         }
     }
 
@@ -130,11 +134,12 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     // update the value of the Tree in range [l, r] with value v
     void update(int l, int r, T v, int idx, int lx, int rx){
         propagate(idx, lx, rx);
-        if(lx >= l && rx <= r) return propagate(idx, lx, rx, v);
+        if(lx >= l && rx <= r) return update_lazy(idx, v);
         if(lx > r || rx < l) return;
-        int m = (lx + rx) / 2;
-        update(l, r, v, 2 * idx, lx, m), update(l, r, v, 2 * idx + 1, m + 1, rx);
-        Tree[idx] = Tree_operation(Tree[2 * idx], Tree[2 * idx + 1]);
+        int mx = (lx + rx) / 2;
+        update(l, r, v, LEFT, lx, mx), update(l, r, v, RIGHT, mx + 1, rx);
+        propagate(LEFT, lx, mx), propagate(RIGHT, mx + 1, rx);
+        Tree[idx] = Tree_operation(Tree[LEFT], Tree[RIGHT]);
     }
 
     // update the value in one index
@@ -148,24 +153,44 @@ template < typename T = int, const int Base = 0 > struct Lazy_Propagation {
     }
 
     // query the value of the Tree in range [l, r]
-    T query(int l, int r, int idx, int lx, int rx){
+    Node query(int l, int r, int idx, int lx, int rx){
         propagate(idx, lx, rx);
         if(lx >= l && rx <= r) return Tree[idx];
-        if(lx > r || rx < l) return Tree_default;
-        int m = (rx + lx) / 2;
-        return Tree_operation(query(l, r, 2 * idx, lx, m), query(l, r, 2 * idx + 1, m + 1, rx));
+        if(lx > r || rx < l) return query_default;
+        int mx = (rx + lx) / 2;
+        propagate(LEFT, lx, mx), propagate(RIGHT, mx + 1, rx);
+        return Tree_operation(query(l, r, LEFT, lx, mx), query(l, r, RIGHT, mx + 1, rx));
     }
 
     // query the value of the Tree in range [l, r]
     T query(int l, int r){
-        return query(l, r, 1, 1, size);
+        return query(l, r, 1, 1, size).val;
     }
 
     // query the value of the Tree in index i
     T query(int i){
-        return query(i, i, 1, 1, size);
+        return query(i, i, 1, 1, size).val;
     }
 
+    // print the Tree
+    void print(int idx, int lx, int rx){
+        propagate(idx, lx, rx);
+        if(lx == rx) cout << Tree[idx].val << ' ';
+        else {
+            int mx = (lx + rx) / 2;
+            print(LEFT, lx, mx), print(RIGHT, mx + 1, rx);
+        }
+    }
+
+    // print the Tree
+    void print(){
+        print(1, 1, size);
+        cout << '\n';
+    }
+
+    // remove the defined macros
+    #undef LEFT
+    #undef RIGHT
 };
 
 void Solve(){

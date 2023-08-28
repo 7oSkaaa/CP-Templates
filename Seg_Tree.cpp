@@ -52,6 +52,8 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
     int size; 
     Node DEFAULT;
     vector < Node > tree; 
+    #define LEFT (idx << 1)
+    #define RIGHT ((idx << 1) | 1)
     
     Segment_Tree(int n = 0){
         size = 1, DEFAULT = 0;
@@ -79,9 +81,9 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
         if(rx == lx) tree[idx] = nums[lx - !Base];
         else {
             int mx = (rx + lx) / 2;
-            build(nums, 2 * idx, lx, mx);
-            build(nums, 2 * idx + 1, mx + 1, rx);
-            tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
+            build(nums, LEFT, lx, mx);
+            build(nums, RIGHT, mx + 1, rx);
+            tree[idx] = operation(tree[LEFT], tree[RIGHT]);
         }
     }
 
@@ -93,9 +95,9 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
         if(rx == lx) tree[idx] = v;
         else {  
             int mx = (rx + lx) / 2;
-            if(index <= mx) update(index, v, 2 * idx, lx, mx);
-            else update(index, v, 2 * idx + 1, mx + 1, rx);
-            tree[idx] = operation(tree[2 * idx], tree[2 * idx + 1]);
+            if(index <= mx) update(index, v, LEFT, lx, mx);
+            else update(index, v, RIGHT, mx + 1, rx);
+            tree[idx] = operation(tree[LEFT], tree[RIGHT]);
         }
     }
 
@@ -107,7 +109,7 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
         if(lx > r || l > rx) return DEFAULT;
         if(lx >= l && rx <= r) return tree[idx];
         int mx = (lx + rx) / 2;
-        return operation(query(l, r, 2 * idx, lx, mx), query(l, r, 2 * idx + 1, mx + 1, rx));
+        return operation(query(l, r, LEFT, lx, mx), query(l, r, RIGHT, mx + 1, rx));
     }
 
     Node query_Node(const int l, const int r){
@@ -127,6 +129,9 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
         return out;
     }
     
+    // remove macro LEFT and RIGHT
+    #undef LEFT
+    #undef RIGHT
 };
 
 void Solve(){
