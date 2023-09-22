@@ -4039,16 +4039,16 @@
 		  "    stk = stack < int > ();",
 		  "}",
 		  "",
-		  "void tarjan(int u){",
+		  "void tarjan(int u, int p = -1){",
 		  "    in_stack[u] = true;",
 		  "    low_link[u] = node_idx[u] = timer++;",
 		  "    stk.push(u);",
 		  "    for(auto& v : adj[u]){",
 		  "        if(node_idx[v] == -1){",
-		  "            tarjan(v);",
+		  "            tarjan(v, u);",
 		  "            // minimize ancestor of my child",
 		  "            low_link[u] = min(low_link[u], low_link[v]);",
-		  "        }else if(in_stack[v])",
+		  "        }else if(in_stack[v] && v != p)",
 		  "            low_link[u] = min(low_link[u], node_idx[v]);",
 		  "    }",
 		  "",
@@ -4064,7 +4064,8 @@
 		  "            comp_idx[v] = sz(comps) - 1; // set component index",
 		  "        }",
 		  "    }",
-		  "}"
+		  "}",
+		  ""
 		],
 		"description": "Tarjan"
 	}
