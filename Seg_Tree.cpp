@@ -54,6 +54,7 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
     vector < Node > tree; 
     #define LEFT (idx << 1)
     #define RIGHT ((idx << 1) | 1)
+    #define VAL val
     
     Segment_Tree(int n = 0){
         size = 1, DEFAULT = 0;
@@ -117,21 +118,36 @@ template < typename T = int , int Base = 0 > struct Segment_Tree {
     }
 
     T query(const int l, const int r){
-        return query_Node(l, r).val;
+        return query_Node(l, r).VAL;
     }
 
     T get(const int idx){
-        return query_Node(idx, idx).val;
+        return query_Node(idx, idx).VAL;
     }
 
     friend ostream& operator << (ostream &out, const Node &node) {
-        out << node.val << ' ';
+        out << node.VAL << ' ';
         return out;
+    }
+
+    void print(int idx, int lx, int rx){
+        if(lx == rx) cout << tree[idx] << ' ';
+        else {
+            int mx = (lx + rx) / 2;
+            print(LEFT, lx, mx);
+            print(RIGHT, mx + 1, rx);
+        }
+    }
+
+    void print(){
+        print(1, 1, size);
+        cout << '\n';
     }
     
     // remove macro LEFT and RIGHT
     #undef LEFT
     #undef RIGHT
+    #undef VAL
 };
 
 void Solve(){
