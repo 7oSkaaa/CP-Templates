@@ -68,11 +68,11 @@ template < typename T = int > struct Point {
 };
 template < typename T = int > struct Converx_Hull {
 
-    typedef Point < int > point;
+    typedef Point < T > point;
 
     // Returns the orientation of the point c with respect to the line a-b
     int orientation(const point& a, const point& b, const point& c) {
-        double val = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+        T val = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
         if(val < 0) return -1; // clockwise
         if(val > 0) return 1; // counter-clockwise
         return 0; // collinear
@@ -99,8 +99,12 @@ template < typename T = int > struct Converx_Hull {
             if(o == 0) return p0.dist(a) < p0.dist(b);
             return o < 0;
         });
+        // remove redundant points
+        points.erase(unique(all(points)), points.end());
+
         if(include_collinear){
             int idx = sz(points) - 1;
+            // remove collinear points from the end
             while(idx > 0 && is_collinear(p0, points[idx], points.back())) idx--;
             reverse(points.begin() + idx + 1, points.end());
         }
