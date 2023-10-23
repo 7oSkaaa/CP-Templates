@@ -55,7 +55,9 @@ template < typename T = int > struct Point {
     T cross(const Point &p) const { return x * p.y - y * p.x; }
     T cross(const Point &a, const Point &b) const { return (a - *this).cross(b - *this); }
     T dist() const { return x * x + y * y; }
+    T dist(const Point &p) const { return (*this - p).dist(); }
     double distance() const { return sqrt(1.0 * dist()); }
+    double distance(const Point &p) const { return sqrt(1.0 * dist(p)); }
     double angle() const { return atan2(y, x); }
     double angle(const Point &p) const { return atan2(cross(p), dot(p)); }
     Point unit() const { return *this / dist(); }
@@ -104,7 +106,7 @@ template < typename T = int > struct Converx_Hull {
         }
         
         for(const point& p : points) {
-            while(sz(hull) > 1 && !cw(Convex_Points[sz(Convex_Points) - 2], Convex_Points.back(), p, include_collinear)) 
+            while(sz(Convex_Points) > 1 && !cw(Convex_Points[sz(Convex_Points) - 2], Convex_Points.back(), p, include_collinear)) 
                 Convex_Points.pop_back();
             Convex_Points.push_back(p);
         }
