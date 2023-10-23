@@ -35,87 +35,80 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-typedef complex < double > point;
-#define X real()
-#define Y imag()
-#define angle(a)                (atan2((a).imag(), (a).real()))
-#define vec(a, b)                ((b)-(a))
-#define same(p1, p2)             (dp(vec(p1, p2), vec(p1,p2)) < EPS)
-#define dp(a, b)                 ( (conj(a) * (b)).real() )	// a * b cos(T), if zero -> prep
-#define cp(a, b)                 ( (conj(a) * (b)).imag() )	// a * b sin(T), if zero -> parllel
-#define length(a)               (hypot((a).imag(), (a).real()))
-#define normalize(a)            (a) / length(a)
-#define polar(r, ang)            ((r) * exp(point(0, ang))) 
-#define rotateO(p, ang)          ((p) * exp(point(0, ang)))
-#define rotateA(p, ang, about)  (rotateO(vec(about, p), ang) + about)
-int dcmp(double a, double b) { return fabs(a - b) <= EPS ? 0 : a < b ? -1 : 1; }
+template < typename T = int > struct Point {
+    T x, y;
+    Point(T _x = 0, T _y = 0) : x(_x), y(_y) {}
+    Point(const Point &p) : x(p.x), y(p.y) {}
+    Point operator + (const Point &p) const { return Point(x + p.x, y + p.y); }
+    Point operator - (const Point &p) const { return Point(x - p.x, y - p.y); }
+    Point operator * (T c) const { return Point(x * c, y * c); }
+    Point operator / (T c) const { return Point(x / c, y / c); }
+    bool operator == (const Point &p) const { return x == p.x && y == p.y; }
+    bool operator != (const Point &p) const { return x != p.x || y != p.y; }
+    bool operator < (const Point &p) const { return make_pair(y, x) < make_pair(p.y, p.x); }
+    bool operator > (const Point &p) const { return make_pair(y, x) > make_pair(p.y, p.x); }
+    bool operator <= (const Point &p) const { return make_pair(y, x) <= make_pair(p.y, p.x); }
+    bool operator >= (const Point &p) const { return make_pair(y, x) >= make_pair(p.y, p.x); }
+    friend istream& operator >> (istream &in, Point &p) { return in >> p.x >> p.y; }
+    friend ostream& operator << (ostream &out, const Point &p) { return out << p.x << ' ' << p.y; }
+    T dot(const Point &p) const { return x * p.x + y * p.y; }
+    T cross(const Point &p) const { return x * p.y - y * p.x; }
+    T cross(const Point &a, const Point &b) const { return (a - *this).cross(b - *this); }
+    T dist() const { return x * x + y * y; }
+    double distance() const { return sqrt(1.0 * dist()); }
+    double angle() const { return atan2(y, x); }
+    double angle(const Point &p) const { return atan2(cross(p), dot(p)); }
+    Point unit() const { return *this / dist(); }
+    Point perp() const { return Point(-y, x); }
+    Point rotate(double a) const { return Point(x * cos(a) - y * sin(a), x * sin(a) + y * cos(a)); }
+    Point rotate(const Point &p, double a) const { return (*this - p).rotate(a) + p; }
+    Point normal() const { return perp().unit(); }
+};
+template < typename T = int > struct Converx_Hull {
 
-istream& operator >> (istream &in, point& p) {
-    double x, y;
-    in >> x >> y;
-    p = point(x, y);
-    return in;
-}
+    typedef Point < int > point;
 
-ostream& operator << (ostream &out, const point& p) { 
-    out << p.X << ' ' << p.Y;
-    return out;
-}
-
-struct Converx_Hull {
-
-    struct angleCMP {
-        
-        point center;
-
-        angleCMP(point C) : center(C) {}
-
-        bool operator()(const point &lhs, const point rhs) const {
-            if(dcmp(cp(lhs - center, rhs - center), 0) == 0) {
-                if(fabs(lhs.Y - rhs.Y) < EPS)
-                    return lhs.X < rhs.X;
-                return lhs.Y < rhs.Y;
-            }
-            return cp((lhs - center), (rhs - center)) < 0;
-        }
-
-    };
-
-    vector < point > Convex_Points;
-
-    Converx_Hull(vector < point > &points) {
-        if(sz(points) <= 1) Convex_Points = points;
-        else {
-            for(int i = 0; i < sz(points); i++){
-                if(make_pair(points[i].Y, points[i].X) < make_pair(points[0].Y, points[0].X))
-                    swap(points[i], points[0]);
-            }
-            sort(points.begin() + 1, points.end(), angleCMP(points[0]));
-
-            // To remove co-linear points, un-comment this part
-
-            // vector < point > tmp;
-            // for(int i = 0; i < sz(points); i++){
-            //     if(sz(tmp) > 1 && !cp(tmp.back() - tmp[0], points[i] - tmp[0])){
-            //         if(length(points[0] - tmp.back()) < length(points[0] - points[i]))
-            //             tmp.back() = points[i];
-            //     }else {
-            //         tmp.push_back(points[i]);
-            //     }
-            // }
-            // points = tmp;
-            
-            for(int i = 0; i < sz(points); i++){
-                int sz = sz(Convex_Points);
-                while(sz > 1 && cp(Convex_Points[sz - 2] - Convex_Points[sz - 1], points[i] - Convex_Points[sz - 1]) < 0)
-                    Convex_Points.pop_back(), sz--;
-                Convex_Points.push_back(points[i]);
-            }
-            if(sz(Convex_Points) >= 3) // not a line
-                Convex_Points.push_back(Convex_Points[0]);
-        }
+    // Returns the orientation of the point c with respect to the line a-b
+    int orientation(const point& a, const point& b, const point& c) {
+        double val = (b.y - a.y) * (c.x - b.x) - (b.x - a.x) * (c.y - b.y);
+        if(val < 0) return -1; // clockwise
+        if(val > 0) return 1; // counter-clockwise
+        return 0; // collinear
     }
 
+    // Returns true if c is on the left side of the line a-b
+    bool cw(const point& a, const point& b, const point& c, bool include_collinear) {
+        int o = orientation(a, b, c);
+        return o < 0 || (include_collinear && o == 0);
+    }
+
+    // return if a-b-c are collinear
+    bool is_collinear(const point& a, const point& b, const point& c) {
+        return orientation(a, b, c) == 0;
+    }
+
+    // Returns a list of points on the convex hull
+    vector < point > Convex_Points;
+
+    Converx_Hull(vector < point > &points, bool include_collinear = false) {
+        point p0 = *min_element(all(points));
+        sort(all(points), [&](const point& a, const point& b) {
+            int o = orientation(p0, a, b);
+            if(o == 0) return p0.dist(a) < p0.dist(b);
+            return o < 0;
+        });
+        if(include_collinear){
+            int idx = sz(points) - 1;
+            while(idx > 0 && is_collinear(p0, points[idx], points.back())) idx--;
+            reverse(points.begin() + idx + 1, points.end());
+        }
+        
+        for(const point& p : points) {
+            while(sz(hull) > 1 && !cw(Convex_Points[sz(Convex_Points) - 2], Convex_Points.back(), p, include_collinear)) 
+                Convex_Points.pop_back();
+            Convex_Points.push_back(p);
+        }
+    }
 };
 
 void Solve(){
