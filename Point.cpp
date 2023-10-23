@@ -34,139 +34,36 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-struct Point {
-
-    double x, y;
-
-    using Vector = Point;
-
-    Point(const double& a, const double& b) : x(a), y(b) { }
-
-    Point(const Point &other) : Point(other.x, other.y) { }
-
-    Point &operator = (const Point &other) {
-        x = other.x, y = other.y;
-        return *this;
-    }
-
-    Point &operator -= (const Point &other) {
-        Point(x - other.x, y - other.y);
-        return *this;
-    }
-
-    Point &operator += (const Point &other) {
-        Point(x + other.x, y + other.y);
-        return *this;
-    }
-
-    Point &operator *= (const Point &other) {
-        Point(x * other.x, y * other.y);
-        return *this;
-    }
-
-    Point operator + (const Point &other) const {
-        return Point(x + other.x, y + other.y);
-    }
-
-    Point operator - (const Point &other) const {
-        return Point(x - other.x, y - other.y);
-    }
-
-    Point operator * (const ll factor) const {
-        return Point(x * factor, y * factor);
-    }
-
-    // factor must be long double
-    Point operator / (const ll factor) const {
-        assert(factor != 0);
-        return Point(x / factor, y / factor);
-    }
-
-    Point operator - () const {
-        return Point(-x, -y);
-    }
-
-    bool operator == (const Point &other) const {
-        return (abs(x - other.x) < EPS && abs(y - other.y) < EPS);
-    }
-
-    bool operator != (const Point &other) const {
-        return !operator == (other);
-    }
-
-    bool operator < (const Point &other) const {
-        if (abs(x - other.x) < EPS) { //equal
-            if (abs(y - other.y) < EPS) return false;
-            return y < other.y;
-        }
-        return x < other.x;
-    }
-
-    bool operator <= (const Point &other) const {
-        return (operator==(other) || operator<(other));
-    }
-
-    bool operator > (const Point &other) const {
-        if (abs(x - other.x) < EPS) { //equal
-            if (abs(y - other.y) < EPS) return false;
-            return y > other.y;
-        }
-        return x > other.x;
-    }
-
-    bool operator >= (const Point &other) const {
-        return operator==(other) || operator>(other);
-    }
-
-    Point translate(const Vector &t) const {
-        return this -> operator + (t);
-    }
-
-    // scaling vector c -> p by ratio
-    Point scale(const Point &c, const double ratio) {
-        // make vector c -> p then scale this vector by ratio
-        // then get the new point and return it
-        // return new Point p' not new Vector cp'
-        return (*this - c) * ratio + c;
-    }
-
-    Point scale(const double ratio) const {
-        return operator * (ratio); // return new Vector v'
-    }
-
-    // rotate point by theta degree counter-clockwise around point c
-    Point rotate(const Point &c, const double deg) const {
-        double rad = deg / 180.0 * acos(-1);
-        Vector vec(*this - c);
-        vec = Vector(vec.x * cos(rad) - vec.y * sin(rad), vec.y * cos(rad) + vec.x * sin(rad));
-        return vec + c;
-    }
-
-    // clockwise
-    Point rotate90(const Point &c) const {
-        //	vec(x, y) -> vec(y, -x);
-        Vector vec(*this - c);
-        return Point(vec.y, -vec.x) + c;
-    }
-
-    // clockwise
-    Point rotate180(const Point &c) const {
-        //	vec(x, y) -> vec(-x, -y);
-        Vector vec(*this - c);
-        vec = -vec;
-        return vec + c;
-    }
-
-    // clockwise
-    Point rotate270(const Point &c) const {
-        //	vec(x, y) -> vec(-y, x);
-        Vector vec(*this - c);
-        return Point(-vec.y, vec.x) + c;
-    }
-
-    Point perp() const {
-        return this -> rotate270(Point(0, 0));
-    }
+template < typename T = int > struct Point {
+    T x, y;
+    Point(T _x = 0, T _y = 0) : x(_x), y(_y) {}
+    Point(const Point &p) : x(p.x), y(p.y) {}
+    Point operator + (const Point &p) const { return Point(x + p.x, y + p.y); }
+    Point operator - (const Point &p) const { return Point(x - p.x, y - p.y); }
+    Point operator * (T c) const { return Point(x * c, y * c); }
+    Point operator / (T c) const { return Point(x / c, y / c); }
+    bool operator == (const Point &p) const { return x == p.x && y == p.y; }
+    bool operator != (const Point &p) const { return x != p.x || y != p.y; }
+    bool operator < (const Point &p) const { return make_pair(y, x) < make_pair(p.y, p.x); }
+    bool operator > (const Point &p) const { return make_pair(y, x) > make_pair(p.y, p.x); }
+    bool operator <= (const Point &p) const { return make_pair(y, x) <= make_pair(p.y, p.x); }
+    bool operator >= (const Point &p) const { return make_pair(y, x) >= make_pair(p.y, p.x); }
+    friend istream& operator >> (istream &in, Point &p) { return in >> p.x >> p.y; }
+    friend ostream& operator << (ostream &out, const Point &p) { return out << p.x << ' ' << p.y; }
+    T dot(const Point &p) const { return x * p.x + y * p.y; }
+    T cross(const Point &p) const { return x * p.y - y * p.x; }
+    T cross(const Point &a, const Point &b) const { return (a - *this).cross(b - *this); }
+    T dist() const { return x * x + y * y; }
+    T dist(const Point &p) const { return (*this - p).dist(); }
+    double distance() const { return sqrt(1.0 * dist()); }
+    double distance(const Point &p) const { return sqrt(1.0 * dist(p)); }
+    double angle() const { return atan2(y, x); }
+    double angle(const Point &p) const { return atan2(cross(p), dot(p)); }
+    Point unit() const { return *this / dist(); }
+    Point perp() const { return Point(-y, x); }
+    Point rotate(double a) const { return Point(x * cos(a) - y * sin(a), x * sin(a) + y * cos(a)); }
+    Point rotate(const Point &p, double a) const { return (*this - p).rotate(a) + p; }
+    Point normal() const { return perp().unit(); }
 };
 
 void Solve(){

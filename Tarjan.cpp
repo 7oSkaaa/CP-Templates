@@ -36,6 +36,8 @@ int timer;
 vector < vector < int > > adj, comps;
 vector < int > low_link, in_stack, node_idx, comp_idx;
 stack < int > stk;
+vector < Pair < int > > bridges;
+set < int > art_points;
 
 void init(int n){
     timer = 0;
@@ -46,16 +48,22 @@ void init(int n){
     stk = stack < int > ();
 }
 
-void tarjan(int u, int p = -1){
+void tarjan(int u){
     in_stack[u] = true;
     low_link[u] = node_idx[u] = timer++;
     stk.push(u);
     for(auto& v : adj[u]){
         if(node_idx[v] == -1){
-            tarjan(v, u);
+            tarjan(v);
             // minimize ancestor of my child
             low_link[u] = min(low_link[u], low_link[v]);
-        }else if(in_stack[v] && v != p)
+            // add bridge
+            if(low_link[v] == node_idx[v])
+                bridges.push_back({u, v});
+            // add articulation point
+            if(low_link[v] >= node_idx[u])
+                art_points.insert(u);
+        }else if(in_stack[v])
             low_link[u] = min(low_link[u], node_idx[v]);
     }
 
