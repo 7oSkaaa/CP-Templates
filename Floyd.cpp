@@ -34,52 +34,49 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct Floyd {
-
-    struct Edge {
-        
-        ll u, v, w;
-        
-        Edge(int U = 0, int V = 0, int W = 0){
-            u = U, v = V, w = W;
-        }
-
-        bool operator < (const Edge& e) const {
-            return w < e.w;
-        }
-
-    };
-
-    int n, m;
+template < typename T = int , int Base = 0 > struct Floyd {
+    
+    int n;
     vector < vector < T > > dist;
-    vector < Edge > edges;
-    T DEFAULT;
+    const T DEF = numeric_limits < T > :: max() / 2;
 
-    Floyd(int N, int M){
-        n = N, m = M, DEFAULT = 1e18;
-        dist.assign(n + 10, vector < T > (n + 10, DEFAULT));
-        edges.resize(m);
+    Floyd(int _n = 0) : n(_n), dist(n + 5, vector < T > (n + 5, DEF)) { 
+        for(int i = 1; i <= n; i++)
+            dist[i][i] = 0; // self loop
     }
 
-    T operation(T a, T b, T c){
-        return min(a, b + c);
+    Floyd(int _n, const vector < vector < T > > &D) : n(_n), dist(n + 5, vector < T > (n + 5, DEF)) { 
+        for(int i = 1; i <= n; i++)
+            for(int j = 1; j <= n; j++)
+                dist[i][j] = D[i - !Base][j - !Base];
     }
 
-    void Get_Data(){
-        for(auto& e : edges){
-            cin >> e.u >> e.v >> e.w;
-            dist[e.u][e.u] = dist[e.v][e.v] = 0;
-            dist[e.u][e.v] = dist[e.v][e.u] = min({dist[e.u][e.v], dist[e.v][e.u], e.w});
-        }
+    T operation(T a, T b){
+        return min(a, b);
     }
 
-    void Build_Dist(){
+    void add_edge(int u, int v, T w){
+        dist[u][v] = operation(dist[u][v], w);
+    }
+
+    void build(){
         for(int i = 1; i <= n; i++)
             for(int u = 1; u <= n; u++)
                 for(int v = 1; v <= n; v++)
-                    dist[u][v] = operation(dist[u][v], dist[u][i], dist[i][v]);
+                    update_dist(u, v, i);
     }
 
+    T get_dist(int u, int v){
+        return dist[u][v];
+    }
+
+    void update_dist(int u, int v, int a, int b){
+        dist[u][v] = operation(dist[u][v], dist[u][a] + dist[a][b] + dist[b][v]);
+    }
+
+    void update_dist(int u, int v, int k){
+        dist[u][v] = operation(dist[u][v], dist[u][k] + dist[k][v]);
+    }
 };
 
 void Solve(){

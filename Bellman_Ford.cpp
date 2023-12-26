@@ -32,52 +32,68 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct Edge {
-    int u, v;
-    T w;
-    Edge(int U = 0, int V = 0, T W = 0) : u(U), v(V), w(W) {}
-    bool operator < (const Edge &e) const {
-        return w < e.w || (w == e.w && u < e.u) || (w == e.w && u == e.u && v < e.v);
+template < typename T = int > struct BellmanFord {
+    
+    struct Edge {
+        int u, v;
+        T w;
+ 
+        Edge(int _u = 0, int _v = 0, T _w = 0) : u(_u), v(_v), w(_w) {}
+ 
+        friend istream& operator >> (istream &in, Edge &e) {
+            in >> e.u >> e.v >> e.w;
+            return in;
+        }
+ 
+        void inv(){
+            w *= -1;
+        }
+    };
+
+    int n, m, src, dest;
+    vector < Edge > edges;
+    T zero, DEFAULT;
+    vector < T > dist;
+
+    BellmanFord(int _n = 0, int _m = 0, int _src = 1, int _dest = 1){
+        n = _n, m = _m, src = _src, dest = _dest;
+        zero = 0, DEFAULT = numeric_limits < T > :: max() / 2;
+        dist.assign(n + 5, DEFAULT);
+        edges.resize(m);
     }
-    void inv(){
-        w *= -1;
+
+    void read_edges(){
+        cin >> edges;
     }
-    friend istream& operator >> (istream &in, Edge &e){
-        in >> e.u >> e.v >> e.w;
-        return in;
+
+    void add_edge(int u, int v, T w){
+        edges.emplace_back(u, v, w);
+    }
+
+    void build(){
+        for(int i = 0; i < n; i++)
+            for(auto& [u, v, w] : edges)
+                dist[v] = min(dist[v], min(dist[u], zero) + w);
+    }
+
+    bool has_negative_cycle(){
+        for(auto& [u, v, w] : edges)
+            if(dist[v] > min(dist[u], zero) + w)
+                return true;
+        return false;
+    } 
+
+    T get_dist(int u){
+        return dist[u];
+    }
+
+    T get_min_dist(){
+        return *min_element(dist.begin(), dist.end());
     }
 };
 
-template < typename T = int > T bellman_ford(int n, vector < Edge < T > >& edges){
-    vector < T > dist(n + 5, LINF);
-    dist[1] = 0;
-    for(int i = 0; i < n; i++){
-        for(auto &[u, v, w] : edges){
-            if(dist[u] == LINF) continue;
-            dist[v] = min(dist[v], dist[u] + w);
-            dist[v] = max(dist[v], -LINF);
-        }
-    }
-    for(int i = 0; i < n; i++)
-        for(auto &[u, v, w] : edges){
-            if(dist[u] == LINF) continue;
-            dist[v] = max(dist[v], -LINF);
-            if(dist[v] > dist[u] + w) 
-                dist[v] = -LINF;
-        }
-    if(dist[n] == -LINF) return -1;
-    if(dist[n] == LINF) return -1;
-    return -dist[n];
-}
-
-
 void Solve(){
-    int n, m;
-    cin >> n >> m;
-    vector < Edge < ll > > edges(m);
-    cin >> edges;
-    for(auto &e : edges) e.inv();
-    cout << bellman_ford(n, edges) << "\n";
+    
 }
 
 int main(){
