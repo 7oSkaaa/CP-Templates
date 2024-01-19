@@ -1079,6 +1079,8 @@
 		  "    int nxtPos;",
 		  "    Segment_Tree < T > seg;",
 		  "",
+		  "    #define loop(v, w, ADJ) for(auto [v, w] : ADJ)",
+		  "",
 		  "    HLD(int n, const vector < vector < Pair < T > > >& G, int treeRoot = 1) : adj(G) {",
 		  "        nxtPos = 1;",
 		  "        // child is heavy child",
@@ -1091,7 +1093,7 @@
 		  "    // init the tree",
 		  "    void init(int u, int p = -1, int d = 0){",
 		  "        dep[u] = d, par[u] = p, SubtreeSz[u] = 1;",
-		  "        for (auto [v, _] : adj[u]){ ",
+		  "        loop(v, w, adj[u]){",
 		  "            if (v == p) continue;",
 		  "            init(v, u, d + 1);",
 		  "            SubtreeSz[u] += SubtreeSz[v];",
@@ -1116,7 +1118,7 @@
 		  "        pos[u] = nxtPos++;",
 		  "        if (child[u]) ",
 		  "            build(child[u], false);",
-		  "        for (auto [v, _] : adj[u]){",
+		  "        loop(v, w, adj[u]){",
 		  "            if(v == par[u] || v == child[u]) continue;",
 		  "            build(v, true);",
 		  "        }",
@@ -1176,8 +1178,9 @@
 		  "            ret = max(ret, seg.query(u, v));",
 		  "        return ret;",
 		  "    }",
-		  "};",
-		  ""
+		  "",
+		  "    #undef loop",
+		  "};"
 		],
 		"description": "HLD"
 	},

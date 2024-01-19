@@ -2,13 +2,11 @@
 
 using namespace std;
 
-#define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
-#define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define fixed(n) fixed << setprecision(n)
-#define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
-#define fill(vec, value) memset(vec, value, sizeof(vec));
-#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
+#define ceil(n, m) (((n) + (m) - 1) / (m))
 #define add_mod(a, b, m) (((a % m) + (b % m)) % m)
+#define sub_mod(a, b, m) (((a % m) - (b % m) + m) % m)
+#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 #define all(vec) vec.begin(), vec.end()
 #define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
@@ -17,9 +15,9 @@ using namespace std;
 #define se second
 #define ll long long
 #define ull unsigned long long
-#define Mod  1'000'000'007
-#define OO 2'000'000'000
 #define EPS 1e-9
+constexpr int INF = 1 << 30, Mod = 1e9 + 7;
+constexpr ll LINF = 1LL << 62;
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
 vector < string > RET = {"NO", "YES"};
@@ -159,6 +157,8 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
     int nxtPos;
     Segment_Tree < T > seg;
 
+    #define loop(v, w, ADJ) for(auto [v, w] : ADJ)
+
     HLD(int n, const vector < vector < Pair < T > > >& G, int treeRoot = 1) : adj(G) {
         nxtPos = 1;
         // child is heavy child
@@ -171,7 +171,7 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
     // init the tree
     void init(int u, int p = -1, int d = 0){
         dep[u] = d, par[u] = p, SubtreeSz[u] = 1;
-        for (auto [v, _] : adj[u]){ 
+        loop(v, w, adj[u]){
             if (v == p) continue;
             init(v, u, d + 1);
             SubtreeSz[u] += SubtreeSz[v];
@@ -196,7 +196,7 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
         pos[u] = nxtPos++;
         if (child[u]) 
             build(child[u], false);
-        for (auto [v, _] : adj[u]){
+        loop(v, w, adj[u]){
             if(v == par[u] || v == child[u]) continue;
             build(v, true);
         }
@@ -256,7 +256,10 @@ template < typename T = int, const int VAL_ON_EDGE = 0 > struct HLD {
             ret = max(ret, seg.query(u, v));
         return ret;
     }
+
+    #undef loop
 };
+
 
 void Solve(){
     
@@ -264,9 +267,11 @@ void Solve(){
 
 int main(){
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int t = 1;
-    //cin >> t;
-    while(t--)
+    int test_cases = 1;
+    // cin >> test_cases;
+    for(int tc = 1; tc <= test_cases; tc++){
+        // cout << "Case #" << tc << ": ";
         Solve();
+    }
     return 0;
 }
