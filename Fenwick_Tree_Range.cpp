@@ -66,6 +66,10 @@ template < typename T = int > struct Fenwick_Tree_Range {
         add_range(r + 1, -val, val * r);
     }
 
+    void add(int idx, T val){
+        add(idx, idx, val);
+    }
+
     T get(int idx){
         T ans = DEFAULT;
         int pos = idx++;
