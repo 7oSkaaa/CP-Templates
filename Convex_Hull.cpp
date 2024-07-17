@@ -66,7 +66,7 @@ template < typename T = int > struct Point {
     Point rotate(const Point &p, double a) const { return (*this - p).rotate(a) + p; }
     Point normal() const { return perp().unit(); }
 };
-template < typename T = int > struct Converx_Hull {
+template < typename T = int > struct Convex_Hull {
 
     typedef Point < T > point;
 

@@ -45,17 +45,11 @@ template < typename T = int, int Base = 0 > struct Sqrt_Decomp {
         return sq * sq == N ? sq : sq + 1;
     }
 
-    Sqrt_Decomp(int N = 0){
+    Sqrt_Decomp(int N = 0, const vector < T >& vec = vector < T > ()){
         n = N, len = calc_sq(n), U_Default = 0, Q_Default = 0;
-        a = vector < T > (n + 5, U_Default);
+        a = (vec.empty() ? vector < T > (n + 5, U_Default) : vec);
         b = vector < vector < T > > (len + 5);
-    }
-
-    Sqrt_Decomp(int N, const vector < T >& vec){
-        n = N, len = calc_sq(n), U_Default = 0, Q_Default = 0;
-        a = vec;
-        b = vector < vector < T > > (len + 5);
-        build();
+        if(!vec.empty()) build();
     }
 
     // build each block

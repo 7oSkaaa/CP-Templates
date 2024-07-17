@@ -34,39 +34,21 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int , int Base = 0 > struct Sparse_Table {
-
-    struct Node {
-
-        T val;
-
-        Node(T V = 0) : val(V) {}
-    
-        Node operator = (const T& rhs) {
-            val = rhs;
-            return *this;
-        }
-
-    };
+template < typename treeType = int, typename numsType = int, int Base = 0 > 
+class Sparse_Table {
+private:
 
     int n, LOG;
-    vector < vector < Node > > table;
+    vector < vector < treeType > > table;
     vector < int > Bin_Log;
-    Node DEFAULT;
+    function < treeType(const treeType&, const treeType&) > operation;
+    treeType DEFAULT;
 
-    Sparse_Table(const vector < T >& vec){
-        n = sz(vec) - Base, DEFAULT = INF, LOG = __lg(n) + 1;
-        table = vector < vector < Node > > (n + 10, vector < Node > (LOG));
-        Bin_Log = vector < int > (n + 10);
-        for(int i = 2; i <= n; i++)
-            Bin_Log[i] = Bin_Log[i >> 1] + 1;
-        for(int i = 1; i <= n; i++)
-            table[i][0] = vec[i - !Base];
-        Build_Table();
-    }
-
-    Node operation(const Node& a, const Node& b){
-        return a.val < b.val ? a : b;
+    // Calculate integer base-2 logarithm
+    int integerLog2(int x) const {
+        int log = 0;
+        while (x >>= 1) ++log;
+        return log;
     }
 
     void Build_Table(){
@@ -75,13 +57,13 @@ template < typename T = int , int Base = 0 > struct Sparse_Table {
                 table[i][log] = operation(table[i][log - 1], table[i + (1 << (log - 1))][log - 1]);
     }
 
-    Node query_1(int L, int R){
+    treeType query_1(int L, int R){
         int log = Bin_Log[R - L + 1];
         return operation(table[L][log], table[R - (1 << log) + 1][log]);
     }
 
-    Node query_log_n(int L, int R){
-        Node answer = DEFAULT;
+    treeType query_log_n(int L, int R){
+        treeType answer = DEFAULT;
         for (int log = LOG; log >= 0; log--){
             if (L + (1 << log) - 1 <= R) {
                 answer = operation(answer, table[L][log]);
@@ -91,8 +73,26 @@ template < typename T = int , int Base = 0 > struct Sparse_Table {
         return answer;
     }
 
-    T query(int L, int R, bool overlap = false){
-        return (!overlap ? query_1(L, R) : query_log_n(L, R)).val;
+public:
+
+    Sparse_Table(
+        int N,
+        const vector < numsType >& vec = vector < numsType > (),
+        function < treeType(const treeType&, const treeType&) > op = [](const treeType& a, const treeType& b) { return min(a, b); },
+        treeType def = numeric_limits < treeType > ::max()
+    ): operation(op), DEFAULT(def) {
+        n = N, LOG = integerLog2(n) + 1;
+        table = vector < vector < treeType > > (n + 10, vector < treeType > (LOG, DEFAULT));
+        Bin_Log = vector < int > (n + 10);
+        for(int i = 2; i <= n; i++)
+            Bin_Log[i] = Bin_Log[i >> 1] + 1;
+        for(int i = 1; i <= N; i++)
+            table[i][0] = treeType(vec[i - !Base]);
+        Build_Table();
+    }
+
+    treeType query(int L, int R, bool overlap = false){
+        return (!overlap ? query_1(L, R) : query_log_n(L, R));
     }
 
 };

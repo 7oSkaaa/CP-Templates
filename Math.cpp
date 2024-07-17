@@ -43,7 +43,7 @@ struct Math {
     ll GCD(ll a, ll b){
         return (!b ? a : GCD(b, a % b));
     }
-    
+
     // least common multiplication between two numbers
 
     ll LCM(ll a, ll b){
@@ -174,7 +174,7 @@ struct Math {
         ll sq = sqrt(n);
         return sum_divisors + (sq * sq == n ? sq : 0);
     }
-    
+
     // sum of divisor of number in range [1 ... n]
     ll divisorSum(ll num){
         ll sum = 0;
@@ -283,7 +283,7 @@ struct Math {
     }
 
     // number of coprime witn n from 1 to n
-    
+
     ll phi(ll n) {
         ll result = n;
         for (ll i = 2; i * i <= n; i++) {
@@ -319,7 +319,7 @@ struct Math {
         y = x1 - y1 * (a / b);
         return d;
     }
-    
+
     bool find_any_solution(int a, int b, int c, int &x0, int &y0, int &g) {
         g = extended_gcd(abs(a), abs(b), x0, y0);
         if (c % g) {
@@ -344,7 +344,7 @@ struct Math {
         }while(decimal != 0);
         return string(result.rbegin(), result.rend());
     }
-    
+
     // Convert any base to decimal
 
     ll  any_base_to_decimal(string str, int base) {

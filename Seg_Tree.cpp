@@ -34,120 +34,100 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int , int Base = 0 > struct Segment_Tree {
+template < typename treeType = int, typename numsType = int, int Base = 0 >
+class Segment_Tree {
+private:
+    int size, max_level;
+    treeType DEFAULT;
+    vector < treeType > tree;
+    const function < treeType(const treeType&, const treeType&) > operation;
 
-    struct Node {
-
-        T val;
-
-        Node(T V = 0) : val(V) {}
-    
-        Node operator = (const T rhs) {
-            val = rhs;
-            return *this;
-        }
-
-    };
-
-    int size; 
-    Node DEFAULT;
-    vector < Node > tree; 
-    #define LEFT (idx << 1)
-    #define RIGHT ((idx << 1) | 1)
-    #define VAL val
-    
-    Segment_Tree(int n = 0){
-        size = 1, DEFAULT = 0;
-        while(size < n) size *= 2;
-        tree = vector < Node > (2 * size, DEFAULT);
-    }
-
-    Segment_Tree(int n, const vector < T >& nums){
-        size = 1, DEFAULT = 0;
-        while(size < n) size *= 2;
-        tree = vector < Node > (2 * size, DEFAULT);
-        build(nums);
-    }
-
-    // Main operation to do
-
-    Node operation(const Node& a, const Node& b){
-        return a.val + b.val;
-    }
-    
-    // If Base is 1 so the array is 1-based else the array is 0-based
-    
-    void build(const vector < T >& nums, int idx, int lx, int rx){
-        if(Base ? lx >= sz(nums) : lx > sz(nums)) return;
-        if(rx == lx) tree[idx] = nums[lx - !Base];
+    // Build the segment tree
+    void build(const vector < numsType >& nums, int idx, int lx, int rx) {
+        if (Base ? lx >= int(nums.size()) : lx > int(nums.size())) return;
+        if (rx == lx) tree[idx] = treeType(nums[lx - !Base]);
         else {
             int mx = (rx + lx) / 2;
-            build(nums, LEFT, lx, mx);
-            build(nums, RIGHT, mx + 1, rx);
-            tree[idx] = operation(tree[LEFT], tree[RIGHT]);
+            build(nums, idx * 2, lx, mx);
+            build(nums, idx * 2 + 1, mx + 1, rx);
+            tree[idx] = operation(tree[idx * 2], tree[idx * 2 + 1]);
         }
     }
 
-    void build(const vector < T >& nums){
+    // Update the segment tree
+    void update(int index, numsType value, int idx, int lx, int rx) {
+        if (rx == lx) tree[idx] = treeType(value);
+        else {
+            int mx = (rx + lx) / 2;
+            if (index <= mx) update(index, value, idx * 2, lx, mx);
+            else update(index, value, idx * 2 + 1, mx + 1, rx);
+            tree[idx] = operation(tree[idx * 2], tree[idx * 2 + 1]);
+        }
+    }
+
+    // Query the segment tree
+    treeType query(int l, int r, int idx, int lx, int rx) const {
+        if (lx > r || l > rx) return DEFAULT;
+        if (lx >= l && rx <= r) return tree[idx];
+        int mx = (lx + rx) / 2;
+        return operation(query(l, r, idx * 2, lx, mx), query(l, r, idx * 2 + 1, mx + 1, rx));
+    }
+
+public:
+
+    Segment_Tree(
+        int n = 0, 
+        const vector < numsType >& nums = vector < numsType >(), 
+        const function < treeType(const treeType&, const treeType&) >& op = [](const treeType& a, const treeType& b) { return a + b; }
+    ) : size(1), max_level(1), DEFAULT(0), operation(op) {
+        while (size < n) size *= 2, max_level++;
+        tree = vector < treeType > (2 * size, DEFAULT);
+        if (!nums.empty()) build(nums, 1, 1, size);
+    }
+
+    void build(const vector < numsType >& nums) {
         build(nums, 1, 1, size);
     }
 
-    void update(int index, T v, int idx, int lx, int rx){
-        if(rx == lx) tree[idx] = v;
-        else {  
-            int mx = (rx + lx) / 2;
-            if(index <= mx) update(index, v, LEFT, lx, mx);
-            else update(index, v, RIGHT, mx + 1, rx);
-            tree[idx] = operation(tree[LEFT], tree[RIGHT]);
-        }
+    void update(int index, numsType value) {
+        update(index, value, 1, 1, size);
     }
 
-    void update(const int index, const T v){
-        update(index, v, 1, 1, size);
-    }
-
-    Node query(int l, int r, int idx, int lx, int rx){
-        if(lx > r || l > rx) return DEFAULT;
-        if(lx >= l && rx <= r) return tree[idx];
-        int mx = (lx + rx) / 2;
-        return operation(query(l, r, LEFT, lx, mx), query(l, r, RIGHT, mx + 1, rx));
-    }
-
-    Node query_Node(const int l, const int r){
+    treeType query(int l, int r) const {
         return query(l, r, 1, 1, size);
     }
 
-    T query(const int l, const int r){
-        return query_Node(l, r).VAL;
+    treeType operator[](int index) const {
+        return query(index, index, 1, 1, size);
     }
 
-    T get(const int idx){
-        return query_Node(idx, idx).VAL;
-    }
-
-    friend ostream& operator << (ostream &out, const Node &node) {
-        out << node.VAL << ' ';
-        return out;
-    }
-
-    void print(int idx, int lx, int rx){
-        if(lx == rx) cout << tree[idx] << ' ';
-        else {
-            int mx = (lx + rx) / 2;
-            print(LEFT, lx, mx);
-            print(RIGHT, mx + 1, rx);
+    // Print the segment tree as a pretty tree structure
+    void print() const {
+        if (tree.size() <= 1) return;
+        int level = 0;
+        queue < pair < int, int > > q;  // pair of (index in tree, level in tree)
+        q.push({1, level});
+        while (!q.empty()) {
+            int nodesAtCurrentLevel = q.size();
+            int spacesBetween = (1 << (max_level - level + 1)) - 1;
+            int leadingSpaces = (1 << (max_level - level)) - 1;
+            cout << string(leadingSpaces * 2, ' ');  // leading spaces for the first node in the level
+            while (nodesAtCurrentLevel--) {
+                auto [idx, lvl] = q.front();
+                q.pop();
+                cout << setw(2) << tree[idx];
+                // Print spaces between nodes at the current level
+                if (nodesAtCurrentLevel) cout << string(spacesBetween * 2, ' ');
+                // Add children to the queue
+                if (idx * 2 < tree.size()) {
+                    q.push({idx * 2, lvl + 1});
+                    q.push({idx * 2 + 1, lvl + 1});
+                }
+            }
+            cout << "\n";  // new line for the new level
+            level++;
         }
     }
-
-    void print(){
-        print(1, 1, size);
-        cout << '\n';
-    }
-    
-    // remove macro LEFT and RIGHT
-    #undef LEFT
-    #undef RIGHT
-    #undef VAL
 };
 
 void Solve(){
