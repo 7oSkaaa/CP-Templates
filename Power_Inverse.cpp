@@ -36,8 +36,12 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 template < typename T = int > struct Power_Inverse {
     
-    T n, r, mod;
-    vector < T > fact, inv;
+    T MAX_N, mod;
+    vector < T > fact, fact_inv, inv;
+
+    T mod_combine(T a, T b, T MOD){
+        return ((a % MOD) * (b % MOD)) % MOD;
+    }
 
     T fast_power(T b, T e, T MOD){
         T power = 1;
@@ -48,33 +52,37 @@ template < typename T = int > struct Power_Inverse {
         return power % MOD;
     }
 
-    T Inverse(T N, T MOD){
+    T get_inv(T N, T MOD){
         return fast_power(N, MOD - 2, MOD) % MOD;
     }
 
-    Power_Inverse(T N, T R, T MOD){
-        n = N, r = R, mod = MOD;
-        fact.assign(n + 10, 1), inv.resize(n + 10, 1);
-        for(ll i = 1; i <= n; i++){
+    Power_Inverse(T N, T MOD){
+        MAX_N = N, mod = MOD;
+        fact.assign(MAX_N + 10, 1), inv.resize(MAX_N + 10, 1), fact_inv.resize(MAX_N + 10, 1);
+
+        for(ll i = 1; i <= MAX_N; i++)
             fact[i] = mod_combine(fact[i - 1], i, mod);
-            inv[i] = Inverse(fact[i], mod);
+
+        inv[MAX_N] = get_inv(MAX_N, mod);
+        fact_inv[MAX_N] = get_inv(fact[MAX_N], mod);        
+        
+        for(ll i = MAX_N - 1; i >= 0; i--){
+            fact_inv[i] = mod_combine(fact_inv[i + 1], i + 1, mod);
+            inv[i] = mod_combine(inv[i + 1], i + 1, mod);
         }
     }
 
     // Combination
-
-    T nCr(){
+    T nCr(int n, int r){ // nCr = n! / (r! * (n - r)!)
         if(r > n) return 0ll;
-        return (((fact[n] % mod) * (inv[r] % mod) % mod) * (inv[n - r] % mod)) % mod;
+        return mod_combine(fact[n], mod_combine(fact_inv[r], fact_inv[n - r], mod), mod);
     }
 
     // Permutation
-
-    T nPr(){
+    T nPr(int n, int r){ // nPr = n! / (n - r)!
         if(r > n) return 0ll;
-        return ((fact[n] % mod) * (inv[r] % mod)) % mod;
+        return mod_combine(fact[n], fact_inv[n - r], mod);
     }
-
 };
 
 void Solve(){
