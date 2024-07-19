@@ -77,6 +77,17 @@ template < typename T = int, int Base = 1 > struct DSU {
         }
     }
 
+    vector < vector < int > > get_components(){
+        vector < vector < int > > components;
+        for(int root = Base; root < sz(roots); root++){
+            vector < int > component;
+            for(int u = roots[root]; ~u ; u = nxt[u])
+                component.push_back(u);
+            components.push_back(component);
+        }
+        return components;
+    }
+
     int get_size(int u){
         return Gsize[find_leader(u)];
     }

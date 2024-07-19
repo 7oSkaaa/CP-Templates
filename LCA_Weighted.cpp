@@ -34,98 +34,85 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct LCA {
-    
-    struct Edge {
-
-        T v, w;
-
-        Edge(T V = 0, T W = 0) : v(V), w(W) {}
-
-        bool operator < (const Edge &rhs) const {
-            return w < rhs.w;
-        }
-
-    };
-
-    int N, LOG;
-    vector < vector < T > > anc, cost;
-    vector < vector < Edge > > adj;
-    vector < int > dep;
-    
-    LCA(int n){
-        N = n + 10, LOG = 0;
-        while((1 << LOG) <= N) LOG++;
-        dep = vector < int > (N);
-        adj = vector < vector < Edge > > (N);
-        anc = cost = vector < vector < T > > (N, vector < T > (LOG));
-    }
-    
-    void add_edge(int u, int v, T w){
-        adj[u].push_back(Edge(v, w));
-        adj[v].push_back(Edge(u, w));
+template < typename T = int >
+class LCA {
+public:
+    LCA(
+        int n,
+        const vector < vector < pair< int, T > > >& adj_list, 
+        const function < T(const T&, const T&) > op = [](const T& a, const T& b) { return a + b; },
+        const T def = T()
+    ) : N(n), adj(adj_list), operation(op), default_value(def) {
+        LOG = 1;
+        while ((1 << LOG) <= N) LOG++;
+        dep = vector < int > (N + 5, -1);
+        anc = vector < vector < int > > (N + 5, vector < int > (LOG));
+        cost = vector < vector < T > > (N + 5, vector < T > (LOG, default_value));
+        build();
     }
 
-    void build_adj(int edges){
-        for(int i = 0, u, v, w; i < edges && cin >> u >> v >> w; i++)
-            add_edge(u, v, w);
-    }
-
-    T operation(T a, T b){
-        return a + b;
-    }
-    
-    void dfs(int u, int p = 0){
-        for(auto& [v, w] : adj[u]){
-            if(v == p) continue;
-            dep[v] = dep[u] + 1, anc[v][0] = u, cost[v][0] = w;
-            for(int bit = 1; bit < LOG; bit++){
-                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
-                cost[v][bit] = operation(cost[v][bit - 1], cost[anc[v][bit - 1]][bit - 1]);
+    void build() {
+        for (int i = 1; i <= N; ++i)
+            if (dep[i] == -1) {
+                dep[i] = 0;  // Initialize root node's depth to 0
+                dfs(i);
             }
-            dfs(v, u);
-        }
     }
-    
-    int kth_ancestor(int u, int k){
-        if(dep[u] < k) 
-            return -1;
-        for(int bit = LOG - 1; bit >= 0; bit--)
-            if(k & (1 << bit))
-                u = anc[u][bit];
-        return u;
-    }
-    
-    int get_lca(int u, int v){
-        if(dep[u] < dep[v])
-            swap(u, v);
+
+    int get_lca(int u, int v) {
+        if (dep[u] < dep[v]) swap(u, v);
         u = kth_ancestor(u, dep[u] - dep[v]);
-        if(u == v)
-            return u;
-        for(int bit = LOG - 1; bit >= 0; bit--)
-            if(anc[u][bit] != anc[v][bit])
+        if (u == v) return u;
+        for (int bit = LOG - 1; bit >= 0; bit--)
+            if (anc[u][bit] != anc[v][bit])
                 u = anc[u][bit], v = anc[v][bit];
         return anc[u][0];
     }
-    
-    T get_cost(int u, int dist){
-        if(dep[u] < dist) return -1;
-        T ans = 0;
-        for(int bit = 0; bit < LOG; bit++)
-            if(dist & (1 << bit))
-                ans = operation(ans, cost[u][bit]), u = anc[u][bit];
-        return ans;
-    }
-    
-    T query(int u, int v){
+
+    T query(int u, int v) {
         int lca = get_lca(u, v);
         return operation(get_cost(u, dep[u] - dep[lca]), get_cost(v, dep[v] - dep[lca]));
     }
 
-    void build(int root = 1){
-        dfs(root);
+private:
+    int N, LOG;
+    vector < vector < int > > anc;
+    vector < vector < T > > cost;
+    vector < vector < pair < int, T > > > adj;
+    vector < int > dep;
+    const function < T(const T&, const T&) > operation;
+    const T default_value;
+
+    void dfs(int u, int p = 0) {
+        for (auto& [v, w] : adj[u]) {
+            if (v == p) continue;
+            if (dep[v] == -1) {
+                dep[v] = dep[u] + 1, anc[v][0] = u, cost[v][0] = w;
+                for (int bit = 1; bit < LOG; bit++) {
+                    anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+                    cost[v][bit] = operation(cost[v][bit - 1], cost[anc[v][bit - 1]][bit - 1]);
+                }
+                dfs(v, u);
+            }
+        }
     }
 
+    int kth_ancestor(int u, int k) {
+        if (dep[u] < k) return -1;
+        for (int bit = LOG - 1; bit >= 0; bit--)
+            if (k & (1 << bit))
+                u = anc[u][bit];
+        return u;
+    }
+
+    T get_cost(int u, int dist) {
+        if (dep[u] < dist) return -1;
+        T ans = default_value;
+        for (int bit = 0; bit < LOG; bit++)
+            if (dist & (1 << bit))
+                ans = operation(ans, cost[u][bit]), u = anc[u][bit];
+        return ans;
+    }
 };
 
 void Solve(){

@@ -34,85 +34,85 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int > struct Monotonic_Stack {
-    
+template < typename T = int >
+struct Monotonic_Stack {
     vector < T > st, Monotonic;
-    T DEFAULT = 0;
+    function < T(const T&, const T&) > operation;
+    T DEFAULT;
 
-    Monotonic_Stack() {
-        Monotonic = { DEFAULT }, st = { };
+    Monotonic_Stack(
+        function < T(const T&, const T&) > op = [](const T& a, const T& b) { return max(a, b); },
+        T default_val = T()
+    ) : operation(op), DEFAULT(default_val) {
+        Monotonic.push_back(DEFAULT);
     }
 
-    static T operation(T a, T b){
-        return max(a, b);
-    }
-
-    void push(T x){
-        st.emplace_back(x);
+    void push(T x) {
+        st.push_back(x);
         Monotonic.push_back(operation(Monotonic.back(), x));
     }
 
-    T pop(){
+    T pop() {
         T res = st.back();
         st.pop_back();
         Monotonic.pop_back();
         return res;
     }
-    
-    bool empty(){
+
+    bool empty() const {
         return st.empty();
     }
-    
-    T top(){
+
+    T top() const {
         return st.back();
     }
 
-    T Monotonic_val(){
+    T Monotonic_val() const {
         return Monotonic.back();
     }
 
-    int size(){
+    int size() const {
         return st.size();
     }
-
 };
 
-template < typename T = int > struct Monotonic_Queue {
-
+template < typename T = int >
+struct Monotonic_Queue {
     Monotonic_Stack < T > s1, s2;
+    function < T(const T&, const T&) > operation;
+    T DEFAULT;
 
-    Monotonic_Queue () {
-        s1 = Monotonic_Stack < T > (), s2 = Monotonic_Stack < T > ();
-    }
+    Monotonic_Queue(
+        function < T(const T&, const T&) > op = [](const T& a, const T& b) { return max(a, b); },
+        T default_val = T()
+    ) : s1(op, default_val), s2(op, default_val), operation(op), DEFAULT(default_val) {}
 
-    void push(T x){
+    void push(T x) {
         s2.push(x);
     }
 
-    void pop(){
-        if(s1.empty()){
-            while(!s2.empty())
+    void pop() {
+        if (s1.empty()) {
+            while (!s2.empty()) {
                 s1.push(s2.pop());
+            }
         }
         s1.pop();
     }
 
-    T monotonic_val(){
-        return Monotonic_Stack < T > ::operation(s1.Monotonic_val(), s2.Monotonic_val());
+    T monotonic_val() const {
+        if (s1.empty()) return s2.Monotonic_val();
+        if (s2.empty()) return s1.Monotonic_val();
+        return operation(s1.Monotonic_val(), s2.Monotonic_val());
     }
 
-    bool is_good(){
-        return monotonic_val() == 1;
-    }
-
-    bool empty(){
+    bool empty() const {
         return s1.empty() && s2.empty();
     }
 
-    int size(){
+    int size() const {
         return s1.size() + s2.size();
     }
-
 };
 
 void Solve(){

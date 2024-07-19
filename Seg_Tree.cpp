@@ -78,8 +78,9 @@ public:
     Segment_Tree(
         int n = 0, 
         const vector < numsType >& nums = vector < numsType >(), 
-        const function < treeType(const treeType&, const treeType&) >& op = [](const treeType& a, const treeType& b) { return a + b; }
-    ) : size(1), max_level(1), DEFAULT(0), operation(op) {
+        const function < treeType(const treeType&, const treeType&) >& op = [](const treeType& a, const treeType& b) { return a + b; },
+        treeType def = 0
+    ) : size(1), max_level(1), DEFAULT(def), operation(op) {
         while (size < n) size *= 2, max_level++;
         tree = vector < treeType > (2 * size, DEFAULT);
         if (!nums.empty()) build(nums, 1, 1, size);

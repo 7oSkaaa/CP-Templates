@@ -56,7 +56,7 @@ template < typename T = long long , int Rounds = 10 > struct Miller_Rabin {
         return res;
     }
 
-    bool is_prime(T num){
+    bool is_prime(T num){ // O(Rounds * log^3(num))
         // Handling base cases:
         if(num < 2) return false;
         if(num != 2 && num % 2 == 0) return false;

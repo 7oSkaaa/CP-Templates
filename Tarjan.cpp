@@ -32,54 +32,106 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-int timer;
-vector < vector < int > > adj, comps;
-vector < int > low_link, in_stack, node_idx, comp_idx;
-stack < int > stk;
-vector < Pair < int > > bridges;
-set < int > art_points;
-
-void init(int n){
-    timer = 0;
-    adj = vector < vector < int > > (n + 5);
-    low_link = node_idx = comp_idx = vector < int > (n + 5, -1);
-    in_stack = vector < int > (n + 5, false);
-    comps.clear();
-    stk = stack < int > ();
-}
-
-void tarjan(int u){
-    in_stack[u] = true;
-    low_link[u] = node_idx[u] = timer++;
-    stk.push(u);
-    for(auto& v : adj[u]){
-        if(node_idx[v] == -1){
-            tarjan(v);
-            // minimize ancestor of my child
-            low_link[u] = min(low_link[u], low_link[v]);
-            // add bridge
-            if(low_link[v] == node_idx[v])
-                bridges.push_back({u, v});
-            // add articulation point
-            if(low_link[v] >= node_idx[u])
-                art_points.insert(u);
-        }else if(in_stack[v])
-            low_link[u] = min(low_link[u], node_idx[v]);
+class Tarjan {
+public:
+    Tarjan(int n) {
+        init(n);
     }
 
-    // head of SCC
-    if(low_link[u] == node_idx[u]){
-        comps.push_back(vector < int > ());
-        int v = -1;
-        while(v != u){
-            v = stk.top();
-            stk.pop();
-            in_stack[v] = false; // remove from stack
-            comps.back().push_back(v); // add node to current component
-            comp_idx[v] = sz(comps) - 1; // set component index
+    void addEdge(int u, int v, bool is_directed = false) {
+        adj[u].push_back(v);
+        if (!is_directed)
+            adj[v].push_back(u); // Assuming an undirected graph
+    }
+
+    void run() {
+        for (int i = 0; i < adj.size(); ++i) {
+            if (node_idx[i] == -1) {
+                dfs(i);
+            }
         }
     }
-}
+    
+    set < int > getArticulationPoints() {
+        return art_points;
+    }
+
+    vector < pair < int, int > > getBridges() {
+        return bridges;
+    }
+
+    bool isArticulationPoint(int u) {
+        return art_points.find(u) != art_points.end();
+    }
+
+    bool isBridge(int u, int v) {
+        return find(bridges.begin(), bridges.end(), make_pair(u, v)) != bridges.end() ||
+               find(bridges.begin(), bridges.end(), make_pair(v, u)) != bridges.end();
+    }
+
+    int get_children(int u){
+        return children[u];
+    }
+
+private:
+    int timer;
+    vector < vector < int > > adj, comps;
+    vector < int > low_link, node_idx, comp_idx;
+    vector < bool > in_stack;
+    stack < int > stk;
+    vector < pair < int, int > > bridges;
+    set < int > art_points;
+
+    void init(int n) {
+        timer = 0;
+        adj.assign(n + 5, vector < int > ());
+        low_link.assign(n + 5, -1);
+        node_idx.assign(n + 5, -1);
+        comp_idx.assign(n + 5, -1);
+        in_stack.assign(n + 5, false);
+        comps.clear();
+        while (!stk.empty()) stk.pop();
+    }
+
+    void dfs(int u, int parent = -1) {
+        low_link[u] = node_idx[u] = timer++;
+        in_stack[u] = true;
+        stk.push(u);
+
+        int childs = 0;
+
+        for (int v : adj[u]) {
+            if (v == parent) continue; // Ignore the edge to parent in undirected graph
+            if (node_idx[v] == -1) { // If v is not visited
+                dfs(v, u);
+                low_link[u] = min(low_link[u], low_link[v]);
+                if (low_link[v] == node_idx[v])
+                    bridges.emplace_back(u, v);
+                if (parent != -1 && low_link[v] >= node_idx[u])
+                    art_points.insert(u);
+                children[u] += children[v];
+                ++childs;
+            } else if (in_stack[v]) {
+                low_link[u] = min(low_link[u], node_idx[v]);
+            }
+        }
+
+        if (parent == -1 && childs > 1)
+            art_points.insert(u);
+
+        if (low_link[u] == node_idx[u]) {
+            comps.emplace_back();
+            int v;
+            do {
+                v = stk.top();
+                stk.pop();
+                in_stack[v] = false;
+                comps.back().push_back(v);
+                comp_idx[v] = comps.size() - 1;
+            } while (v != u);
+        }
+    }
+};
 
 void Solve(){
     

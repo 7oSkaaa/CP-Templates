@@ -75,7 +75,7 @@ struct Factorization {
         for (int i = 2; i <= n; i++){ 
             if (!prime_factors[i]) {
                 for (int j = i; j <= n; j += i){ 
-                    prime_factors[j]++;
+                    prime_factors_cnt[j]++;
                     prime_factors[j].push_back(i);
                 }
             }
@@ -84,7 +84,7 @@ struct Factorization {
 
     // get the number of prime factors of n
     int get_prime_factors(int x){
-        return prime_factors[x];
+        return prime_factors_cnt[x];
     }
 
     // get the prime factors of n
