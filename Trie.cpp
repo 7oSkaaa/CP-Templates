@@ -32,72 +32,86 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < int Mode = 0 > struct Trie {
-    // Mode [lowercase, uppercase, digits]
-    static constexpr int sz[4] = {26, 26, 10};
+enum class TrieMode { Lowercase, Uppercase, Digits };
+template < TrieMode Mode >
+class Trie {
+public:
+    Trie() : root(new Node()) {}
 
-    struct Node {
- 
-        Node* child[sz[Mode]];
-        bool is_word;
-        int freq;
- 
-        Node(){
-            memset(child, 0, sizeof(child));
-            is_word = false;
-            freq = 0;
-        }
-    };
-
-    Node* root;
-    char DEFAULT;
-
-    Trie(){
-        root = new Node;
-        DEFAULT = "aA0"[Mode];
-    }
-    
-    void insert(const string& word){
-        Node* curr = root; 
-        for(auto& c : word){
-            if(!curr -> child[c - DEFAULT]) 
-                curr -> child[c - DEFAULT] = new Node;
-            curr = curr -> child[c - DEFAULT];
+    void insert(const string& word) {
+        Node* curr = root;
+        for (char c : word) {
+            int index = charToIndex(c);
+            if (!curr -> children[index]) 
+                curr -> children[index] = new Node();
+            curr = curr -> children[index];
             curr -> freq++;
         }
         curr -> is_word = true;
     }
-  
-    void erase(const string& word, int idx, Node* curr){
-        if(idx == sz(word)) return void(curr -> is_word = curr -> freq > 1);
-        erase(word, idx + 1, curr -> child[word[idx] - DEFAULT]);
-        if(--curr -> child[word[idx] - DEFAULT] -> freq == 0){
-            delete curr -> child[word[idx] - DEFAULT];
-            curr -> child[word[idx] - DEFAULT] = nullptr;
-        }
-    }
 
-    bool search(const string& word){
-        Node* curr = root; 
-        for(auto& c : word){
-            if(!curr -> child[c - DEFAULT]) return false;
-            curr = curr -> child[c - DEFAULT];
+    bool search(const string& word) const {
+        const Node* curr = root;
+        for (char c : word) {
+            int index = charToIndex(c);
+            if (!curr -> children[index]) return false;
+            curr = curr -> children[index];
         }
         return curr -> is_word;
     }
- 
-    void erase(const string& word){
-        if(search(word)) 
-            erase(word, 0, root);
+
+    void erase(const string& word) {
+        erase(word, 0, root);
     }
 
-    bool is_prefix(const string& word){
-        Node* curr = root; 
-        for(auto& c : word){
-            if(!curr -> child[c - DEFAULT]) return false;
-            curr = curr -> child[c - DEFAULT];
+    bool is_prefix(const string& word) const {
+        const Node* curr = root;
+        for (char c : word) {
+            int index = charToIndex(c);
+            if (!curr -> children[index]) return false;
+            curr = curr -> children[index];
         }
         return true;
+    }
+    
+private:
+    inline static constexpr int charSize() {
+        switch (Mode) {
+            case TrieMode::Lowercase: return 26;
+            case TrieMode::Uppercase: return 26;
+            case TrieMode::Digits:    return 10;
+        }
+        return 0; // Should never reach here
+    }
+
+    inline static int charToIndex(char c) {
+        switch (Mode) {
+            case TrieMode::Lowercase: return c - 'a';
+            case TrieMode::Uppercase: return c - 'A';
+            case TrieMode::Digits:    return c - '0';
+        }
+        return -1; // Should never reach here
+    }
+
+    struct Node {
+        Node* children[charSize()] = {nullptr};
+        bool is_word = false;
+        int freq = 0;
+    };
+
+    Node* root;
+
+    void erase(const std::string& word, size_t idx, Node* curr) {
+        if (idx == word.size()) return curr -> is_word = false, void();
+        int index = charToIndex(word[idx]);
+        if (curr -> children[index]) {
+            erase(word, idx + 1, curr -> children[index]);
+            curr -> children[index] -> freq--;
+            if (curr -> children[index] -> freq == 0) {
+                delete curr -> children[index];
+                curr -> children[index] = nullptr;
+            }
+        }
     }
 };
 

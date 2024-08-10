@@ -32,60 +32,66 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int, int LOG = 30 > struct Trie {
-
+class Trie {
+public:
     struct Node {
- 
         Node* child[2];
         int freq;
- 
-        Node(){
-            memset(child, 0, sizeof(child));
-            freq = 0;
+        
+        Node() : freq(0) {
+            child[0] = child[1] = nullptr;
         }
     };
 
     Node* root;
+    static constexpr int LOG = 30;
 
-    Trie(){
-        root = new Node;
-    }
+    Trie() : root(new Node()) {}
 
-    void insert(const T& x){
-        Node* curr = root; 
-        for(int bit = LOG; bit >= 0; --bit){
-            int bit_val = (x >> bit) & 1;
-            if(!curr -> child[bit_val]) 
-                curr -> child[bit_val] = new Node;
+    void insert(int x) {
+        Node* curr = root;
+        for(int bit = LOG; bit >= 0; --bit) {
+            int bit_val = get_bit(x, bit);
+            if(!curr -> child[bit_val])
+                curr -> child[bit_val] = new Node();
             curr = curr -> child[bit_val];
             ++curr -> freq;
         }
     }
-  
-    void erase(const T& x, int bit, Node* curr){
-        if(bit < 0) return;
-        int bit_val = (x >> bit) & 1;
-        erase(x, bit - 1, curr -> child[bit_val]);
-        if(--curr -> child[bit_val] -> freq == 0){
-            delete curr -> child[bit_val];
-            curr -> child[bit_val] = nullptr;
+
+    void erase(int x) {
+        if (search(x)) {
+            erase(x, LOG, root);
         }
     }
 
-    bool search(const T& x){
-        Node* curr = root; 
-        for(int bit = LOG; bit >= 0; --bit){
-            int bit_val = (x >> bit) & 1;
-            if(!curr -> child[bit_val]) 
+    bool search(int x) const {
+        Node* curr = root;
+        for(int bit = LOG; bit >= 0; --bit) {
+            int bit_val = get_bit(x, bit);
+            if(!curr -> child[bit_val]) {
                 return false;
+            }
             curr = curr -> child[bit_val];
         }
         return true;
     }
- 
-    void erase(const T& x){
-        if(search(x)) 
-            erase(x, LOG, root);
+    
+private:
+    void erase(int x, int bit, Node* curr) {
+        if(bit < 0) return;
+        int bit_val = get_bit(x, bit);
+        if (curr -> child[bit_val]) {
+            erase(x, bit - 1, curr -> child[bit_val]);
+            if (--curr -> child[bit_val] -> freq == 0) {
+                delete curr -> child[bit_val];
+                curr -> child[bit_val] = nullptr;
+            }
+        }
+    }
+
+    inline int get_bit(int x, int bit) const {
+        return (x >> bit) & 1;
     }
 };
 

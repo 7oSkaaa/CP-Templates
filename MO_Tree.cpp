@@ -34,7 +34,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 
 template < typename T = int > struct MO_Tree {
 
-    static inline int64_t gilbertOrder(int x, int y, int pow, int rotate) {
+    static inline int64_t hilbertOrder(int x, int y, int pow, int rotate) {
         if (pow == 0) return 0;
         int hpow = 1 << (pow - 1);
         int seg = (x < hpow) ? ((y < hpow) ? 0 : 3) : ((y < hpow) ? 1 : 2);
@@ -44,7 +44,7 @@ template < typename T = int > struct MO_Tree {
         int nrot = (rotate + rotateDelta[seg]) & 3;
         int64_t subSquareSize = int64_t(1) << (2 * pow - 2);
         int64_t ordd = seg * subSquareSize;
-        int64_t add = gilbertOrder(nx, ny, pow - 1, nrot);
+        int64_t add = hilbertOrder(nx, ny, pow - 1, nrot);
         ordd += (seg == 1 || seg == 2) ? add : (subSquareSize - add - 1);
         return ordd;
     }
@@ -69,7 +69,7 @@ template < typename T = int > struct MO_Tree {
         inline void calcOrder() {
             constexpr int K = 19;
             // K should be minimum such that 2^K >= n
-            ord = gilbertOrder(l, r, K, 0);
+            ord = hilbertOrder(l, r, K, 0);
         }
 
         bool operator < (const query & rhs) const {
