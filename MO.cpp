@@ -34,9 +34,59 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int, int Base = 0 > struct MO {
+template < typename T = int, int Base = 0 >
+class MoAlgorithm {
+public:
+    struct query {
+        int l, r, query_idx;
+        int64_t ord;
 
-    static inline int64_t hilbertOrder(int x, int y, int pow, int rotate) {
+        query(int L = 0, int R = 0, int Query_idx = 0, int HilbertPow = 0) {
+            l = L - !Base, r = R - !Base, query_idx = Query_idx;
+            calcOrder(HilbertPow);
+        }
+
+        void calcOrder(int HilbertPow) {
+            ord = gilbertOrder(l, r, HilbertPow, 0);
+        }
+
+        bool operator < (const query& rhs) const {
+            return ord < rhs.ord;
+        }
+    };
+
+    MoAlgorithm(int N = 0, int M = 0) : currL(1), currR(0), n(N), m(M), sqrtN(n / sqrt(m) + 1), hilbertPow(calculateHilbertPow()), ans(0), answers(m), queries(m) {}
+
+    void getData(const vector < T >& v = {}){
+        val = v;
+        
+        for (int i = 0, l, r; i < m && cin >> l >> r; i++)
+            queries[i] = query(l, r, i, hilbertPow);
+        
+        process();
+    }
+
+    void process() {
+        sort(queries.begin(), queries.end());
+        currL = queries[0].l, currR = queries[0].l - 1;
+
+        for (auto& q : queries) {
+            setRange(q);
+            answers[q.query_idx] = ans;
+        }
+    }
+
+    vector < T > getAnswers() const {
+        return answers;
+    }
+
+private:
+    int currL, currR, n, m, sqrtN, hilbertPow;
+    T ans;
+    vector < T > answers, val;
+    vector < query > queries;
+
+    static int64_t gilbertOrder(int x, int y, int pow, int rotate) {
         if (pow == 0) return 0;
         int hpow = 1 << (pow - 1);
         int seg = (x < hpow) ? ((y < hpow) ? 0 : 3) : ((y < hpow) ? 1 : 2);
@@ -46,91 +96,31 @@ template < typename T = int, int Base = 0 > struct MO {
         int nrot = (rotate + rotateDelta[seg]) & 3;
         int64_t subSquareSize = int64_t(1) << (2 * pow - 2);
         int64_t ordd = seg * subSquareSize;
-        int64_t add = hilbertOrder(nx, ny, pow - 1, nrot);
+        int64_t add = gilbertOrder(nx, ny, pow - 1, nrot);
         ordd += (seg == 1 || seg == 2) ? add : (subSquareSize - add - 1);
         return ordd;
     }
 
-    struct query {
-
-        int l, r, query_idx;
-        int64_t ord;
-
-        query(int L = 0, int R = 0, int Query_idx = 0){
-            l = L - !Base, r = R - !Base, query_idx = Query_idx, calcOrder();
-        }
-
-        inline void calcOrder() {
-            constexpr int K = 19;
-            // K should be minimum such that 2^K >= n
-            ord = hilbertOrder(l, r, K, 0);
-        }
-
-        bool operator < (const query & rhs) const{
-            return ord < rhs.ord;
-        }
-    };
-
-    T curr_l, curr_r, ans, n, m, Sqrt_N;
-    vector < T > answers, nums;
-    vector < query > queries;
-
-    MO(int N = 0, int M = 0){
-        curr_l = 1, curr_r = 0, ans = 0, n = N, m = M, Sqrt_N = n / sqrt(m) + 1;
-        queries = vector < query > (m);
-        answers = vector < T > (m);
-        nums = vector < T > (n + 5);
-    }
-    
-    void Get_Data(const vector < T > &v){
-        // get the array and set the queries
-        nums = v;
-
-        for(int i = 0, l, r; i < m && cin >> l >> r; i++)
-            queries[i] = query(l, r, i);
-        
+    int calculateHilbertPow() const {
+        int pow = 1;
+        while ((1 << pow) < n) pow++;
+        return pow;
     }
 
-    // add the idx to the current range
-    void add(int idx){
-
+    void add(int idx) {
+        // add idx to the processing range
     }
 
-    // remove the idx from the current range
-    void remove(int idx){
-
+    void remove(int idx) {
+        // remove idx from the processing range
     }
 
-    void set_range(const query& q){
-        // add the new range and remove the old range
-        while (curr_l > q.l) curr_l--, add(curr_l);
-        while (curr_r < q.r) curr_r++, add(curr_r);
-        while (curr_l < q.l) remove(curr_l), curr_l++;
-        while (curr_r > q.r) remove(curr_r), curr_r--;
+    void setRange(const query& q) {
+        while (currL > q.l) currL--, add(currL);
+        while (currR < q.r) currR++, add(currR);
+        while (currL < q.l) remove(currL), currL++;
+        while (currR > q.r) remove(currR), currR--;
     }
-
-    void Process(){
-        
-        sort(all(queries));
-
-        // to start with the first query
-        curr_l = queries[0].l, curr_r = queries[0].l - 1;
-        
-        for(int i = 0; i < m; i++){
-            set_range(queries[i]);
-            answers[queries[i].query_idx] = ans;
-        }
-    }
-
-    void Print_queries_answers(){
-        for(int i = 0; i < m; i++)
-            cout << answers[i] << '\n';
-    }
-
-    vector < T > Get_answers(){
-        return answers;
-    }
-
 };
 
 void Solve(){
