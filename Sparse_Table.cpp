@@ -34,22 +34,15 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename treeType = int, typename numsType = int, int Base = 0 > 
+template < typename Tabletype = int, typename numsType = int, int Base = 0 > 
 class Sparse_Table {
 private:
 
     int n, LOG;
-    vector < vector < treeType > > table;
+    vector < vector < Tabletype > > table;
     vector < int > Bin_Log;
-    function < treeType(const treeType&, const treeType&) > operation;
-    treeType DEFAULT;
-
-    // Calculate integer base-2 logarithm
-    int integerLog2(int x) const {
-        int log = 0;
-        while (x >>= 1) ++log;
-        return log;
-    }
+    function < Tabletype(const Tabletype&, const Tabletype&) > operation;
+    Tabletype DEFAULT;
 
     void Build_Table(){
         for(int log = 1; log < LOG; log++)
@@ -57,13 +50,13 @@ private:
                 table[i][log] = operation(table[i][log - 1], table[i + (1 << (log - 1))][log - 1]);
     }
 
-    treeType query_1(int L, int R){
+    Tabletype query_1(int L, int R){
         int log = Bin_Log[R - L + 1];
         return operation(table[L][log], table[R - (1 << log) + 1][log]);
     }
 
-    treeType query_log_n(int L, int R){
-        treeType answer = DEFAULT;
+    Tabletype query_log_n(int L, int R){
+        Tabletype answer = DEFAULT;
         for (int log = LOG; log >= 0; log--){
             if (L + (1 << log) - 1 <= R) {
                 answer = operation(answer, table[L][log]);
@@ -76,23 +69,22 @@ private:
 public:
 
     Sparse_Table(
-        int N,
+        int N = 0,
         const vector < numsType >& vec = vector < numsType > (),
-        function < treeType(const treeType&, const treeType&) > op = [](const treeType& a, const treeType& b) { return min(a, b); },
-        treeType def = numeric_limits < treeType > ::max()
-    ): operation(op), DEFAULT(def) {
-        n = N, LOG = integerLog2(n) + 1;
-        table = vector < vector < treeType > > (n + 10, vector < treeType > (LOG, DEFAULT));
+        function < Tabletype(const Tabletype&, const Tabletype&) > op = [](const Tabletype& a, const Tabletype& b) { return min(a, b); },
+        Tabletype def = numeric_limits < Tabletype > ::max()
+    ): n(N), LOG(__lg(n) + 1), operation(op), DEFAULT(def) {
+        table = vector < vector < Tabletype > > (n + 10, vector < Tabletype > (LOG, DEFAULT));
         Bin_Log = vector < int > (n + 10);
         for(int i = 2; i <= n; i++)
             Bin_Log[i] = Bin_Log[i >> 1] + 1;
         for(int i = 1; i <= N; i++)
-            table[i][0] = treeType(vec[i - !Base]);
+            table[i][0] = Tabletype(vec[i - !Base]);
         Build_Table();
     }
 
-    treeType query(int L, int R, bool overlap = false){
-        return (!overlap ? query_1(L, R) : query_log_n(L, R));
+    Tabletype query(int L, int R, bool is_overlap = false){
+        return (!is_overlap ? query_1(L, R) : query_log_n(L, R));
     }
 
 };

@@ -34,84 +34,81 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int >
+template < typename treeType = int , typename graphType >
 class LCA {
 public:
     LCA(
-        int n,
-        const vector < vector < pair< int, T > > >& adj_list, 
-        const function < T(const T&, const T&) > op = [](const T& a, const T& b) { return a + b; },
-        const T def = T()
-    ) : N(n), adj(adj_list), operation(op), default_value(def) {
-        LOG = 1;
-        while ((1 << LOG) <= N) LOG++;
-        dep = vector < int > (N + 5, -1);
-        anc = vector < vector < int > > (N + 5, vector < int > (LOG));
-        cost = vector < vector < T > > (N + 5, vector < T > (LOG, default_value));
-        build();
+        int n = 0,
+        const vector < vector < pair < int, graphType > > > &G = {},
+        function < treeType(treeType, treeType) > op = [](treeType a, treeType b){ return a + b; },
+        treeType _neutral = treeType(),
+        int root = 1
+    ) : N(n), LOG(0), ROOT(root), adj(G), operation(op), neutral(_neutral) {
+        while((1 << LOG) <= N) LOG++;
+        anc.assign(N + 5, vector < int > (LOG));
+        cost.assign(N + 5, vector < treeType > (LOG, neutral));
+        depth.assign(N + 5, 0);
+        dfs(ROOT);
     }
 
-    void build() {
-        for (int i = 1; i <= N; ++i)
-            if (dep[i] == -1) {
-                dep[i] = 0;  // Initialize root node's depth to 0
-                dfs(i);
-            }
-    }
-
-    int get_lca(int u, int v) {
-        if (dep[u] < dep[v]) swap(u, v);
-        u = kth_ancestor(u, dep[u] - dep[v]);
-        if (u == v) return u;
-        for (int bit = LOG - 1; bit >= 0; bit--)
-            if (anc[u][bit] != anc[v][bit])
-                u = anc[u][bit], v = anc[v][bit];
-        return anc[u][0];
-    }
-
-    T query(int u, int v) {
-        int lca = get_lca(u, v);
-        return operation(get_cost(u, dep[u] - dep[lca]), get_cost(v, dep[v] - dep[lca]));
-    }
-
-private:
-    int N, LOG;
-    vector < vector < int > > anc;
-    vector < vector < T > > cost;
-    vector < vector < pair < int, T > > > adj;
-    vector < int > dep;
-    const function < T(const T&, const T&) > operation;
-    const T default_value;
-
-    void dfs(int u, int p = 0) {
-        for (auto& [v, w] : adj[u]) {
-            if (v == p) continue;
-            if (dep[v] == -1) {
-                dep[v] = dep[u] + 1, anc[v][0] = u, cost[v][0] = w;
-                for (int bit = 1; bit < LOG; bit++) {
-                    anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
-                    cost[v][bit] = operation(cost[v][bit - 1], cost[anc[v][bit - 1]][bit - 1]);
-                }
-                dfs(v, u);
-            }
-        }
-    }
-
-    int kth_ancestor(int u, int k) {
-        if (dep[u] < k) return -1;
-        for (int bit = LOG - 1; bit >= 0; bit--)
-            if (k & (1 << bit))
+    int kth_ancestor(int u, int k) const {
+        if(depth[u] < k) return -1;
+        for(int bit = 0; bit < LOG; bit++)
+            if(k & (1 << bit)) 
                 u = anc[u][bit];
         return u;
     }
 
-    T get_cost(int u, int dist) {
-        if (dep[u] < dist) return -1;
-        T ans = default_value;
-        for (int bit = 0; bit < LOG; bit++)
-            if (dist & (1 << bit))
-                ans = operation(ans, cost[u][bit]), u = anc[u][bit];
-        return ans;
+    int get_lca(int u, int v) const {
+        if(depth[u] < depth[v]) swap(u, v);
+
+        u = kth_ancestor(u, depth[u] - depth[v]);
+        if(u == v) return u;
+        
+        for(int bit = LOG - 1; bit >= 0; bit--)
+            if(anc[u][bit] != anc[v][bit])
+                u = anc[u][bit], v = anc[v][bit];
+        
+        return anc[u][0];
+    }
+
+    treeType query(int u, int v) const {
+        int lca = get_lca(u, v);
+        return operation(get_cost(u, depth[u] - depth[lca]), get_cost(v, depth[v] - depth[lca]));
+    }
+
+private:
+    int N, LOG, ROOT;
+    const vector < vector < pair < int, graphType > > > &adj;
+    vector < vector < int > > anc;
+    vector < vector < treeType > > cost;
+    vector < int > depth;
+    function < treeType(treeType, treeType) > operation;
+    treeType neutral;
+
+    void dfs(int u, int p = 0){
+        for(auto& [v, w] : adj[u]){
+            if(v == p) continue;
+            depth[v] = depth[u] + 1;
+            anc[v][0] = u, cost[v][0] = treeType(w);
+            for(int bit = 1; bit < LOG; bit++){
+                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+                cost[v][bit] = operation(cost[v][bit - 1], cost[anc[v][bit - 1]][bit - 1]);
+            }
+            dfs(v, u);
+        }
+    }
+
+    treeType get_cost(int u, int dist) const {
+        if(depth[u] < dist) return neutral;
+        treeType ret = neutral;
+        for(int bit = 0; bit < LOG; bit++){
+            if(dist & (1 << bit)){
+                ret = operation(ret, cost[u][bit]);
+                u = anc[u][bit];
+            }
+        }
+        return ret;
     }
 };
 
