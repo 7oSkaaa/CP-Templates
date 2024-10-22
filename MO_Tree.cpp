@@ -32,7 +32,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename T = int , bool VAL_ON_EDGE = false >
+template < typename T = int , typename graphType = int , bool VAL_ON_EDGE = false >
 class MoTree {
 public:
     struct Query {
@@ -58,12 +58,14 @@ public:
         }
     };
 
-    MoTree(int N, int M, vector < vector < int > >& G, vector < T >& V, int root = 1) : curr_l(1), curr_r(0), n(N), m(M), SqrtN(n / sqrt(m) + 1), timer(1), ans(0), answers(M), val(V), adj(G) {
+    MoTree(int N, int M, const vector < vector < graphType > >& G, const vector < T >& V = {}, int root = 1) 
+        : curr_l(1), curr_r(0), n(N), m(M), SqrtN(n / sqrt(m) + 1), timer(1), ans(0), answers(M), val(V), adj(G) {
         LOG = calcLog(N);
         helbertPow = calcHilbertPow(2 * N + 1);
         nodeFreq = S = E = dep = vector < int > (n + 5);
         FT = vector < int > (2 * n + 5);
         anc = vector < vector < int > > (n + 5, vector < int > (LOG));
+        if(val.empty()) val = vector < T > (n + 5);
 
         dfs(root);
     }
@@ -102,7 +104,7 @@ public:
             if (~q.lca && !VAL_ON_EDGE) 
                 add(q.lca);
             
-            answers[q.queryIdx] = Mex.get_mex();
+            answers[q.queryIdx] = ans;
             
             if (~q.lca && !VAL_ON_EDGE) 
                 remove(q.lca);
@@ -118,20 +120,32 @@ private:
     T ans;
     vector < T > answers, val;
     vector < int > dep, S, E, FT, nodeFreq;
-    vector < vector < int > > adj, anc;
+    vector < vector < int > > anc;
     vector < Query > queries;
+    const vector < vector < graphType > >& adj;
 
     void dfs(int u, int p = -1) {
         S[u] = timer;
         FT[timer++] = u;
-        for (auto& [v, w] : adj[u]) {
-            if (v == p) continue;
-            dep[v] = dep[u] + 1;
-            anc[v][0] = u;
-            for (int bit = 1; bit < LOG; bit++)
-                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
-            val[v] = w;
-            dfs(v, u);
+        if constexpr (std::is_same_v < graphType, int >) {
+            for (auto& v : adj[u]) {
+                if (v == p) continue;
+                dep[v] = dep[u] + 1;
+                anc[v][0] = u;
+                for (int bit = 1; bit < LOG; bit++)
+                    anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+                dfs(v, u);
+            }
+        } else if constexpr (std::is_same_v < graphType, pair < int, int > >) {
+            for (auto& [v, w] : adj[u]) {
+                if (v == p) continue;
+                dep[v] = dep[u] + 1;
+                anc[v][0] = u;
+                for (int bit = 1; bit < LOG; bit++)
+                    anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+                val[v] = w;
+                dfs(v, u);
+            }
         }
         E[u] = timer;
         FT[timer++] = u;
