@@ -69,8 +69,8 @@ public:
                find(bridges.begin(), bridges.end(), make_pair(v, u)) != bridges.end();
     }
 
-    int get_children(int u){
-        return children[u];
+    vector < vector < int > > getComponents() {
+        return comps;
     }
 
 private:
@@ -109,7 +109,6 @@ private:
                     bridges.emplace_back(u, v);
                 if (parent != -1 && low_link[v] >= node_idx[u])
                     art_points.insert(u);
-                children[u] += children[v];
                 ++childs;
             } else if (in_stack[v]) {
                 low_link[u] = min(low_link[u], node_idx[v]);
