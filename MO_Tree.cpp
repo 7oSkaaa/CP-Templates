@@ -67,7 +67,7 @@ public:
         anc = vector < vector < int > > (n + 5, vector < int > (LOG));
         if(val.empty()) val = vector < T > (n + 5);
 
-        dfs(root);
+        dfs(root, adj);
     }
 
     static inline int64_t hilbertOrder(int x, int y, int pow, int rotate) {
@@ -123,29 +123,31 @@ private:
     vector < vector < int > > anc;
     vector < Query > queries;
     const vector < vector < graphType > >& adj;
-
-    void dfs(int u, int p = -1) {
+    
+    void dfs(int u, const vector < vector < pair < int, int > > >& adj, int p = -1) {
         S[u] = timer;
         FT[timer++] = u;
-        if constexpr (std::is_same_v < graphType, int >) {
-            for (auto& v : adj[u]) {
-                if (v == p) continue;
-                dep[v] = dep[u] + 1;
-                anc[v][0] = u;
-                for (int bit = 1; bit < LOG; bit++)
-                    anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
-                dfs(v, u);
-            }
-        } else if constexpr (std::is_same_v < graphType, pair < int, int > >) {
-            for (auto& [v, w] : adj[u]) {
-                if (v == p) continue;
-                dep[v] = dep[u] + 1;
-                anc[v][0] = u;
-                for (int bit = 1; bit < LOG; bit++)
-                    anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
-                val[v] = w;
-                dfs(v, u);
-            }
+        for (auto& [v, w] : adj[u]) {
+            if (v == p) continue;
+            dep[v] = dep[u] + 1, anc[v][0] = u, val[v] = w;
+            for (int bit = 1; bit < LOG; bit++)
+                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+            dfs(v, adj, u);
+        }
+        E[u] = timer;
+        FT[timer++] = u;
+    }
+
+    void dfs(int u, const vector < vector < int > >& adj, int p = -1) {
+        S[u] = timer;
+        FT[timer++] = u;
+        for (auto& v : adj[u]) {
+            if (v == p) continue;
+            dep[v] = dep[u] + 1;
+            anc[v][0] = u;
+            for (int bit = 1; bit < LOG; bit++)
+                anc[v][bit] = anc[anc[v][bit - 1]][bit - 1];
+            dfs(v, adj, u);
         }
         E[u] = timer;
         FT[timer++] = u;
@@ -180,7 +182,7 @@ private:
     }
 
     inline void add(int u){
-    
+        
     }
 
     inline void remove(int u){
