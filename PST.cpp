@@ -19,111 +19,157 @@ using namespace std;
 constexpr int INF = 1 << 30, Mod = 1e9 + 7;
 constexpr ll LINF = 1LL << 62;
 #define PI acos(-1)
-template < typename T = int > using Pair = pair < T, T >;
-vector < string > RET = {"NO", "YES"};
+template <typename T = int>
+using Pair = pair<T, T>;
+vector<string> RET = {"NO", "YES"};
 
-template < typename T = int > istream& operator >> (istream &in, vector < T > &v) {
-    for (auto &x : v) in >> x;
+template <typename T = int>
+istream &operator>>(istream &in, vector<T> &v)
+{
+    for (auto &x : v)
+        in >> x;
     return in;
 }
 
-template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
-    for (const T &x : v) out << x << ' '; 
+template <typename T = int>
+ostream &operator<<(ostream &out, const vector<T> &v)
+{
+    for (const T &x : v)
+        out << x << ' ';
     return out;
 }
 
-template < typename T = int , int Base = 0 > struct PST {
- 
-    struct Node {
-       
+template <typename T = int, int Base = 0>
+struct PST
+{
+
+    struct Node
+    {
+
         T val, prefix;
         Node *left, *right;
- 
-        Node(T _val = 0) {
-            this -> val = _val;
-            this -> prefix = max(0ll, _val);
+
+        Node(T _val = 0)
+        {
+            this->val = _val;
+            this->prefix = max(0ll, _val);
             left = right = this;
         }
- 
-        Node(Node* node, Node* l = new Node, Node* r = new Node) {
-            val = node -> val;
-            prefix = node -> prefix;
+        Node(Node *node)
+        {
+            val = node->val;
+            prefix = node->prefix;
+            left = node->left;
+            right = node->right;
+        }
+        Node(Node *l, Node *r)
+        {
+            // Operation But With Pointers
+            val = l->val + r->val;
+            prefix = max(l->prefix, l->val + r->prefix);
+            left = l;
+            right = r;
+        }
+        Node(Node *node, Node *l, Node *r)
+        {
+            val = node->val;
+            prefix = node->prefix;
             left = l;
             right = r;
         }
     };
- 
-    vector < Node* > roots;
+
+    vector<Node *> roots;
     T N, Lx, Rx;
- 
-    PST(int n = 0, T lx = -1e9, T rx = 1e9) : N(n), Lx(lx), Rx(rx) {
-        roots = vector < Node* > (n + 5, new Node);
+
+    PST(int n = 0, T lx = -1e9, T rx = 1e9) : N(n), Lx(lx), Rx(rx)
+    {
+        // roots = vector<Node *>(n + 5, new Node);
+        roots.push_back(new Node());
     }
 
-    Node* build(const vector < T >& nums, T l, T r){
-        if(l == r) return new Node(nums[l - !Base]);
+    Node *build(const vector<T> &nums, T l, T r)
+    {
+        if (l == r)
+            return new Node(nums[l - !Base]);
         T mx = l + (r - l) / 2;
-        Node* L = build(nums, l, mx);
-        Node* R = build(nums, mx + 1, r);
-        return new Node(operation(L, R), L, R);
+        Node *L = build(nums, l, mx);
+        Node *R = build(nums, mx + 1, r);
+        return new Node(new Node(L, R), L, R);
     }
 
-    void build(const vector < T >& nums){
+    void build(const vector<T> &nums)
+    {
         roots[0] = build(nums, Lx, Rx);
     }
- 
-    Node* operation(Node* a, Node* b){
-        Node* Merged = new Node();
-        Merged -> val = a -> val + b -> val;
-        Merged -> prefix = max(a -> prefix, a -> val + b -> prefix);
+
+    Node operation(Node a, Node b)
+    {
+        // Operation But With Nodes
+        Node Merged = new Node();
+        Merged.val = a.val + b.val;
+        Merged.prefix = max(a.prefix, a.val + b.prefix);
         return Merged;
     }
- 
-    Node* update(Node* root, int idx, T val, T lx, T rx){
-        if(idx < lx || idx > rx) return root;
-        if(lx == rx) return new Node(val);
+
+    Node *update(Node *root, int idx, T val, T lx, T rx)
+    {
+        if (idx < lx || idx > rx)
+            return root;
+        if (lx == rx)
+            return new Node(val);
         T mx = lx + (rx - lx) / 2;
-        Node* L = update(root -> left, idx, val, lx, mx);
-        Node* R = update(root -> right, idx, val, mx + 1, rx);
-        return new Node(operation(L, R), L, R);
+        Node *L = update(root->left, idx, val, lx, mx);
+        Node *R = update(root->right, idx, val, mx + 1, rx);
+        return new Node(new Node(L, R), L, R);
     }
-  
-    void insert(int idx, T val, int curr_time, int prev_time){
+
+    void insert(int idx, T val, int curr_time, int prev_time)
+    {
         roots[curr_time] = update(roots[prev_time], idx, val, Lx, Rx);
     }
 
-    void update(int idx, T val, int curr_time){
+    void update(int idx, T val, int curr_time)
+    {
         roots[curr_time] = update(roots[curr_time], idx, val, Lx, Rx);
     }
- 
-    Node* query(Node* root, int l, int r, T lx, T rx){
-        if (root == nullptr) return new Node(); // Base case for null pointer
-        if (lx > r || l > rx) return new Node(); // Base case for out-of-range interval
-        if(lx >= l && rx <= r) return root;
+
+    Node query(Node *root, int l, int r, T lx, T rx)
+    {
+        if (root == nullptr)
+            return new Node(); // Base case for null pointer
+        if (lx > r || l > rx)
+            return new Node(); // Base case for out-of-range interval
+        if (lx >= l && rx <= r)
+            return root;
         int mx = (lx + rx) / 2;
-        Node* L = query(root -> left, l, r, lx, mx);
-        Node* R = query(root -> right, l, r, mx + 1, rx);
+        Node L = query(root->left, l, r, lx, mx);
+        Node R = query(root->right, l, r, mx + 1, rx);
         return operation(L, R);
     }
-    
-    T query(int l, int r, int time){
-        return query(roots[time], l, r, Lx, Rx) -> prefix;
+
+    Node query(int l, int r, int time)
+    {
+        return query(roots[time], l, r, Lx, Rx);
     }
 
-    T get(int time, int idx){
-        return query(idx, idx, time) -> prefix;
+    Node get(int time, int idx)
+    {
+        return query(idx, idx, time);
     }
 };
 
-void Solve(){
-    
+void Solve()
+{
 }
 
-int main(){
+int main()
+{
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
     int test_cases = 1;
     // cin >> test_cases;
-    for(int tc = 1; tc <= test_cases; tc++){
+    for (int tc = 1; tc <= test_cases; tc++)
+    {
         // cout << "Case #" << tc << ": ";
         Solve();
     }
