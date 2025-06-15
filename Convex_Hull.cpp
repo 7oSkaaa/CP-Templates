@@ -92,7 +92,7 @@ template < typename T = int > struct Convex_Hull {
     // Returns a list of points on the convex hull
     vector < point > Convex_Points;
 
-    Converx_Hull(vector < point > &points, bool include_collinear = false) {
+    Convex_Hull(vector < point > &points, bool include_collinear = false) {
         point p0 = *min_element(all(points));
         sort(all(points), [&](const point& a, const point& b) {
             int o = orientation(p0, a, b);
