@@ -38,32 +38,59 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  * Fenwick_Tree — Binary Indexed Tree (BIT), 1D
  *
  * Template params:
- *   T = value type (default int)
+ *   T      = value type                    (default int)
+ *   Op     = combine operation             (default plus<T>  = sum)
+ *   InvOp  = inverse of Op for range query (default minus<T> = subtract)
+ *
+ * IMPORTANT — Op must be invertible via InvOp:
+ *   query(l, r) = prefix(r) [InvOp] prefix(l-1)
+ *   This requires: InvOp(Op(a, b), b) == a  for all a, b
+ *
+ * Allowed operations:
+ *   Sum        : Op = plus<T>,     InvOp = minus<T>      — identity = 0  (default)
+ *   XOR        : Op = bit_xor<T>,  InvOp = bit_xor<T>   — identity = 0  (self-inverse)
+ *   Mul mod p  : custom Op/InvOp with modular inverse    — identity = 1
+ *
+ * NOT allowed (no inverse exists):
+ *   max, min, gcd, bitwise AND/OR
+ *   → use Segment Tree for those
  *
  * Constructor:
- *   Fenwick_Tree<T> ft(int sz);   // 0-indexed input, size = sz
+ *   Fenwick_Tree<T, Op, InvOp> ft(int sz, Op op = {}, InvOp inv = {}, T identity = T{});
  *
  * Methods:
  *   build(vector<T>& nums)    → O(n) build from 0-indexed array
  *   add(int idx, T val)       → point update at 0-indexed idx
- *   query(int l, int r)       → range sum [l, r] 0-indexed → T
+ *   query(int l, int r)       → range result [l, r] 0-indexed → T
  *   get(int idx)              → value at single index
  *   size()                    → number of elements
  *
- * Example:
- *   Fenwick_Tree<int> ft(n);
- *   ft.build(arr);
+ * Example (sum — default):
+ *   Fenwick_Tree<int> ft(n, arr);
  *   ft.add(3, 5);
  *   cout << ft.query(1, 4);
- *   cout << ft.get(3);
+ *
+ * Example (XOR — self-inverse, use decltype for lambdas):
+ *   Fenwick_Tree<int, bit_xor<int>, bit_xor<int>> ft(n);
+ *   ft.build(arr);
+ *   cout << ft.query(0, n - 1);
+ *
+ * Example (custom lambda op):
+ *   auto myOp  = [](int a, int b){ return a ^ b; };
+ *   auto myInv = [](int a, int b){ return a ^ b; };
+ *   Fenwick_Tree<int, decltype(myOp), decltype(myInv)> ft(n, myOp, myInv, 0);
  */
-template < typename T = int > struct Fenwick_Tree {
+template < typename T = int, typename Op = plus < T >, typename InvOp = minus < T > >
+struct Fenwick_Tree {
 
     int n;
     T DEFAULT;
+    Op op;
+    InvOp inv_op;
     vector < T > tree;
 
-    Fenwick_Tree(int sz = 0) : n(sz), DEFAULT(T{}) {
+    Fenwick_Tree(int sz = 0, Op op = Op{}, InvOp inv_op = InvOp{}, T def = T{})
+        : n(sz), DEFAULT(def), op(op), inv_op(inv_op) {
         tree.assign(n + 1, DEFAULT);
     }
 
@@ -72,25 +99,25 @@ template < typename T = int > struct Fenwick_Tree {
         for (int i = 0; i < sz(nums); i++) tree[i + 1] = nums[i];
         for (int i = 1; i <= n; i++) {
             int j = i + (i & -i);
-            if (j <= n) tree[j] += tree[i];
+            if (j <= n) tree[j] = op(tree[j], tree[i]);
         }
     }
 
     void add(int idx, T val) {
         for (++idx; idx <= n; idx += idx & -idx)
-            tree[idx] += val;
+            tree[idx] = op(tree[idx], val);
     }
 
     T prefix(int idx) const {
         T ans = DEFAULT;
         for (++idx; idx > 0; idx -= idx & -idx)
-            ans += tree[idx];
+            ans = op(ans, tree[idx]);
         return ans;
     }
 
     T query(int l, int r) const {
         if (l > r) return DEFAULT;
-        return prefix(r) - (l ? prefix(l - 1) : DEFAULT);
+        return inv_op(prefix(r), l ? prefix(l - 1) : DEFAULT);
     }
 
     T get(int idx) const {
