@@ -64,8 +64,9 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *   seg.update(3, 10);
  *   cout << seg.query(1, 5);
  *
- * Example (custom op via make_seg_tree — lambda, no decltype needed):
- *   auto seg = make_seg_tree<int>(n, arr, [](int a, int b){ return max(a,b); }, INT_MIN);
+ * Example (custom op via lambda — name it first to use decltype):
+ *   auto maxOp = [](int a, int b){ return max(a, b); };
+ *   Segment_Tree<int, int, 0, decltype(maxOp)> seg(n, arr, maxOp, INT_MIN);
  *   cout << seg.query(1, n);
  *
  * Example (custom op via struct, 1-indexed input):
@@ -169,18 +170,6 @@ public:
     }
 };
 
-/*
- * make_seg_tree — factory to deduce Op from a lambda, avoids decltype boilerplate
- *
- * Usage:
- *   auto seg = make_seg_tree<int>(n, arr, [](int a, int b){ return max(a,b); }, INT_MIN);
- *   auto seg = make_seg_tree<int>(n, arr, [](int a, int b){ return min(a,b); }, INT_MAX);
- *   auto seg = make_seg_tree<int>(n, arr, [](int a, int b){ return a ^ b; });
- */
-template < typename treeType = int, typename numsType = int, int Base = 0, typename Op >
-auto make_seg_tree(int n, const vector < numsType >& nums = {}, Op op = Op{}, treeType def = treeType{}) {
-    return Segment_Tree < treeType, numsType, Base, Op > (n, nums, op, def);
-}
 
 void Solve(){
 
