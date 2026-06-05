@@ -35,79 +35,83 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 }
 
 /*
- * Monotonic_Stacks — Common monotonic stack patterns (next/prev greater/smaller)
+ * Monotonic_Stacks — Next/prev greater/smaller index queries (O(n) each)
  *
- * All methods return 0-indexed results.
- * "Greater" uses strict >, "Smaller" uses strict <.
+ * All functions return 0-indexed results (indices into the input array).
+ * Sentinels: next* → n (past-end), prev* → -1 (before-start) when no match found.
  *
- * Constructor:
- *   Monotonic_Stacks ms;   // stateless
+ * strict = true  (default) → strict comparison  (>, <)
+ * strict = false            → non-strict         (>=, <=)
  *
- * Methods (all template T = int, pass vector<T>&):
- *   nextGreaterelement(nums)  → vector<T>, for each i: index of next element > nums[i], or n if none
- *   prevGreaterelement(nums)  → vector<T>, for each i: index of prev element > nums[i], or 0 if none
- *   nextSmallerelement(nums)  → vector<T>, for each i: index of next element < nums[i], or n if none
- *   prevSmallerelement(nums)  → vector<T>, for each i: index of prev element < nums[i], or 0 if none
+ * Functions:
+ *   next_greater(nums, strict=true)  → vector<int>, next j > i where nums[j] > nums[i]
+ *   prev_greater(nums, strict=true)  → vector<int>, prev j < i where nums[j] > nums[i]
+ *   next_smaller(nums, strict=true)  → vector<int>, next j > i where nums[j] < nums[i]
+ *   prev_smaller(nums, strict=true)  → vector<int>, prev j < i where nums[j] < nums[i]
  *
  * Example:
- *   Monotonic_Stacks ms;
  *   vector<int> a = {2, 1, 5, 3, 4};
- *   auto nge = ms.nextGreaterelement(a);  // {2, 2, 5, 4, 5} (indices)
- *   auto pse = ms.prevSmallerelement(a);  // {0, 0, 1, 1, 3} (indices)
+ *   auto nge = next_greater(a);  // {2, 2, 5, 4, 5}   — 5 = n means none
+ *   auto pse = prev_smaller(a);  // {-1, -1, 1, 1, 3} — -1 means none
+ *
+ * Example (non-strict — next greater or equal):
+ *   auto ngoe = next_greater(a, false);  // next j where nums[j] >= nums[i]
  */
-struct Monotonic_Stacks {
-
-    Monotonic_Stacks(){ }
-
-    template < typename T = int > vector < T > nextGreaterelement(vector < T >& nums) {
-        int n = nums.size();
-        vector < T > res(n);
-        stack < int > st;
-        for(int i = n - 1; i >= 0; i--){
-            while(!st.empty() && nums[st.top()] <= nums[i]) st.pop();
-            res[i] = (st.empty() ? n : st.top());
-            st.push(i);
-        }
-        return res;
+template < typename T >
+vector < int > next_greater(const vector < T >& nums, bool strict = true) {
+    int n = nums.size();
+    vector < int > res(n, n);
+    stack < int > st;
+    for (int i = n - 1; i >= 0; i--) {
+        while (!st.empty() && (strict ? nums[st.top()] <= nums[i] : nums[st.top()] < nums[i]))
+            st.pop();
+        res[i] = st.empty() ? n : st.top();
+        st.push(i);
     }
-    
-    template < typename T = int > vector < T > prevGreaterelement(vector < T >& nums) {
-        int n = nums.size();
-        vector < T > res(n);
-        stack < int > st;
-        for(int i = 0; i < n; i++){
-            while(!st.empty() && nums[st.top()] <= nums[i]) st.pop();
-            res[i] = (st.empty() ? 0 : st.top());
-            st.push(i);
-        }
-        return res;
-    }
+    return res;
+}
 
-    template < typename T = int > vector < T > nextSmallerelement(vector < T >& nums) {
-        int n = nums.size();
-        vector < T > res(n);
-        stack < int > st;
-        for(int i = n - 1; i >= 0; i--){
-            while(!st.empty() && nums[st.top()] >= nums[i]) st.pop();
-            res[i] = (st.empty() ? n : st.top());
-            st.push(i);
-        }
-        return res;
+template < typename T >
+vector < int > prev_greater(const vector < T >& nums, bool strict = true) {
+    int n = nums.size();
+    vector < int > res(n, -1);
+    stack < int > st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && (strict ? nums[st.top()] <= nums[i] : nums[st.top()] < nums[i]))
+            st.pop();
+        res[i] = st.empty() ? -1 : st.top();
+        st.push(i);
     }
-    
-    template < typename T = int > vector < T > prevSmallerelement(vector < T >& nums) {
-        int n = nums.size();
-        vector < T > res(n);
-        stack < int > st;
-        for(int i = 0; i < n; i++){
-            while(!st.empty() && nums[st.top()] >= nums[i]) st.pop();
-            res[i] = (st.empty() ? 0 : st.top());
-            st.push(i);
-        }
-        return res;
-    }
+    return res;
+}
 
-};
+template < typename T >
+vector < int > next_smaller(const vector < T >& nums, bool strict = true) {
+    int n = nums.size();
+    vector < int > res(n, n);
+    stack < int > st;
+    for (int i = n - 1; i >= 0; i--) {
+        while (!st.empty() && (strict ? nums[st.top()] >= nums[i] : nums[st.top()] > nums[i]))
+            st.pop();
+        res[i] = st.empty() ? n : st.top();
+        st.push(i);
+    }
+    return res;
+}
+
+template < typename T >
+vector < int > prev_smaller(const vector < T >& nums, bool strict = true) {
+    int n = nums.size();
+    vector < int > res(n, -1);
+    stack < int > st;
+    for (int i = 0; i < n; i++) {
+        while (!st.empty() && (strict ? nums[st.top()] >= nums[i] : nums[st.top()] > nums[i]))
+            st.pop();
+        res[i] = st.empty() ? -1 : st.top();
+        st.push(i);
+    }
+    return res;
+}
 
 void Solve(){
     
