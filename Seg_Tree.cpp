@@ -38,23 +38,23 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  * Segment_Tree — Generic Segment Tree
  *
  * Template params:
- *   treeType = node/answer type  (default int)
- *   numsType = input array type  (default int)
- *   Base     = 0 → 0-indexed input array, 1 → 1-indexed input array (tree API always 1-indexed)
- *   Op       = binary functor for combine operation (default plus<treeType> = sum)
+ *   T        = node/answer type          (default int)
+ *   Op       = binary combine functor    (default plus<T> = sum)
+ *   Base     = 0 → 0-indexed input, 1 → 1-indexed input  (tree API always 1-indexed)
+ *   numsType = input array type          (default T)
  *
  * Constructor:
- *   Segment_Tree<treeType, numsType, Base, Op> seg(
+ *   Segment_Tree<T, Op, Base, numsType> seg(
  *       int n,
  *       vector<numsType> nums = {},   // optional initial values
  *       Op op = Op{},                 // combine functor instance
- *       treeType def = treeType{}     // identity element
+ *       T def = T{}                   // identity element
  *   );
  *
  * Methods:
  *   build(vector<numsType>& nums)       → rebuild from array (resets tree first)
  *   update(int index, numsType value)   → point update (1-indexed internally)
- *   query(int l, int r)                 → range query → treeType
+ *   query(int l, int r)                 → range query → T
  *   seg[index]                          → single element query
  *   size()                              → returns original n (not rounded size)
  *   print()                             → pretty tree debug print
@@ -66,31 +66,31 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *
  * Example (custom op via lambda — name it first to use decltype):
  *   auto maxOp = [](int a, int b){ return max(a, b); };
- *   Segment_Tree<int, int, 0, decltype(maxOp)> seg(n, arr, maxOp, INT_MIN);
+ *   Segment_Tree<int, decltype(maxOp)> seg(n, arr, maxOp, INT_MIN);
  *   cout << seg.query(1, n);
  *
  * Example (custom op via plain function — use & to get pointer type):
  *   int myOp(int a, int b) { return max(a, b); }
- *   Segment_Tree<int, int, 0, decltype(&myOp)> seg(n, arr, &myOp, INT_MIN);
+ *   Segment_Tree<int, decltype(&myOp)> seg(n, arr, &myOp, INT_MIN);
  *   cout << seg.query(1, n);
  *
  * Example (custom op via struct, 1-indexed input):
  *   struct GCD { int operator()(int a, int b) const { return __gcd(a, b); } };
- *   Segment_Tree<int, int, 1, GCD> seg(n, arr);
+ *   Segment_Tree<int, GCD, 1> seg(n, arr);
  *   cout << seg.query(1, n);
  */
-template < typename treeType = int, typename numsType = int, int Base = 0,
-           typename Op = plus < treeType > >
+template < typename T = int, typename Op = plus < T >, int Base = 0,
+           typename numsType = T >
 class Segment_Tree {
 private:
     int n, max_level;
-    treeType DEFAULT;
-    vector < treeType > tree;
+    T DEFAULT;
+    vector < T > tree;
     Op operation;
 
     void build(const vector < numsType >& nums, int idx, int lx, int rx) {
         if (Base ? lx >= int(nums.size()) : lx > int(nums.size())) return;
-        if (rx == lx) tree[idx] = treeType(nums[lx - !Base]);
+        if (rx == lx) tree[idx] = T(nums[lx - !Base]);
         else {
             int mx = (rx + lx) / 2;
             build(nums, idx * 2, lx, mx);
@@ -100,7 +100,7 @@ private:
     }
 
     void update(int index, numsType value, int idx, int lx, int rx) {
-        if (rx == lx) tree[idx] = treeType(value);
+        if (rx == lx) tree[idx] = T(value);
         else {
             int mx = (rx + lx) / 2;
             if (index <= mx) update(index, value, idx * 2, lx, mx);
@@ -109,7 +109,7 @@ private:
         }
     }
 
-    treeType query(int l, int r, int idx, int lx, int rx) const {
+    T query(int l, int r, int idx, int lx, int rx) const {
         if (lx > r || l > rx) return DEFAULT;
         if (lx >= l && rx <= r) return tree[idx];
         int mx = (lx + rx) / 2;
@@ -122,10 +122,10 @@ public:
         int n = 0,
         const vector < numsType >& nums = vector < numsType >(),
         Op op = Op{},
-        treeType def = treeType{}
+        T def = T{}
     ) : n(n), max_level(1), DEFAULT(def), operation(op) {
         while ((1 << max_level) < n) max_level++;
-        tree = vector < treeType > (4 * n, DEFAULT);
+        tree = vector < T > (4 * n, DEFAULT);
         if (!nums.empty()) build(nums, 1, 1, n);
     }
 
@@ -139,11 +139,11 @@ public:
         update(index, value, 1, 1, n);
     }
 
-    treeType query(int l, int r) const {
+    T query(int l, int r) const {
         return query(l, r, 1, 1, n);
     }
 
-    treeType operator[](int index) const {
+    T operator[](int index) const {
         return query(index, index, 1, 1, n);
     }
 

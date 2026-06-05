@@ -36,13 +36,13 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  * SegmentTree2D — 2D Segment Tree (point update, rectangle query)
  *
  * Template params:
- *   T    = value type          (default int)
+ *   T    = value type                  (default int)
+ *   Op   = binary combine functor      (default plus<T> = sum)
  *   Base = 0 → 0-indexed input, 1 → 1-indexed input  (tree API always 1-indexed)
- *   Op   = binary combine functor (default plus<T> = sum)
  *
  * Constructors:
- *   SegmentTree2D<T, Base> seg(int n, int m);
- *   SegmentTree2D<T, Base> seg(int n, int m, vector<vector<T>>& nums);
+ *   SegmentTree2D<T> seg(int n, int m);
+ *   SegmentTree2D<T> seg(int n, int m, vector<vector<T>>& nums);
  *
  * Methods:
  *   update(int x, int y, T val)             → point update
@@ -58,13 +58,13 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *
  * Example (custom op via lambda):
  *   auto maxOp = [](int a, int b){ return max(a, b); };
- *   SegmentTree2D<int, 0, decltype(maxOp)> seg(n, m, grid, maxOp, INT_MIN);
+ *   SegmentTree2D<int, decltype(maxOp)> seg(n, m, grid, maxOp, INT_MIN);
  *
  * Example (custom op via plain function — use & to get pointer type):
  *   int myOp(int a, int b) { return max(a, b); }
- *   SegmentTree2D<int, 0, decltype(&myOp)> seg(n, m, grid, &myOp, INT_MIN);
+ *   SegmentTree2D<int, decltype(&myOp)> seg(n, m, grid, &myOp, INT_MIN);
  */
-template < typename T = int, int Base = 0, typename Op = plus < T > >
+template < typename T = int, typename Op = plus < T >, int Base = 0 >
 struct SegmentTree2D {
 
     int n, m, rows, cols;
