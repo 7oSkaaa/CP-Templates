@@ -34,6 +34,25 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * longestPalSubstring — Manacher's Algorithm
+ *
+ * Finds the longest palindromic substring in O(n).
+ *
+ * Params:
+ *   s = input string (passed by reference)
+ *
+ * Returns:
+ *   string — the longest palindromic substring
+ *   If multiple exist with same length, returns the leftmost one.
+ *
+ * Example:
+ *   string s = "babad";
+ *   cout << longestPalSubstring(s);   // "bab"
+ *
+ *   string s2 = "cbbd";
+ *   cout << longestPalSubstring(s2);  // "bb"
+ */
 string longestPalSubstring(string& s){
     int strLen = 2 * sz(s) + 3, maxLen = 0, start = 0, maxRight = 0 ,center = 0;
     string str = "@#";

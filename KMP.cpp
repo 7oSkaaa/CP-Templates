@@ -32,6 +32,23 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * KMP — Knuth-Morris-Pratt String Matching
+ *
+ * Constructor:
+ *   KMP kmp(string& pattern);
+ *
+ * Methods:
+ *   match(string& str)    → vector<int>, 1-indexed start positions of pattern in str
+ *   count(string& str)    → vector<int>, cnt[i] = occurrences of prefix of length i in str
+ *   get_prefixes()        → vector<int>, sorted lengths of border (prefix = suffix) of pattern
+ *
+ * Example:
+ *   KMP kmp("aba");
+ *   auto pos = kmp.match("abababa");  // {1, 3, 5}
+ *   auto cnt = kmp.count("abababa");
+ *   auto pfx = kmp.get_prefixes();
+ */
 struct KMP {
 
     string pattern;

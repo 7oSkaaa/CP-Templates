@@ -34,6 +34,26 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Dijkstra — Shortest Path (non-negative weights)
+ *
+ * Template params:
+ *   T = weight type (default int, use ll for large weights)
+ *
+ * Constructor:
+ *   Dijkstra<T> dij(int edges, bool indirected = true);
+ *   // Reads `edges` lines of "u v w" from cin during construction
+ *
+ * Methods:
+ *   Min_Cost(int src, int dest)  → T, min cost src→dest, -1 if unreachable
+ *   get_dist(int src)            → vector<T>, distances from src to all nodes
+ *
+ * Example:
+ *   int e; cin >> e;
+ *   Dijkstra<ll> dij(e, true);   // reads e weighted edges
+ *   cout << dij.Min_Cost(1, n);
+ *   auto dist = dij.get_dist(1);
+ */
 template < typename T = int > struct Dijkstra {
     
     struct Edge {

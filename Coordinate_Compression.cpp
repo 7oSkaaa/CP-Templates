@@ -34,6 +34,32 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Coordinate_Compression — Map arbitrary values to dense 1-indexed ranks
+ *
+ * Template params:
+ *   T = value type (default int)
+ *
+ * Constructors:
+ *   Coordinate_Compression<T> cc;             // empty, add values manually
+ *   Coordinate_Compression<T> cc(vector<T>&); // build from vector immediately
+ *
+ * Methods:
+ *   add(T x)                   → add value to compression set (rebuilds lazily)
+ *   build()                    → sort + deduplicate (called automatically if needed)
+ *   get(T x)                   → int, 1-indexed rank of x (upper_bound based)
+ *   get_compressed(vector<T>&) → vector<T>, rank of each element in input
+ *   get_mapping(vector<T>&)    → vector<T>, inverse: rank → original value
+ *   size()                     → int, number of distinct values
+ *
+ * Example:
+ *   vector<int> a = {10, 5, 30, 5, 20};
+ *   Coordinate_Compression<int> cc(a);
+ *   cout << cc.get(5);   // 1
+ *   cout << cc.get(10);  // 2
+ *   cout << cc.get(30);  // 4
+ *   auto compressed = cc.get_compressed(a); // {2, 1, 4, 1, 3}
+ */
 template < typename T = int > struct Coordinate_Compression {
 
     vector < T > compressed;

@@ -32,6 +32,27 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Fenwick_Tree_Range — BIT supporting range updates AND range sum queries
+ *
+ * Template params:
+ *   T = value type (default int)
+ *
+ * Constructor:
+ *   Fenwick_Tree_Range<T> ft(int sz);  // 0-indexed, size = sz
+ *
+ * Methods:
+ *   build(vector<T>& nums)       → build from 0-indexed array
+ *   add(int l, int r, T val)     → add val to all elements in [l, r] 0-indexed
+ *   add(int idx, T val)          → point add at idx
+ *   query(int L, int R)          → T, range sum [L, R] 0-indexed
+ *
+ * Example:
+ *   Fenwick_Tree_Range<ll> ft(n);
+ *   ft.build(arr);
+ *   ft.add(2, 5, 3);         // add 3 to elements 2..5
+ *   cout << ft.query(1, 6);
+ */
 template < typename T = int > struct Fenwick_Tree_Range {
     
     int N;

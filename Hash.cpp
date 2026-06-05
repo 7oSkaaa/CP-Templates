@@ -32,6 +32,29 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Hash — Polynomial Double Hash (anti-hack randomized bases/mods)
+ *
+ * Template params:
+ *   T    = hash value type (default long long)
+ *   Base = 0 → 0-indexed input, 1 → 1-indexed input
+ *
+ * Constructors:
+ *   Hash<> h;                        // empty (use for static methods only)
+ *   Hash<ll, 1> h(string& s);        // hash a string (1-indexed)
+ *   Hash<ll, 0> h(vector<T>& vec);   // hash a vector (0-indexed)
+ *
+ * Methods:
+ *   sub(int l, int r)                       → pair<T,T>, hash of [l,r]
+ *   equal(int l1,int r1, int l2,int r2)     → bool, s[l1..r1] == s[l2..r2]
+ *   at(int idx)                             → pair<T,T>, hash of single element
+ *   merge_hash(int l1,int r1, int l2,int r2)→ pair<T,T>, concat hash
+ *
+ * Example:
+ *   string s = "abcabc";
+ *   Hash<ll, 1> h(s);
+ *   cout << h.equal(1, 3, 4, 6);   // 1 (abc == abc)
+ */
 template < typename T = long long , int Base = 0 > struct Hash {
     mt19937 rng;
     int n;

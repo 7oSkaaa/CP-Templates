@@ -32,6 +32,28 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Miller_Rabin — Probabilistic primality test
+ *
+ * Template params:
+ *   T      = integer type (default long long)
+ *   Rounds = number of test rounds (default 10, higher = more accurate)
+ *
+ * Constructor:
+ *   Miller_Rabin<T, Rounds> mr;   // stateless
+ *
+ * Methods:
+ *   is_prime(T num)   → bool, O(Rounds * log^3(num))
+ *   // False positive probability ≈ 4^(-Rounds)
+ *   // With Rounds=10: error chance < 1 in 1 million
+ *
+ * Example:
+ *   Miller_Rabin<ll> mr;
+ *   cout << mr.is_prime(1000000007);  // 1
+ *   cout << mr.is_prime(1000000008);  // 0
+ *   cout << mr.is_prime(2);           // 1
+ *   cout << mr.is_prime(1);           // 0
+ */
 template < typename T = long long , int Rounds = 10 > struct Miller_Rabin {
 
     T BinMul(T b, T e, T mod) {

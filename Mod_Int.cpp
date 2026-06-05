@@ -34,6 +34,38 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * ModInt — Modular Integer with full operator overloading
+ *
+ * Template params:
+ *   MOD = modulus    (default 1e9+7)
+ *   T   = underlying type (default int)
+ *
+ * Predefined alias:
+ *   using Mint = ModInt<998244353>;
+ *
+ * Constructor:
+ *   ModInt<MOD> x(T val = 0);
+ *   Mint x = 42;
+ *
+ * Supported operators:
+ *   +, -, *, /, %     (with ModInt or T)
+ *   ++, --            (pre and post)
+ *   ==, !=, <, <=, >, >=
+ *   ^  n              → fast power (x ^ n)
+ *   cin >> x, cout << x
+ *
+ * Methods:
+ *   x.inverse()       → ModInt, modular inverse (x^(MOD-2))
+ *   x.power(n)        → ModInt, x^n
+ *   x()               → T, get raw value
+ *
+ * Example:
+ *   Mint a = 3, b = 500000004;
+ *   cout << a * b;           // 3 * 500000004 mod 998244353
+ *   cout << (a ^ 1000000);   // fast power
+ *   cout << a.inverse();     // modular inverse of 3
+ */
 template < int MOD = 1000000007, typename T = int > struct ModInt {
 
     T val;

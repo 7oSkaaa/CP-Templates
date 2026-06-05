@@ -32,6 +32,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Trie (Binary) — Binary Trie for XOR / bitwise operations on integers
+ *
+ * Stores integers bit by bit from MSB to LSB (LOG=30 bits, values up to 2^30).
+ *
+ * Constructor:
+ *   Trie trie;   // empty
+ *
+ * Methods:
+ *   insert(int x)    → insert integer x
+ *   erase(int x)     → remove one occurrence of x (if it exists)
+ *   search(int x)    → bool, x exists in trie
+ *
+ * Common use: max XOR of two elements
+ *   After inserting all elements, for each x traverse choosing the opposite bit
+ *   to maximize XOR greedily.
+ *
+ * Example:
+ *   Trie t;
+ *   vector<int> arr = {3, 10, 5, 25, 2};
+ *   for(int x : arr) t.insert(x);
+ *   // Max XOR with 25: traverse choosing bits opposite to 25's bits
+ *   // Result: 25 XOR 5 = 28
+ *   t.erase(3);
+ *   cout << t.search(3);  // 0
+ *   cout << t.search(10); // 1
+ */
 class Trie {
 public:
     struct Node {

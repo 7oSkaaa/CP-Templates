@@ -34,6 +34,28 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Prim — Minimum Spanning Tree (Prim's algorithm)
+ *
+ * Template params:
+ *   T = weight type (default int, use ll for large weights)
+ *
+ * Constructor:
+ *   Prim<T> prim(int n = 0);   // n = number of nodes
+ *
+ * Methods:
+ *   build_adj(int edges, bool is_directed = false)
+ *       → reads `edges` lines of "u v w" from cin, builds adjacency list
+ *   get_cost(int root)
+ *       → T, total MST weight starting from node `root`
+ *
+ * NOTE: Nodes are 0-indexed in adj but typically used 1-indexed (adj has n+10 slots).
+ *
+ * Example:
+ *   Prim<ll> prim(n);
+ *   prim.build_adj(m);          // reads m edges from cin
+ *   cout << prim.get_cost(1);   // MST cost starting from node 1
+ */
 template < typename T = int > struct Prim {
 
     struct Edge {

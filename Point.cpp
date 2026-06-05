@@ -34,6 +34,43 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Point — 2D geometric point with full operator overloading
+ *
+ * Template params:
+ *   T = coordinate type (default int, use double/long double for float geometry)
+ *
+ * Constructor:
+ *   Point<T> p(T x = 0, T y = 0);
+ *   Point<T> p(const Point& other);
+ *
+ * Operators:
+ *   +, -, *, /        → arithmetic with another point or scalar
+ *   ==, !=, <, >, <=, >= → comparison (sorts by (y, x))
+ *   >> , <<           → cin/cout support
+ *
+ * Methods:
+ *   dot(p)            → T, dot product
+ *   cross(p)          → T, cross product (2D)
+ *   cross(a, b)       → T, cross product of vectors (a-this) and (b-this)
+ *   dist()            → T, squared distance from origin
+ *   dist(p)           → T, squared distance to p
+ *   distance()        → double, Euclidean distance from origin
+ *   distance(p)       → double, Euclidean distance to p
+ *   angle()           → double, polar angle from origin (atan2)
+ *   angle(p)          → double, angle between this and p
+ *   unit()            → Point, unit vector (divides by dist())
+ *   perp()            → Point, perpendicular vector (-y, x)
+ *   rotate(a)         → Point, rotated by angle a (radians)
+ *   rotate(p, a)      → Point, rotated around point p by angle a
+ *   normal()          → Point, unit normal (perp().unit())
+ *
+ * Example:
+ *   Point<ll> a(3, 4), b(0, 0);
+ *   cout << a.distance(b);    // 5.0
+ *   cout << a.cross(b);       // 0
+ *   cout << a.perp();         // -4 3
+ */
 template < typename T = int > struct Point {
     T x, y;
     Point(T _x = 0, T _y = 0) : x(_x), y(_y) {}

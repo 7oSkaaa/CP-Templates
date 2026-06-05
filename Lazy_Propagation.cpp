@@ -34,6 +34,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Lazy_Propagation — Segment Tree with Lazy Propagation
+ *
+ * Template params:
+ *   T    = value type (default int)
+ *   Base = 0 → 0-indexed input, 1 → 1-indexed input
+ *
+ * NOTE: Edit lazy_operation() and tree_operation() inside for your problem.
+ *       Default: range add updates, range sum queries.
+ *
+ * Constructor:
+ *   Lazy_Propagation<T, Base> seg(int n, vector<T> v = {});
+ *
+ * Methods:
+ *   build(T initial_value)       → fill all nodes with constant
+ *   build(vector<T>& nums)       → build from array
+ *   update(int i, T v)           → point update at i
+ *   update(int l, int r, T v)    → range update [l, r]
+ *   query(int l, int r)          → range query → T
+ *   get(int i)                   → single element value
+ *   print()                      → debug print
+ *
+ * Example:
+ *   Lazy_Propagation<ll> seg(n, arr);
+ *   seg.update(1, 5, 3);    // add 3 to [1..5]
+ *   cout << seg.query(2, 4);
+ */
 template < typename T = int , const int Base = 0 >
 class Lazy_Propagation {
 private:

@@ -47,6 +47,34 @@ Data combine(const Data& a, const Data& b){
     return res;
 }
  
+/*
+ * SplayTree (Implicit Key) — Sequence data structure with lazy propagation
+ *
+ * Template params:
+ *   T = value type (default int). Internally uses Data struct.
+ *
+ * NOTE: This is an index-based (not value-based) splay tree.
+ *       Default query: max subarray sum. Edit Data struct and combine() for other queries.
+ *
+ * Constructor:
+ *   SplayTree<Data> st;   // empty sequence
+ *
+ * Methods:
+ *   insert(int idx, int val)     → insert val at 0-indexed position idx
+ *   erase(int idx)               → remove element at idx
+ *   replace(int idx, int val)    → replace element at idx with val
+ *   at(int k)                    → returnType, value/info at index k
+ *   query(int s, int e)          → returnType, query on range [s, e] (default: max subarray sum)
+ *   get_size()                   → int
+ *   print()                      → debug print
+ *
+ * Example:
+ *   SplayTree<Data> st;
+ *   st.insert(0, 3);
+ *   st.insert(1, -1);
+ *   st.insert(2, 5);
+ *   cout << st.query(0, 2);   // max subarray sum = 7
+ */
 template < typename T = int > struct SplayTree { // 0-indexed
 
     struct Node {

@@ -34,6 +34,34 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * DSU — Disjoint Set Union (Union-Find)
+ *
+ * Template params:
+ *   T    = node index type (default int)
+ *   Base = 1 → 1-indexed nodes, 0 → 0-indexed
+ *
+ * Constructor:
+ *   DSU<> dsu(n);            // nodes 1..n (1-indexed)
+ *   DSU<int,0> dsu(n);       // nodes 0..n-1 (0-indexed)
+ *
+ * Methods:
+ *   find_leader(u)           → root of u's component
+ *   is_same_sets(u, v)       → bool
+ *   union_sets(u, v)         → merge components
+ *   get_size(u)              → component size of u
+ *   get_components_number()  → number of components
+ *   get_components()         → vector<vector<int>>
+ *   print()                  → print all components
+ *
+ * Example:
+ *   DSU<> dsu(5);
+ *   dsu.union_sets(1, 2);
+ *   dsu.union_sets(3, 4);
+ *   cout << dsu.is_same_sets(1, 3); // 0
+ *   cout << dsu.get_size(1);        // 2
+ *   cout << dsu.get_components_number(); // 3
+ */
 template < typename T = int, int Base = 1 > struct DSU {
     
     vector < T > parent, Gsize, nxt, tail, pos, roots;

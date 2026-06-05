@@ -34,6 +34,25 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Factorization — Sieve-based precomputation of factors and prime factors
+ *
+ * Constructor:
+ *   Factorization f(int N);
+ *   // Precomputes all factors and prime factors for 1..N in O(N log N)
+ *
+ * Methods:
+ *   get_factors(int x)        → int, count of divisors of x
+ *   get_factors()             → vector<int>, all divisors of N
+ *   get_prime_factors(int x)  → int, count of distinct prime factors of x
+ *   get_prime_factors(int x)  → vector<int>, list of distinct prime factors of x
+ *
+ * Example:
+ *   Factorization f(100);
+ *   cout << f.get_factors(12);            // 6  (divisors: 1,2,3,4,6,12)
+ *   auto pf = f.get_prime_factors(12);    // {2, 3}
+ *   cout << f.get_prime_factors(12);      // 2
+ */
 struct Factorization {
     
     int n;

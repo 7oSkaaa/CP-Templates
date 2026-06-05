@@ -34,6 +34,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Floyd — Floyd-Warshall all-pairs shortest path
+ *
+ * Template params:
+ *   T    = weight type (default int, use ll for large weights)
+ *   Base = 0 → 0-indexed input matrix, 1 → 1-indexed
+ *
+ * Constructors:
+ *   Floyd<T> f(int n);                             // n nodes, all dist = INF/2
+ *   Floyd<T, Base> f(int n, vector<vector<T>>& D); // from distance matrix
+ *
+ * Methods:
+ *   add_edge(int u, int v, T w)          → add directed edge (takes min)
+ *   build()                              → run Floyd-Warshall O(n^3)
+ *   get_dist(int u, int v)               → T, shortest path u→v after build()
+ *   update_dist(int u, int v, int k)     → single relaxation through k
+ *   update_dist(int u, int v, int a, int b) → relaxation through a→b path
+ *
+ * NOTE: Nodes are 1-indexed internally regardless of Base.
+ *
+ * Example:
+ *   Floyd<ll> f(n);
+ *   f.add_edge(1, 2, 5);
+ *   f.add_edge(2, 3, 3);
+ *   f.build();
+ *   cout << f.get_dist(1, 3);   // 8
+ */
 template < typename T = int , int Base = 0 > struct Floyd {
     
     int n;

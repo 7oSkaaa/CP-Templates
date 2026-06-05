@@ -34,6 +34,30 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * MoAlgorithm — Mo's Algorithm for offline range queries (Hilbert curve ordering)
+ *
+ * Template params:
+ *   T    = answer type (default int)
+ *   Base = 0 → 0-indexed queries, 1 → 1-indexed queries
+ *
+ * NOTE: Implement add(int idx) and remove(int idx) inside the class,
+ *       updating the member variable `ans` accordingly.
+ *
+ * Constructor:
+ *   MoAlgorithm<T, Base> mo(int N, int M);
+ *   // N = array size, M = number of queries
+ *
+ * Methods:
+ *   getData(vector<T>& v = {})  → reads M queries "l r" from cin, processes all
+ *   getAnswers()                → vector<T>, answers in original query order
+ *
+ * Example:
+ *   // After implementing add() and remove():
+ *   MoAlgorithm<int> mo(n, q);
+ *   mo.getData(arr);
+ *   for(auto& a : mo.getAnswers()) cout << a << "\n";
+ */
 template < typename T = int, int Base = 0 >
 class MoAlgorithm {
 public:

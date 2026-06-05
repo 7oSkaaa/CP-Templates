@@ -34,6 +34,31 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Centroid_Decomposition — Centroid Decomposition of a tree
+ *
+ * Template params:
+ *   T = adjacency/index type (default int)
+ *
+ * Constructor:
+ *   Centroid_Decomposition<T> cd(int N, vector<vector<T>>& G, int Root = 1);
+ *
+ * Usage:
+ *   Call cd.Decompose() to start decomposition.
+ *   Add your problem logic inside the Centroid() method body
+ *   at the comment "// do something with centroid".
+ *
+ * Internal methods (not meant to be called directly):
+ *   updateSize(u, p)        → update subtree sizes
+ *   getCentroid(u, target)  → find centroid of component
+ *   Centroid(u, p)          → recursive decompose step
+ *   Decompose()             → entry point, call this
+ *
+ * Example:
+ *   Centroid_Decomposition<int> cd(n, adj, 1);
+ *   // Edit Centroid() to do your DP/computation at each centroid
+ *   cd.Decompose();
+ */
 template < typename T = int > struct Centroid_Decomposition {
 
     int n, treeRoot;

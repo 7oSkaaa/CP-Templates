@@ -32,6 +32,36 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Matrix — Square Matrix with Multiplication and Power
+ *
+ * Template params:
+ *   T = element type (default int, use ll for large values)
+ *
+ * Constructors:
+ *   Matrix<T> m(int n, T val = 0);             // n×n filled with val
+ *   Matrix<T> m(vector<vector<T>>& grid);      // from 2D vector
+ *
+ * Operators:
+ *   m[i][j]     → row access
+ *   A * B       → matrix multiplication (mod Mod)
+ *   A *= B
+ *
+ * Helper functions (non-member):
+ *   GetIdentity<T>(int N)      → N×N identity matrix
+ *   GetZero<T>(int N)          → N×N zero matrix
+ *   GetTrans<T>()              → Fibonacci transition matrix (edit for your recurrence)
+ *   Power(Matrix<T>& b, ll e)  → matrix power using GetTrans()
+ *   k_th<T>(T k, int N)        → k-th term of Fibonacci-like recurrence
+ *
+ * Example:
+ *   // k-th Fibonacci number
+ *   cout << k_th<ll>(10, 2);   // fib(10) = 55
+ *
+ *   // Custom matrix power
+ *   auto A = Matrix<ll>({{1,1},{1,0}});
+ *   // ... multiply manually ...
+ */
 template < typename T = int >  struct Matrix {
 
     // The matrix

@@ -32,6 +32,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * BellmanFord — Shortest path with negative edge support
+ *
+ * Template params:
+ *   T = weight type (default int, use ll for large weights)
+ *
+ * Constructor:
+ *   BellmanFord<T> bf(int n, int m, int src = 1, int dest = 1);
+ *   // n = nodes, m = edges (pre-allocates edge list of size m)
+ *
+ * Methods:
+ *   read_edges()              → reads m edges "u v w" from cin
+ *   add_edge(int u, int v, T w) → manually add edge
+ *   build()                   → run Bellman-Ford from src (n-1 relaxations)
+ *   has_negative_cycle()      → bool, check after build()
+ *   get_dist(int u)           → T, dist from src to u
+ *   get_min_dist()            → T, minimum dist across all nodes
+ *
+ * NOTE: e.inv() negates the edge weight (for max-path via negation trick).
+ *
+ * Example:
+ *   BellmanFord<ll> bf(n, m, 1, n);
+ *   bf.read_edges();
+ *   bf.build();
+ *   if(bf.has_negative_cycle()) cout << "negative cycle\n";
+ *   else cout << bf.get_dist(n);
+ */
 template < typename T = int > struct BellmanFord {
     
     struct Edge {

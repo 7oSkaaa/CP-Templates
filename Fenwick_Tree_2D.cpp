@@ -34,8 +34,28 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Fenwick_Tree (2D) — 2D Binary Indexed Tree
+ *
+ * Template params:
+ *   T = value type (default int)
+ *
+ * Constructor:
+ *   Fenwick_Tree<T> ft(int rows, int cols);  // 1-indexed rows and cols
+ *
+ * Methods:
+ *   build(vector<vector<T>>& nums)           → build from 2D array (0-indexed input)
+ *   add(int idx, int jdx, T val)            → point update at (idx, jdx) 1-indexed
+ *   query(int x1, int y1, int x2, int y2)  → T, rectangle sum [x1..x2] × [y1..y2]
+ *
+ * Example:
+ *   Fenwick_Tree<ll> ft(n, m);
+ *   ft.add(1, 1, 5);
+ *   ft.add(2, 3, 3);
+ *   cout << ft.query(1, 1, 2, 3);
+ */
 template < typename T = int > struct Fenwick_Tree {
-    
+
     vector < vector < T > > Tree;
     int n, m;
     T DEFAULT;

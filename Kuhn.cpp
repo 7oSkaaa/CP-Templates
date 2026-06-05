@@ -32,6 +32,31 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Kuhn — Maximum Bipartite Matching (Kuhn's / Hungarian algorithm)
+ *
+ * Template params:
+ *   T    = index type (default int)
+ *   Base = 1 → 1-indexed nodes (default), 0 → 0-indexed
+ *
+ * Constructor:
+ *   Kuhn<T, Base> kuhn(int N, int M, vector<vector<T>>& G);
+ *   // N = left side size, M = right side size
+ *   // G = adjacency list: G[u] = list of right-side nodes u can match to
+ *
+ * Methods:
+ *   max_match()  → T, size of maximum matching
+ *   matching[]   → vector<T>, matching[v] = left node matched to right node v, -1 if unmatched
+ *
+ * Example:
+ *   int n = 3, m = 3;
+ *   vector<vector<int>> adj(n + 1);
+ *   adj[1] = {1, 2};
+ *   adj[2] = {2, 3};
+ *   adj[3] = {3};
+ *   Kuhn<> kuhn(n, m, adj);
+ *   cout << kuhn.max_match();  // 3
+ */
 template < typename T = int , int Base = 1 > struct Kuhn {
     int n, m;
     vector < vector < T > > adj;

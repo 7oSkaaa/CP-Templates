@@ -34,6 +34,54 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Math — Collection of common math utility functions
+ *
+ * Constructor:
+ *   Math m;   // stateless utility struct
+ *
+ * Methods:
+ *   GCD(a, b)                      → ll, greatest common divisor
+ *   LCM(a, b)                      → ll, least common multiple
+ *   prime_factorization(n)         → vector<int>, prime factors of n
+ *   nCr(n, r)                      → ll, combination (no mod)
+ *   nPr(n, r)                      → ll, permutation (no mod)
+ *   Big_Mod(string s, ll mod)      → ll, big integer mod
+ *   add(ll& a, ll b, ll mod)       → modular add in-place
+ *   mul(ll& a, ll b, ll mod)       → modular multiply in-place
+ *   Bin_Pow(b, e)                  → ll, b^e (no mod)
+ *   Bin_Pow(b, e, mod)             → ll, b^e % mod
+ *   Bin_Mul(b, e, mod)             → ll, b*e % mod (avoids overflow)
+ *   is_prime(n)                    → bool
+ *   number_of_divisors(n)          → int
+ *   sum_of_divisors(n)             → ll
+ *   divisorSum(num)                → ll, sum of divisors for 1..num
+ *   Get_Divisors(n)                → vector<ll>
+ *   Print_Permutation(vector/string) → print all permutations
+ *   Summation(r, l=0)              → ll, sum [l..r]
+ *   how_many_divisors(a, b, c)     → ll, count multiples of c in [a,b]
+ *   Summation_of_Devisors(a, b, c) → ll, sum of multiples of c in [a,b]
+ *   get_log(a, b)                  → double, log_b(a)
+ *   is_power(n, base=2)            → bool
+ *   dist(x1,y1,x2,y2)             → double, Euclidean distance
+ *   is_triangle(a, b, c)           → bool
+ *   slope(x1,y1,x2,y2)            → double
+ *   is_same_line(x1,y1,x2,y2,x3,y3) → bool
+ *   is_perfect_square(n)           → bool
+ *   phi(n)                         → ll, Euler's totient
+ *   FactN_PrimePowers(n, p)        → ll, power of prime p in n!
+ *   extended_gcd(a, b, x, y)       → int gcd, sets x,y for ax+by=gcd
+ *   find_any_solution(a,b,c,x0,y0,g) → bool, solve ax+by=c
+ *   decimal_to_any_base(n, base)   → string
+ *   any_base_to_decimal(str, base) → ll
+ *
+ * Example:
+ *   Math m;
+ *   cout << m.GCD(12, 8);              // 4
+ *   cout << m.Bin_Pow(2, 10, 1e9+7);  // 1024
+ *   cout << m.nCr(5, 2);              // 10
+ *   cout << m.is_prime(97);           // 1
+ */
 struct Math {
 
     Math(){}

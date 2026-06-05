@@ -34,6 +34,27 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Kadane — Maximum / Minimum Contiguous Subarray Sum
+ *
+ * Template params:
+ *   T = element type (default int, use ll for large sums)
+ *
+ * Constructor:
+ *   Kadane<T> k;   // stateless, just holds the methods
+ *
+ * Methods:
+ *   Max_Subarray_Sum(vector<T>& nums)  → T, maximum subarray sum
+ *   Min_Subarray_Sum(vector<T>& nums)  → T, minimum subarray sum
+ *
+ * Both run in O(n). At least one element must be selected.
+ *
+ * Example:
+ *   Kadane<int> k;
+ *   vector<int> a = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+ *   cout << k.Max_Subarray_Sum(a);  // 6  ({4,-1,2,1})
+ *   cout << k.Min_Subarray_Sum(a);  // -6 ({-2,1,-3,-5+...} depends)
+ */
 template < typename T = int > struct Kadane {
     
     // Minimum Contigours Subarray Sum

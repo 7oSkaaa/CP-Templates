@@ -33,10 +33,36 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * SplayTree — Self-balancing BST (value-based, supports duplicates)
+ *
+ * Template params:
+ *   T = element type (default int)
+ *
+ * Constructor:
+ *   SplayTree<T> st;   // empty tree
+ *
+ * Methods:
+ *   insert(T val)        → insert value (increments freq if duplicate)
+ *   erase(T val)         → remove one occurrence of val
+ *   search(T val)        → bool, splays node to root
+ *   kth(T k)             → T, 0-indexed k-th smallest element
+ *   count_less(T val)    → int, number of elements < val
+ *   get_size()           → int, total element count
+ *   print()              → debug print (in-order)
+ *
+ * Example:
+ *   SplayTree<int> st;
+ *   st.insert(3); st.insert(1); st.insert(5); st.insert(3);
+ *   cout << st.kth(0);         // 1 (0-indexed)
+ *   cout << st.kth(1);         // 3
+ *   cout << st.count_less(4);  // 3
+ *   cout << st.get_size();     // 4
+ */
 template < typename T = int > struct SplayTree {
 
     struct Node {
-        
+
         Node *ch[2], *par;
         T val;
         int subSz, freq;

@@ -34,6 +34,36 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Segment_Tree — Generic Segment Tree
+ *
+ * Template params:
+ *   treeType = node/answer type  (default int)
+ *   numsType = input array type  (default int)
+ *   Base     = 0 → 0-indexed input, 1 → 1-indexed input
+ *
+ * Constructor:
+ *   Segment_Tree<treeType, numsType, Base> seg(
+ *       int n,
+ *       vector<numsType> nums = {},              // optional initial values
+ *       function<treeType(treeType,treeType)> op, // combine op (default: sum)
+ *       treeType def = 0                          // identity element
+ *   );
+ *
+ * Methods:
+ *   build(vector<numsType>& nums)       → build/rebuild from array
+ *   update(int index, numsType value)   → point update (1-indexed internally)
+ *   query(int l, int r)                 → range query → treeType
+ *   seg[index]                          → single element query
+ *   print()                             → pretty tree debug print
+ *
+ * Example:
+ *   // Range max, 1-indexed input
+ *   Segment_Tree<int,int,1> seg(n, arr,
+ *       [](int a, int b){ return max(a,b); }, INT_MIN);
+ *   seg.update(3, 10);
+ *   cout << seg.query(1, n);
+ */
 template < typename treeType = int, typename numsType = int, int Base = 0 >
 class Segment_Tree {
 private:

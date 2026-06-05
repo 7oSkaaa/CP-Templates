@@ -32,6 +32,35 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Hash_SegmentTree — Segment Tree for substring hashing (supports point updates)
+ *
+ * Template params:
+ *   T    = hash value type (default int, use ll for safety)
+ *   Base = 0 → 0-indexed, 1 → 1-indexed
+ *
+ * Uses double hashing (p1=313/m1=1e9+7, p2=1013/m2=1e9+9).
+ *
+ * Constructor:
+ *   Hash_SegmentTree<T, Base> hs(int n);
+ *
+ * Methods:
+ *   build(vector<T>& nums)         → build from integer array
+ *   update(int index, T val)       → point update at index (1-indexed)
+ *   update(int index, char c)      → update with char (maps 'a'→1, etc.)
+ *   query(int l, int r)            → pair<T,T>, double hash of [l,r]
+ *
+ * Two ranges are equal iff their hashes match:
+ *   hs.query(1, 5) == hs.query(6, 10)
+ *
+ * Example:
+ *   string s = "abcabc";
+ *   Hash_SegmentTree<ll, 1> hs(n);
+ *   hs.build(arr);
+ *   // or build char by char:
+ *   for(int i = 1; i <= n; i++) hs.update(i, s[i-1]);
+ *   cout << (hs.query(1,3) == hs.query(4,6));  // 1
+ */
 template < typename T = int , int Base = 0 > struct Hash_SegmentTree {
  
     int n, size;

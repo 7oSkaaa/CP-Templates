@@ -32,6 +32,32 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Sqrt_Decomp — Square Root Decomposition with sorted blocks
+ *
+ * Template params:
+ *   T    = element type (default int)
+ *   Base = 0 → 0-indexed, 1 → 1-indexed
+ *
+ * Default query: count elements >= x in range [l, r].
+ * Modify query() body for other queries (sum, min, etc.).
+ *
+ * Constructor:
+ *   Sqrt_Decomp<T, Base> sq(int N, vector<T>& vec = {});
+ *   // If vec provided, build() is called automatically
+ *
+ * Methods:
+ *   build()                      → sort each block (called in constructor if vec given)
+ *   update(int idx, T val)       → O(sqrt n) point update + re-sort block
+ *   update_range(int idx, T val) → O(n) point update + rebuild whole block
+ *   query(int l, int r, T x)     → T, count elements >= x in [l, r]
+ *
+ * Example:
+ *   Sqrt_Decomp<int> sq(n, arr);
+ *   cout << sq.query(1, n, 5);   // count elements >= 5
+ *   sq.update(3, 10);
+ *   cout << sq.query(1, n, 5);
+ */
 template < typename T = int, int Base = 0 > struct Sqrt_Decomp {
 
     int n, len;

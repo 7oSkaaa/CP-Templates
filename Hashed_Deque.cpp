@@ -34,6 +34,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Hashed_Deque — Deque with O(1) rolling polynomial hash
+ *
+ * Template params:
+ *   T = element type
+ *
+ * Supports push/pop from both ends while maintaining a double hash.
+ * Two Hashed_Deques are equal iff they have the same size and same hash.
+ * Useful for comparing sliding windows or sequence palindromes in O(1).
+ *
+ * Constructor:
+ *   Hashed_Deque<T> dq;   // empty deque
+ *
+ * Methods:
+ *   push_back(T x)   → append to back
+ *   push_front(T x)  → prepend to front
+ *   pop_back()       → remove from back
+ *   pop_front()      → remove from front
+ *   size()           → int
+ *   dq1 == dq2       → bool, O(1) equality check
+ *
+ * Example:
+ *   Hashed_Deque<int> left, right;
+ *   left.push_back(1); left.push_back(2);
+ *   right.push_back(1); right.push_back(2);
+ *   cout << (left == right);  // 1
+ */
 template < typename T >
 class Hashed_Deque {
 private:

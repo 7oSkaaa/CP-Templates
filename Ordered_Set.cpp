@@ -48,6 +48,45 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Ordered_Multiset — Order-statistics multiset (pb_ds backed)
+ *
+ * Supports duplicates, O(log n) rank/index queries.
+ * Requires: #include <ext/pb_ds/assoc_container.hpp>
+ *           #include <ext/pb_ds/tree_policy.hpp>
+ *
+ * Template params:
+ *   T            = element type (default int)
+ *   CompFunction = comparison (default less_equal → ascending order)
+ *                  Use greater_equal for descending order
+ *
+ * Constructors:
+ *   Ordered_Multiset<T> ms(bool isSmaller = true);
+ *   Ordered_Multiset<T> ms(vector<T>& vec, bool isSmaller = true);
+ *
+ * Methods:
+ *   insert(T val)          → insert element
+ *   erase(T val)           → remove one occurrence
+ *   is_exist(T val)        → bool
+ *   at(int idx)            → T, 0-indexed element by rank
+ *   ms[idx]                → T, same as at()
+ *   first_idx(T val)       → int, first 0-indexed rank of val, -1 if absent
+ *   last_idx(T val)        → int, last 0-indexed rank of val
+ *   count(T val)           → T, occurrences of val
+ *   order_of_key(T val)    → int, number of elements strictly less than val
+ *   find_by_order(int idx) → iterator at rank idx
+ *   size()                 → int
+ *   clear()
+ *
+ * Example:
+ *   Ordered_Multiset<int> ms;
+ *   ms.insert(3); ms.insert(1); ms.insert(3); ms.insert(5);
+ *   cout << ms[0];             // 1
+ *   cout << ms.count(3);       // 2
+ *   cout << ms.order_of_key(3); // 1 (one element < 3)
+ *   ms.erase(3);
+ *   cout << ms.count(3);       // 1
+ */
 template < typename T = int , typename CompFunction = std::less_equal < T > > struct Ordered_Multiset {
     
     ordered_multiset < T, CompFunction > mst;

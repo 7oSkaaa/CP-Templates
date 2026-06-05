@@ -34,6 +34,37 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * LCA (Weighted) — LCA with path aggregate queries on edge weights
+ *
+ * Template params:
+ *   treeType  = query result type (e.g. int, ll)
+ *   graphType = edge weight type
+ *
+ * Constructor:
+ *   LCA<treeType, graphType> lca(
+ *       int n,
+ *       vector<vector<pair<int, graphType>>>& G,   // weighted adjacency list
+ *       function<treeType(treeType,treeType)> op,  // merge operation (default sum)
+ *       treeType neutral = treeType(),              // identity element
+ *       int root = 1
+ *   );
+ *
+ * Methods:
+ *   get_lca(int u, int v)   → int, LCA node
+ *   query(int u, int v)     → treeType, aggregate edge weights on path u→v
+ *   kth_ancestor(int u, int k) → int
+ *
+ * Example:
+ *   // Max edge weight on path
+ *   LCA<int, int> lca(n, adj,
+ *       [](int a, int b){ return max(a,b); }, 0, 1);
+ *   cout << lca.query(u, v);
+ *
+ *   // Sum of edge weights on path
+ *   LCA<ll, ll> lca(n, adj,
+ *       [](ll a, ll b){ return a + b; }, 0LL, 1);
+ */
 template < typename treeType = int , typename graphType >
 class LCA {
 public:

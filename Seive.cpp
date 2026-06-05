@@ -34,6 +34,31 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Seive — Sieve of Eratosthenes for primality testing
+ *
+ * Template params:
+ *   T = integer type (default int)
+ *
+ * Constructor:
+ *   Seive<T> s(int n);
+ *   // Builds is_prime[] for 0..n in O(n log log n)
+ *
+ * Methods:
+ *   get_primes(int n)   → fills primes[] vector with all primes ≤ n
+ *   print_primes()      → print all primes in primes[]
+ *
+ * Members:
+ *   is_prime[i]   → bool, true if i is prime
+ *   primes        → vector<T>, filled after calling get_primes()
+ *
+ * Example:
+ *   Seive<int> s(100);
+ *   cout << s.is_prime[97];  // 1
+ *   cout << s.is_prime[100]; // 0
+ *   s.get_primes(100);
+ *   s.print_primes();        // 2 3 5 7 11 ... 97
+ */
 template < typename T = int > struct Seive {
 
     vector < bool > is_prime;

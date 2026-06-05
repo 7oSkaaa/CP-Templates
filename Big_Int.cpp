@@ -34,6 +34,38 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * BigInt — Arbitrary precision non-negative integer
+ *
+ * Internally stored in base 1e9 (each element = 9 decimal digits).
+ *
+ * Constructors:
+ *   BigInt b;                 // zero
+ *   BigInt b(long long val);  // from long long
+ *   BigInt b(string val);     // from decimal string
+ *
+ * Operators:
+ *   +, +=          → addition
+ *   -, -=, --, ++  → subtraction (throws on underflow)
+ *   *, *=          → multiplication
+ *   / (ll), /=     → division by long long
+ *   % (ll), %=     → modulo by long long
+ *   <, >, ==, <=   → comparison
+ *   cin >> b       → read from input
+ *   cout << b      → print
+ *
+ * Methods:
+ *   size()   → int, number of base-1e9 digits
+ *   zero()   → bool, is zero
+ *   val()    → ll, convert to long long (only safe if fits in ll)
+ *
+ * Example:
+ *   BigInt a = "123456789012345678";
+ *   BigInt b(999999999LL);
+ *   cout << a + b;
+ *   cout << a * b;
+ *   cout << (a % 1000000007LL);
+ */
 struct BigInt {
 
     const int BASE = 1000000000;

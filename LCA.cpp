@@ -32,6 +32,29 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * LCA — Lowest Common Ancestor (unweighted tree, binary lifting)
+ *
+ * Template params:
+ *   vecType = node index type (default int)
+ *
+ * Constructor:
+ *   LCA<> lca(int n, vector<vector<int>>& G, int root = 1);
+ *   // G = adjacency list (1-indexed nodes)
+ *
+ * Methods:
+ *   get_lca(int u, int v)        → int, LCA node
+ *   get_dist(int u, int v)       → int, edge count between u and v
+ *   kth_ancestor(int u, int k)   → int, k-th ancestor of u, -1 if none
+ *
+ * Example:
+ *   vector<vector<int>> adj(n + 1);
+ *   // ... build adj ...
+ *   LCA<> lca(n, adj, 1);
+ *   cout << lca.get_lca(3, 7);
+ *   cout << lca.get_dist(3, 7);
+ *   cout << lca.kth_ancestor(5, 2);
+ */
 template < typename vecType = int >
 class LCA {
 public:

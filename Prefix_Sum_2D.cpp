@@ -34,6 +34,27 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Prefix_2D — 2D Prefix Sum (static grid, rectangle sum queries)
+ *
+ * Template params:
+ *   T = value type (default int, use ll for large sums)
+ *
+ * Constructor:
+ *   Prefix_2D<T> ps(int N = 0, int M = 0);   // 1-indexed N×M grid
+ *
+ * Methods:
+ *   Build_Prefix(vector<vector<T>>& matrix)      → build from 0-indexed matrix
+ *   Get_Query(int x1, int y1, int x2, int y2)   → T, sum of rectangle [x1..x2]×[y1..y2]
+ *   Print_Prefix()                               → print prefix table
+ *
+ * Example:
+ *   vector<vector<int>> mat = {{1,2,3},{4,5,6},{7,8,9}};
+ *   Prefix_2D<int> ps(3, 3);
+ *   ps.Build_Prefix(mat);
+ *   cout << ps.Get_Query(1, 1, 2, 2);  // 1+2+4+5 = 12
+ *   cout << ps.Get_Query(1, 1, 3, 3);  // 45 (sum of all)
+ */
 template < typename T = int > struct Prefix_2D {
 
     int n, m;

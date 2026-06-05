@@ -32,6 +32,34 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * LCT — Link-Cut Tree (dynamic trees with path/subtree queries)
+ *
+ * Template params:
+ *   T    = value type (default int)
+ *   Base = 0 → 0-indexed values array, 1 → 1-indexed
+ *
+ * Constructors:
+ *   LCT<T> lct(int n);                     // all values = 1
+ *   LCT<T, Base> lct(int n, vector<T>& v); // with initial node values
+ *
+ * Methods:
+ *   link(int x, int y)        → add edge between x and y
+ *   cut(int x, int y)         → remove edge between x and y
+ *   connected(int x, int y)   → bool
+ *   get_root(int x)           → int, root of x's tree
+ *   query(int x, int y)       → T, aggregate on path x→y
+ *   query_subtree(int x)      → T, subtree aggregate
+ *   set(int x, T v)           → update node x's value
+ *
+ * Example:
+ *   LCT<int> lct(n);
+ *   lct.link(1, 2); lct.link(2, 3);
+ *   cout << lct.connected(1, 3);  // 1
+ *   cout << lct.query(1, 3);      // path aggregate
+ *   lct.cut(2, 3);
+ *   cout << lct.connected(1, 3);  // 0
+ */
 template < typename T = int , int Base = 0 > struct LCT {
     
     struct Node {

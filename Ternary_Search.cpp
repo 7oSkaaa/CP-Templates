@@ -33,6 +33,27 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 }
 
 
+/*
+ * Ternary_Search — Find minimum of unimodal function over integer or real range
+ *
+ * Two overloads:
+ *   Ternary_Search(ll L, ll R)       → ll, discrete integer version
+ *   Ternary_Search(double L, double R) → double, continuous real version
+ *
+ * Both call F(m) which you must implement.
+ * F should be unimodal (single minimum) over [L, R].
+ * Default finds MINIMUM — change < to > in comparisons for maximum.
+ *
+ * NOTE: Edit F(ll m) and F(double m) to define your objective function.
+ *
+ * Example (minimize |x - 7| over integers):
+ *   // In F(ll m): return abs(m - 7);
+ *   cout << Ternary_Search(0, 20);  // 0 (minimum value)
+ *
+ * Example (minimize f(x) = x^2 - 4x + 5 over reals):
+ *   // In F(double m): return m*m - 4*m + 5;
+ *   cout << Ternary_Search(0.0, 10.0);  // ~1.0 (minimum at x=2)
+ */
 ll F(ll m){
     // to do function to compare the two halves in the range [L, R]
     return m;

@@ -34,6 +34,27 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Monotonic_Stacks — Common monotonic stack patterns (next/prev greater/smaller)
+ *
+ * All methods return 0-indexed results.
+ * "Greater" uses strict >, "Smaller" uses strict <.
+ *
+ * Constructor:
+ *   Monotonic_Stacks ms;   // stateless
+ *
+ * Methods (all template T = int, pass vector<T>&):
+ *   nextGreaterelement(nums)  → vector<T>, for each i: index of next element > nums[i], or n if none
+ *   prevGreaterelement(nums)  → vector<T>, for each i: index of prev element > nums[i], or 0 if none
+ *   nextSmallerelement(nums)  → vector<T>, for each i: index of next element < nums[i], or n if none
+ *   prevSmallerelement(nums)  → vector<T>, for each i: index of prev element < nums[i], or 0 if none
+ *
+ * Example:
+ *   Monotonic_Stacks ms;
+ *   vector<int> a = {2, 1, 5, 3, 4};
+ *   auto nge = ms.nextGreaterelement(a);  // {2, 2, 5, 4, 5} (indices)
+ *   auto pse = ms.prevSmallerelement(a);  // {0, 0, 1, 1, 3} (indices)
+ */
 struct Monotonic_Stacks {
 
     Monotonic_Stacks(){ }

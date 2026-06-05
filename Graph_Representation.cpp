@@ -32,6 +32,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Graph_Representation — Linked-list (head array) adjacency representation
+ *
+ * Faster cache-friendly alternative to vector<vector<Edge>> for dense graphs.
+ *
+ * Setup:
+ *   init(int n, int m);         // n nodes, m edges (allocates 2*m+5 edge slots)
+ *   addEdge(int u, int v, int c = 0);     // directed edge u→v with cost c
+ *   AddBiEdge(int u, int v, int c = 0);   // undirected: both directions
+ *
+ * Traversal macro:
+ *   adj_loop(u, v, e)
+ *   // Iterates over all neighbors v of u, e = edge index
+ *   // edges[e].cost = edge weight
+ *
+ * Example:
+ *   init(n, m);
+ *   for(int i = 0; i < m; i++) {
+ *       int u, v, w; cin >> u >> v >> w;
+ *       AddBiEdge(u, v, w);
+ *   }
+ *   // Traverse neighbors of node 1:
+ *   adj_loop(1, v, e) {
+ *       cout << v << " " << edges[e].cost << "\n";
+ *   }
+ */
+
 // ----------------------------------------------------------- //
 
 #define adj_loop(u, v, e) for(int e = head[u], v; ~e && (v = edges[e].to, 1); e = edges[e].nxt)

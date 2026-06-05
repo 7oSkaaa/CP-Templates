@@ -34,6 +34,29 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Partial_2D — 2D Difference Array (range updates, point queries)
+ *
+ * Use for: apply +1 to many rectangles, then query point values.
+ * Opposite of Prefix_2D: update rectangles, read resulting values.
+ *
+ * Template params:
+ *   T = value type (default int)
+ *
+ * Constructor:
+ *   Partial_2D<T> pd(int N, int M);   // 1-indexed N×M grid
+ *
+ * Methods:
+ *   build_partial(int queries)   → reads `queries` rectangles "x1 y1 x2 y2" from cin,
+ *                                   applies +1 to each, then propagates all updates
+ *   get(int x, int y)            → T, final value at (x, y) after build_partial()
+ *   print()                      → print the final grid
+ *
+ * Example:
+ *   Partial_2D<int> pd(n, m);
+ *   pd.build_partial(q);    // reads q rectangle queries from cin
+ *   cout << pd.get(2, 3);   // how many rectangles cover cell (2,3)
+ */
 template < typename T = int > struct Partial_2D {
 
     vector < vector < T > > partial;

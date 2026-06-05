@@ -34,6 +34,34 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * BST — Binary Search Tree
+ *
+ * Constructor:
+ *   BST* root = nullptr;
+ *   BST bst(int data = 0);   // node with given data (used as handle)
+ *
+ * Methods (all take root pointer):
+ *   Insert(root, int val)        → BST*, insert val, return new root
+ *   Search(root, int val)        → bool
+ *   Delete_Node(root, int key)   → BST*, delete key, return new root
+ *   minValueNode(node)           → BST*, leftmost (minimum) node
+ *   maxValueNode(node)           → BST*, rightmost (maximum) node
+ *   Inorder(root)               → print sorted (ascending)
+ *   Preorder(root)              → print root-left-right
+ *   Postorder(root)             → print left-right-root
+ *   Level_Order(root)           → print BFS order
+ *
+ * Example:
+ *   BST* root = nullptr;
+ *   BST bst;
+ *   root = bst.Insert(root, 5);
+ *   root = bst.Insert(root, 3);
+ *   root = bst.Insert(root, 7);
+ *   bst.Inorder(root);         // 3 5 7
+ *   cout << bst.Search(root, 3);  // 1
+ *   root = bst.Delete_Node(root, 5);
+ */
 struct BST {
 
     int data;

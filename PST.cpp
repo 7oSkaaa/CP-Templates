@@ -32,6 +32,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * PST — Persistent Segment Tree
+ *
+ * Template params:
+ *   T    = value/coordinate type (default int)
+ *   Base = 0 → 0-indexed coords, 1 → 1-indexed coords
+ *
+ * Default query: max prefix sum in coordinate range [Lx, Rx].
+ * Edit operation() and Node to change query type.
+ *
+ * Constructor:
+ *   PST<T, Base> pst(int n, T lx = -1e9, T rx = 1e9);
+ *   // n = max versions, [lx, rx] = coordinate range
+ *
+ * Methods:
+ *   build(vector<T>& nums)                             → build version 0
+ *   insert(int idx, T val, int curr_time, int prev_time) → new version from prev
+ *   update(int idx, T val, int curr_time)              → update within current version
+ *   query(int l, int r, int time)                      → T, query at version time
+ *   get(int time, int idx)                             → T, single element at version
+ *
+ * Example:
+ *   PST<ll> pst(q + 1, 1, n);
+ *   pst.build(arr);                         // version 0
+ *   pst.insert(5, 99, 1, 0);               // version 1 = version 0 with idx 5 = 99
+ *   cout << pst.query(1, 10, 1);
+ */
 template < typename T = int , int Base = 0 > struct PST {
  
     struct Node {

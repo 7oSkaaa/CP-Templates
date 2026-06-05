@@ -34,6 +34,51 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Monotonic_Stack — Stack that tracks a running monotonic aggregate
+ *
+ * Template params:
+ *   T = element type (default int)
+ *
+ * Constructor:
+ *   Monotonic_Stack<T> s(
+ *       function<T(T,T)> op = max,   // aggregate operation (default max)
+ *       T default_val = T()          // identity element
+ *   );
+ *
+ * Methods:
+ *   push(T x)         → push element, update aggregate
+ *   pop()             → → T, pop top and update aggregate
+ *   top()             → T, peek top element
+ *   Monotonic_val()   → T, current aggregate over all elements
+ *   empty()           → bool
+ *   size()            → int
+ *
+ * -------------------------------------------------------------------
+ * Monotonic_Queue — Deque with O(1) range aggregate using two stacks
+ *
+ * Constructor:
+ *   Monotonic_Queue<T> q(
+ *       function<T(T,T)> op = max,   // aggregate operation
+ *       T default_val = T()
+ *   );
+ *
+ * Methods:
+ *   push(T x)          → enqueue element
+ *   pop()              → dequeue front element
+ *   monotonic_val()    → T, aggregate over all elements in queue
+ *   empty()            → bool
+ *   size()             → int
+ *
+ * Example:
+ *   // Sliding window max of size k
+ *   Monotonic_Queue<int> mq;
+ *   for(int i = 0; i < n; i++) {
+ *       mq.push(arr[i]);
+ *       if(i >= k) mq.pop();
+ *       if(i >= k - 1) cout << mq.monotonic_val() << "\n";
+ *   }
+ */
 template < typename T = int >
 struct Monotonic_Stack {
     vector < T > st, Monotonic;

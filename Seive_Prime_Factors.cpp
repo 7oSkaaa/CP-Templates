@@ -32,6 +32,28 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Seive_Prime_Factors — Smallest Prime Factor sieve for fast factorization
+ *
+ * Globals:
+ *   SPF[i]          → smallest prime factor of i
+ *   primeFactors[i] → vector<int>, prime factorization of i
+ *
+ * Functions:
+ *   Seive(int N)        → build SPF[] and primeFactors[] for 1..N in O(N log log N)
+ *   PrimeFactors(int x) → vector<int>, prime factors of x using SPF (O(log x))
+ *
+ * Usage:
+ *   Call Seive(N) once at the start, then query any number ≤ N instantly.
+ *
+ * Example:
+ *   Seive(1000000);
+ *   auto pf = PrimeFactors(360);   // {2, 2, 2, 3, 3, 5}
+ *   // or use precomputed:
+ *   auto& pf2 = primeFactors[360]; // same result
+ *   cout << SPF[360];              // 2
+ */
+
 // Vector to store smallest prime factor of numbers from 1 to N.
 vector < int > SPF;
 

@@ -32,6 +32,35 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Trie — Character Trie for strings
+ *
+ * Template params:
+ *   Mode = TrieMode::Lowercase  → 'a'-'z' (26 children)
+ *          TrieMode::Uppercase  → 'A'-'Z' (26 children)
+ *          TrieMode::Digits     → '0'-'9' (10 children)
+ *
+ * Constructor:
+ *   Trie<TrieMode::Lowercase> trie;
+ *
+ * Methods:
+ *   insert(string& word)      → insert word
+ *   search(string& word)      → bool, exact match
+ *   erase(string& word)       → remove word (decrements freq, frees nodes if freq=0)
+ *   is_prefix(string& word)   → bool, word is prefix of any inserted string
+ *
+ * Node has .freq (count of inserted strings passing through this node)
+ *
+ * Example:
+ *   Trie<TrieMode::Lowercase> t;
+ *   t.insert("hello");
+ *   t.insert("hell");
+ *   cout << t.search("hello");     // 1
+ *   cout << t.is_prefix("hel");    // 1
+ *   t.erase("hello");
+ *   cout << t.search("hello");     // 0
+ *   cout << t.search("hell");      // 1
+ */
 enum class TrieMode { Lowercase, Uppercase, Digits };
 template < TrieMode Mode >
 class Trie {

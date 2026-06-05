@@ -34,6 +34,32 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Power_Inverse — Precomputed factorials, inverse factorials, and modular inverses
+ *
+ * Template params:
+ *   T = integer type (default int, use ll for large values)
+ *
+ * Constructor:
+ *   Power_Inverse<T> pi(T N, T MOD);
+ *   // Precomputes fact[], fact_inv[], inv[] for 0..N in O(N log N)
+ *
+ * Methods:
+ *   nCr(int n, int r)   → T, C(n,r) mod MOD
+ *   nPr(int n, int r)   → T, P(n,r) mod MOD
+ *   get_inv(T N, T MOD) → T, modular inverse of N (internal helper)
+ *
+ * Arrays (public):
+ *   fact[i]      → i! mod MOD
+ *   fact_inv[i]  → (i!)^(-1) mod MOD
+ *   inv[i]       → i^(-1) mod MOD
+ *
+ * Example:
+ *   Power_Inverse<ll> pi(1000000, 1e9 + 7);
+ *   cout << pi.nCr(10, 3);   // 120
+ *   cout << pi.nPr(10, 3);   // 720
+ *   cout << pi.fact[5];      // 120
+ */
 template < typename T = int > struct Power_Inverse {
     
     T MAX_N, mod;

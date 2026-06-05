@@ -52,6 +52,34 @@ struct Line {
     }
 };
 
+/*
+ * CHT — Convex Hull Trick (Li Chao tree via multiset, online queries)
+ *
+ * Template params:
+ *   T    = numeric type (default int, use ll for large values)
+ *   Mode = -1 → maximize  y = m*x + c
+ *          +1 → minimize  y = m*x + c
+ *
+ * Constructor:
+ *   CHT<T, Mode> cht;   // empty
+ *
+ * Methods:
+ *   add(T m, T c)    → add line y = m*x + c (any order, O(log n) amortized)
+ *   query(T x)       → T, optimal value at x (O(log n))
+ *
+ * Example:
+ *   // Maximize m*x + c
+ *   CHT<ll, -1> cht;
+ *   cht.add(2, 3);    // line: 2x + 3
+ *   cht.add(5, -1);   // line: 5x - 1
+ *   cout << cht.query(4);   // max(2*4+3, 5*4-1) = max(11,19) = 19
+ *
+ *   // Minimize m*x + c
+ *   CHT<ll, 1> cht;
+ *   cht.add(3, 5);
+ *   cht.add(1, 10);
+ *   cout << cht.query(2);   // min(3*2+5, 1*2+10) = min(11,12) = 11
+ */
 template < typename T = int, T Mode = -1 > class CHT : multiset < Line, less < > > {
 private:
     

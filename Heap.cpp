@@ -32,6 +32,33 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Heap — Custom Binary Heap
+ *
+ * Template params:
+ *   T            = element type (default int)
+ *   CompFunction = comparison (default greater_equal → max-heap)
+ *                  Use less_equal<T> for min-heap
+ *
+ * Constructors:
+ *   Heap<T> h;                     // empty max-heap
+ *   Heap<T> h(vector<T>& v);       // build from vector
+ *
+ * Methods:
+ *   insert(T x)   → insert element
+ *   pop()         → remove top element
+ *   top()         → → T, peek top
+ *   empty()       → → bool
+ *   size()        → → int
+ *
+ * Example:
+ *   Heap<int> maxH;              // max-heap
+ *   maxH.insert(3); maxH.insert(7); maxH.insert(1);
+ *   cout << maxH.top();          // 7
+ *   maxH.pop();
+ *
+ *   Heap<int, less_equal<int>> minH;  // min-heap
+ */
 template < typename T = int , typename CompFunction = std::greater_equal < T > > struct Heap {
     
     vector < T > heap;

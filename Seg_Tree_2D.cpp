@@ -32,6 +32,29 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * SegmentTree2D — 2D Segment Tree (point update, rectangle query)
+ *
+ * Template params:
+ *   T    = value type (default int)
+ *   Base = 0 → 0-indexed input, 1 → 1-indexed input
+ *
+ * NOTE: Modify operation() inside for non-sum queries.
+ *
+ * Constructors:
+ *   SegmentTree2D<T, Base> seg(int n, int m);                          // empty n×m grid
+ *   SegmentTree2D<T, Base> seg(int n, int m, vector<vector<T>>& nums); // with initial values
+ *
+ * Methods:
+ *   update(int x, int y, T val)             → point update, 1-indexed
+ *   query(int lx, int rx, int ly, int ry)   → T, rectangle sum [lx..rx] × [ly..ry]
+ *   get(int x, int y)                       → T, single cell value
+ *
+ * Example:
+ *   SegmentTree2D<int> seg(n, m);
+ *   seg.update(2, 3, 7);
+ *   cout << seg.query(1, 3, 1, 4);
+ */
 template < typename T = int , int Base = 0 > struct SegmentTree2D {
 
     struct Node {

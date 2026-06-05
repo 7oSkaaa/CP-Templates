@@ -32,6 +32,31 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Tarjan — SCC + Bridges + Articulation Points
+ *
+ * Constructor:
+ *   Tarjan t(int n);   // n = number of nodes (0-indexed internally, size n+5)
+ *
+ * Methods:
+ *   addEdge(int u, int v, bool is_directed = false)  → add edge
+ *   run()                                             → must call before querying
+ *   getComponents()          → vector<vector<int>>, SCCs
+ *   getBridges()             → vector<pair<int,int>>, bridge edges
+ *   getArticulationPoints()  → set<int>
+ *   isArticulationPoint(u)   → bool
+ *   isBridge(u, v)           → bool
+ *
+ * Example:
+ *   Tarjan t(n);
+ *   for(int i = 0; i < m; i++) {
+ *       int u, v; cin >> u >> v;
+ *       t.addEdge(u, v, true);
+ *   }
+ *   t.run();
+ *   cout << t.getComponents().size();
+ *   for(auto& [u,v] : t.getBridges()) cout << u << " " << v << "\n";
+ */
 class Tarjan {
 public:
     Tarjan(int n) {

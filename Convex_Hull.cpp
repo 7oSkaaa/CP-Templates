@@ -35,6 +35,48 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Point<T> — 2D geometric point with full operator support
+ *
+ * Template params:
+ *   T = coordinate type (int for exact, double for floating)
+ *
+ * Constructor:
+ *   Point<T> p(T x = 0, T y = 0);
+ *
+ * Operators: +, -, *, /, ==, !=, <, >, <=, >= (sorted by (y,x)), cin >>, cout <<
+ *
+ * Methods:
+ *   dot(q)           → T, dot product
+ *   cross(q)         → T, cross product (this × q)
+ *   cross(a, b)      → T, cross product of (a-this) × (b-this)
+ *   dist()           → T, squared distance from origin
+ *   dist(q)          → T, squared distance to q
+ *   distance()       → double, Euclidean distance from origin
+ *   distance(q)      → double, Euclidean distance to q
+ *   angle()          → double, atan2(y, x)
+ *   angle(q)         → double, angle between this and q
+ *   perp()           → Point(-y, x), perpendicular
+ *   rotate(double a) → rotated point by angle a
+ *   rotate(p, a)     → rotated around point p by angle a
+ *   unit()           → unit vector
+ *   normal()         → unit normal (perpendicular unit vector)
+ *
+ * -------------------------------------------------------------------
+ * Convex_Hull<T> — Graham Scan convex hull
+ *
+ * Constructor:
+ *   Convex_Hull<T> ch(vector<Point<T>>& points, bool include_collinear = false);
+ *   // NOTE: modifies the input points vector (sorts + deduplicates)
+ *
+ * Result:
+ *   ch.Convex_Points   → vector<Point<T>>, hull vertices in CCW order
+ *
+ * Example:
+ *   vector<Point<int>> pts = {{0,0},{4,0},{2,3},{1,1}};
+ *   Convex_Hull<int> ch(pts);
+ *   for(auto& p : ch.Convex_Points) cout << p << "\n";
+ */
 template < typename T = int > struct Point {
     T x, y;
     Point(T _x = 0, T _y = 0) : x(_x), y(_y) {}

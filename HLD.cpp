@@ -32,6 +32,37 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * HLD — Heavy-Light Decomposition
+ *
+ * Template params:
+ *   T           = value/query type (default int)
+ *   VAL_ON_EDGE = false → values on nodes, true → values on edges
+ *
+ * Constructor:
+ *   HLD<T, VAL_ON_EDGE> hld(int n, vector<vector<int>>& G, int treeRoot = 1);
+ *   // After construction: hld.pos[u] = position of node u in HLD array (1-indexed)
+ *   // Use pos[] to map nodes to your segment tree indices
+ *
+ * Methods:
+ *   update(int u, T val, function<void(T,T)>& seg_update)
+ *       → point update on node u
+ *   update(int u, int v, T val, function<void(T,T)>& seg_update)
+ *       → edge update on edge u-v
+ *   query(int u, int v,
+ *         function<T(T,T)>& combine,     // merge two seg results
+ *         function<T(T,T)>& seg_query,   // your seg tree query
+ *         T default_value)               → T
+ *
+ * Example:
+ *   HLD<int> hld(n, adj, 1);
+ *   Segment_Tree<int,int,1> seg(n);
+ *   // init: seg.update(hld.pos[u], node_val[u]);
+ *   // path sum:
+ *   auto res = hld.query(u, v,
+ *       [](int a, int b){ return a + b; },
+ *       [&](int l, int r){ return seg.query(l, r); }, 0);
+ */
 template < typename T = int, bool VAL_ON_EDGE = false >
 class HLD {
     // VAL_ON_EDGE = 1 if the value is on the edge, 0 if the value is on the node

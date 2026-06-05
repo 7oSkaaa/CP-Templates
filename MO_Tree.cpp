@@ -32,6 +32,35 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * MoTree — Mo's Algorithm on Trees (Hilbert curve ordering)
+ *
+ * Template params:
+ *   T           = answer type (default int)
+ *   graphType   = adjacency element type (default int; use pair<int,int> for weighted)
+ *   VAL_ON_EDGE = false → values on nodes, true → values on edges
+ *
+ * NOTE: Implement add(int u) and remove(int u) inside the class,
+ *       updating the member variable `ans` accordingly.
+ *
+ * Constructor:
+ *   MoTree<T, graphType, VAL_ON_EDGE> mo(
+ *       int N, int M,
+ *       vector<vector<graphType>>& G,
+ *       vector<T>& V = {},   // optional node values
+ *       int root = 1
+ *   );
+ *
+ * Methods:
+ *   getData()        → reads M queries "u v" from cin, processes all
+ *   getAnswers()     → vector<T>, answers in original query order
+ *
+ * Example:
+ *   // After implementing add() and remove():
+ *   MoTree<int, int> mo(n, q, adj, node_vals, 1);
+ *   mo.getData();
+ *   for(auto& a : mo.getAnswers()) cout << a << "\n";
+ */
 template < typename T = int , typename graphType = int , bool VAL_ON_EDGE = false >
 class MoTree {
 public:

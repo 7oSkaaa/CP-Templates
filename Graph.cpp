@@ -34,6 +34,30 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
+/*
+ * Graph — General undirected/directed graph with BFS/DFS utilities
+ *
+ * Constructor:
+ *   Graph g(int N, int M);   // N nodes, M edges
+ *
+ * Methods:
+ *   add_edge(u, v, is_directed=false)  → add edge
+ *   build_adj(is_directed=false)       → read M edges from cin
+ *   remove_edge(u, v)                  → remove undirected edge
+ *   dfs(node, dep=0, par=-1)           → fills depth[], parent[], vis[]
+ *   bfs(from, to)                      → shortest path distance → int
+ *   is_cycle(node, par)                → → bool
+ *   is_Bipartite()                     → → bool
+ *   topology()                         → topological sort, prints result
+ *   get_path(node)                     → print path to root after dfs
+ *
+ * Example:
+ *   Graph g(n, m);
+ *   g.build_adj();
+ *   g.dfs(1);
+ *   cout << g.bfs(1, n);
+ *   cout << g.is_Bipartite();
+ */
 struct Graph {
 
     int n, m, connected_components;

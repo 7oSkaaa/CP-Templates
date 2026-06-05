@@ -34,7 +34,38 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
     return out;
 }
 
-template < typename Tabletype = int, typename numsType = int, int Base = 0 > 
+/*
+ * Sparse_Table — Static RMQ / Range Query in O(1) or O(log n)
+ *
+ * Template params:
+ *   Tabletype = answer type   (default int)
+ *   numsType  = input type    (default int)
+ *   Base      = 0 → 0-indexed input, 1 → 1-indexed input
+ *
+ * Constructor:
+ *   Sparse_Table<Tabletype, numsType, Base> st(
+ *       int N,
+ *       vector<numsType>& vec,
+ *       function<Tabletype(Tabletype,Tabletype)> op,  // default: min
+ *       Tabletype def = numeric_limits<Tabletype>::max()
+ *   );
+ *
+ * Methods:
+ *   query(int L, int R, bool is_overlap = false) → Tabletype
+ *     is_overlap = false → O(1), use for idempotent ops (min, max, gcd)
+ *     is_overlap = true  → O(log n), use for non-idempotent ops (sum)
+ *
+ * Example:
+ *   // Range min, 1-indexed
+ *   Sparse_Table<int,int,1> st(n, arr);
+ *   cout << st.query(1, n);
+ *
+ *   // Range sum, 0-indexed
+ *   Sparse_Table<ll,ll,0> st(n, arr,
+ *       [](ll a, ll b){ return a+b; }, 0LL);
+ *   cout << st.query(0, n-1, true);
+ */
+template < typename Tabletype = int, typename numsType = int, int Base = 0 >
 class Sparse_Table {
 private:
 
