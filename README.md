@@ -1,150 +1,194 @@
-<head>
- <link rel="icon" type="image/png" href="https://iili.io/H5APPzG.png">
-</head>
+<div align="center">
 
-<h1> Competitive Programming Templates </h1>
+<h1>⚡ CP Templates</h1>
 
-This template is made for competitive programming using `C++` language.
+<p><b>Ahmed Hossam's competitive programming reference library</b><br>
+57 battle-tested algorithms & data structures, organized for contests</p>
 
-<br><br><br>
+[![Stars](https://img.shields.io/github/stars/7oSkaaa/CP-Templates?style=flat-square&color=00cfff&labelColor=0d1626&logo=github)](https://github.com/7oSkaaa/CP-Templates/stargazers)
+[![Forks](https://img.shields.io/github/forks/7oSkaaa/CP-Templates?style=flat-square&color=7c5cfc&labelColor=0d1626&logo=github)](https://github.com/7oSkaaa/CP-Templates/network/members)
+[![Language](https://img.shields.io/badge/C%2B%2B-17-00599C?style=flat-square&labelColor=0d1626&logo=cplusplus)](https://isocpp.org/)
+[![Website](https://img.shields.io/badge/website-live-10b981?style=flat-square&labelColor=0d1626&logo=googlechrome&logoColor=white)](https://7oskaaa.github.io/CP-Templates/)
 
-<h3> 
-<img src="https://media4.giphy.com/media/dMLmQfCO7lCA2gX3tw/giphy.gif?cid=ecf05e47ak6mwfu812269zzr8ydv529109qzpb8rszwnja9e&rid=giphy.gif&ct=s" width="10%"/> <span>My Competitive Programming Profiles</span>
-</h3>
+<br>
 
----
+<a href="https://codeforces.com/profile/7oSkaaa" title="Codeforces">
+  <img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" width="36px"/>
+</a>&ensp;
+<a href="https://leetcode.com/7oSkaa/" title="LeetCode">
+  <img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png" width="36px"/>
+</a>&ensp;
+<a href="https://atcoder.jp/users/ahmed_7oSkaa" title="AtCoder">
+  <img src="https://iili.io/HTsq4wv.png" width="36px"/>
+</a>&ensp;
+<a href="https://www.codechef.com/users/ahmed_7oskaa" title="CodeChef">
+  <img src="https://img.icons8.com/color/50/000000/codechef.png" width="36px"/>
+</a>&ensp;
+<a href="https://icpc.global/ICPCID/IW0X0CTD0ZV9" title="ICPC">
+  <img src="https://iili.io/HTsBUfS.png" width="36px"/>
+</a>
 
-<p align="center">
-  <a href="https://codeforces.com/profile/7oSkaaa"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-codeforces-programming-competitions-and-contests-programming-community-logo-shadow-tal-revivo.png" alt="Code Forces" width="6%"/></a>&emsp; 
- <a href="https://leetcode.com/7oSkaa/"><img src="https://img.icons8.com/external-tal-revivo-shadow-tal-revivo/50/000000/external-level-up-your-coding-skills-and-quickly-land-a-job-logo-shadow-tal-revivo.png" alt="LeetCode" width="6%"/></a>&emsp; 
- <a href="https://atcoder.jp/users/ahmed_7oSkaa"><img src="https://iili.io/HTsq4wv.png" alt="AtCoder" width="6%"/></a>&emsp; 
- <a href="https://www.codechef.com/users/ahmed_7oskaa"><img src="https://img.icons8.com/color/50/000000/codechef.png" alt="Code Chef" width="6%"/></a>&emsp; 
- <a href="https://icpc.global/ICPCID/IW0X0CTD0ZV9"><img src="https://iili.io/HTsBUfS.png" alt="ICPC Global" width="6%"/></a>&emsp; 
- <a href="https://www.codingame.com/profile/e5e56c7585fda3b457056b85180a4d636850344" ><img src="https://tcourreges.github.io/images/codersstrikeback/codingamelogo.png" alt="Codingame" width="20%"/></a>
-</p>
+<br><br>
 
-<br><br><br>
+### [🌐 Browse the interactive website →](https://7oskaaa.github.io/CP-Templates/)
+*Search, preview with syntax highlighting, and download any template in one click*
 
-### Contest templates
-
----
-
-- [My template C++](https://github.com/7oSkaaa/CP-Templates/blob/main/Template.cpp)&nbsp;<a href='Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Google template C++](https://github.com/7oSkaaa/CP-Templates/blob/main/Google_Template.cpp)&nbsp;<a href='Google_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-
-<br><br><br>
-
-### Graph
-
----
-
-- [Graph Traversing (DFS, BFS)](https://github.com/7oSkaaa/CP-Templates/blob/main/Graph.cpp)&nbsp;<a href='Graph.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Dijkstra](https://github.com/7oSkaaa/CP-Templates/blob/main/Dijkstra.cpp)&nbsp;<a href='Dijkstra.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Floyd](https://github.com/7oSkaaa/CP-Templates/blob/main/Floyd.cpp)&nbsp;<a href='Floyd.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Prim](https://github.com/7oSkaaa/CP-Templates/blob/main/Prim.cpp)&nbsp;<a href='Prim.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Binary Search Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Binary_Search_Tree.cpp)&nbsp;<a href='Binary_Search_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Centroid Decomposition](https://github.com/7oSkaaa/CP-Templates/blob/main/Centroid_Decomposition.cpp)&nbsp;<a href='Centroid_Decomposition.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Lowest Common Ancestor](https://github.com/7oSkaaa/CP-Templates/blob/main/LCA.cpp)&nbsp;<a href='LCA.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Lowest Common Ancestor Weighted](https://github.com/7oSkaaa/CP-Templates/blob/main/LCA_Weighted.cpp)&nbsp;<a href='LCA_Weighted.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [SQRT Decomposition + Mo’s Algorithm on Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/MO_Tree.cpp)&nbsp;<a href='MO_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-<br><br><br>
-
-### Data Structures
+</div>
 
 ---
 
-- [Segment Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Seg_Tree.cpp)&nbsp;<a href='Seg_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Lazy Propagation](https://github.com/7oSkaaa/CP-Templates/blob/main/Lazy_Propagation.cpp)&nbsp;<a href='Lazy_Propagation.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Persistent Segment Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/PST.cpp)&nbsp;<a href='PST.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Fenwick Tree](https://github.com/7oSkaaa/CP-Templates/blob/main/Fenwick_Tree.cpp)&nbsp;<a href='Fenwick_Tree.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Fenwick Tree 2D](https://github.com/7oSkaaa/CP-Templates/blob/main/Fenwick_Tree_2D.cpp)&nbsp;<a href='Fenwick_Tree_2D.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Sparse Table](https://github.com/7oSkaaa/CP-Templates/blob/main/Sparse_Table.cpp)&nbsp;<a href='Sparse_Table.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Disjoint Set Union](https://github.com/7oSkaaa/CP-Templates/blob/main/DSU.cpp)&nbsp;<a href='DSU.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Heavy Light Decomposition](https://github.com/7oSkaaa/CP-Templates/blob/main/HLD.cpp)&nbsp;<a href='HLD.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [SQRT Decomposition + Mo’s Algorithm](https://github.com/7oSkaaa/CP-Templates/blob/main/MO.cpp)&nbsp;<a href='MO.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Ordered Set](https://github.com/7oSkaaa/CP-Templates/blob/main/Ordered_Set.cpp)&nbsp;<a href='Ordered_Set.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie.cpp)&nbsp;<a href='Trie.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Binary Trie](https://github.com/7oSkaaa/CP-Templates/blob/main/Trie_Binary.cpp)&nbsp;<a href='Trie_Binary.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Monotonic Stacks](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Stacks.cpp)&nbsp;<a href='Monotonic_Stacks.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Monotonic Queue](https://github.com/7oSkaaa/CP-Templates/blob/main/Monotonic_Queue.cpp)&nbsp;<a href='Monotonic_Queue.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+## 📋 Contents
 
-<br><br><br>
-
-### Hashing
+[🏆 Contest](#-contest) · [🕸️ Graph](#️-graph) · [🌲 Data Structures](#-data-structures) · [📊 Range Query](#-range-query) · [#️⃣ Hashing](#️-hashing) · [📈 Dynamic Programming](#-dynamic-programming) · [📝 String](#-string) · [π Number Theory](#-number-theory) · [📐 Math & Geometry](#-math--geometry) · [⚙️ Data Types](#️-data-types) · [🗜️ Compression](#️-compression)
 
 ---
 
-- [Hash Interval](https://github.com/7oSkaaa/CP-Templates/blob/main/Hash.cpp)&nbsp;<a href='Hash.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Hashed Deque](https://github.com/7oSkaaa/CP-Templates/blob/main/Hashed_Deque.cpp)&nbsp;<a href='Hashed_Deque.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+## 🏆 Contest
 
-<br><br><br>
-
-### Dynamic Programming
-
----
-
-- [Convex Hull Trick](https://github.com/7oSkaaa/CP-Templates/blob/main/Convex_Hull_Trick.cpp)&nbsp;<a href='Convex_Hull_Trick.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Kadane](https://github.com/7oSkaaa/CP-Templates/blob/main/Kadane.cpp)&nbsp;<a href='Kadane.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Prefix Sum 2D](https://github.com/7oSkaaa/CP-Templates/blob/main/Prefix_Sum_2D.cpp)&nbsp;<a href='Prefix_Sum_2D.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Partial Sum 2D](https://github.com/7oSkaaa/CP-Templates/blob/main/Partial_Sum_2D.cpp)&nbsp;<a href='Partial_Sum_2D.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Manacher](https://github.com/7oSkaaa/CP-Templates/blob/main/Manacher.cpp)&nbsp;<a href='Manacher.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-
-<br><br><br>
-
-### String Algorithm
+| Template | Description |
+|----------|-------------|
+| [Contest Template](Template.cpp) | Main C++ template with macros and common includes |
 
 ---
 
-- [KMP](https://github.com/7oSkaaa/CP-Templates/blob/main/KMP.cpp)&nbsp;<a href='KMP.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+## 🕸️ Graph
 
-<br><br><br>
-
-### Number Theory
-
----
-
-- [Sieve of Eratosthenes](https://github.com/7oSkaaa/CP-Templates/blob/main/Seive.cpp)&nbsp;<a href='Seive.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Factors](https://github.com/7oSkaaa/CP-Templates/blob/main/Factors.cpp)&nbsp;<a href='Factors.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Miller Robin](https://github.com/7oSkaaa/CP-Templates/blob/main/Miller_Robin.cpp)&nbsp;<a href='Miller_Robin.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-<br><br><br>
-
-### Math & Computational Geometry
-
----
-
-- [Convex Hull](https://github.com/7oSkaaa/CP-Templates/blob/main/Convex_Hull.cpp)&nbsp;<a href='Convex_Hull.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Math Template](https://github.com/7oSkaaa/CP-Templates/blob/main/Math.cpp)&nbsp;<a href='Math.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Matrix Power](https://github.com/7oSkaaa/CP-Templates/blob/main/Matrix_Power.cpp)&nbsp;<a href='Matrix_Power.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Power Inverse](https://github.com/7oSkaaa/CP-Templates/blob/main/Power_Inverse.cpp)&nbsp;<a href='Power_Inverse.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Points Template](https://github.com/7oSkaaa/CP-Templates/blob/main/Point.cpp)&nbsp;<a href='Point.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-
-<br><br><br>
-
-### Data types Templates
+| Template | Description |
+|----------|-------------|
+| [Graph Traversal](Graph.cpp) | DFS & BFS on adjacency list graphs |
+| [Graph Representation](Graph_Representation.cpp) | Adjacency list and adjacency matrix representations |
+| [Dijkstra's Algorithm](Dijkstra.cpp) | Single-source shortest path for non-negative weighted graphs |
+| [Floyd-Warshall](Floyd.cpp) | All-pairs shortest path in O(V³) |
+| [Prim's MST](Prim.cpp) | Minimum spanning tree using priority queue |
+| [Bellman-Ford](Bellman_Ford.cpp) | SSSP supporting negative edge weights and cycle detection |
+| [Centroid Decomposition](Centroid_Decomposition.cpp) | Divide-and-conquer on trees via centroid |
+| [LCA — Binary Lifting](LCA.cpp) | Lowest Common Ancestor with O(log n) queries |
+| [LCA Weighted](LCA_Weighted.cpp) | LCA with path distance queries on weighted trees |
+| [Tarjan's SCC](Tarjan.cpp) | Strongly connected components, bridges, and articulation points |
+| [Kuhn's Matching](Kuhn.cpp) | Maximum bipartite matching via augmenting paths |
+| [Link Cut Tree](Link_Cut_Tree.cpp) | Dynamic tree connectivity with path queries in O(log n) |
 
 ---
 
-- [Mod Int](https://github.com/7oSkaaa/CP-Templates/blob/main/Mod_Int.cpp)&nbsp;<a href='Mod_Int.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
-- [Bit Int](https://github.com/7oSkaaa/CP-Templates/blob/main/Big_Int.cpp)&nbsp;<a href='Big_Int.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+## 🌲 Data Structures
 
-<br><br><br>
-
-### Compression Algorithms
+| Template | Description |
+|----------|-------------|
+| [Binary Search Tree](Binary_Search_Tree.cpp) | BST with insert, delete, search operations |
+| [Segment Tree](Seg_Tree.cpp) | Point update, range query in O(log n) |
+| [Segment Tree — Lazy](Lazy_Propagation.cpp) | Range update with lazy propagation in O(log n) |
+| [Persistent Segment Tree](PST.cpp) | Immutable versioned segment tree for historical queries |
+| [Segment Tree 2D](Seg_Tree_2D.cpp) | 2D segment tree for 2D range queries and updates |
+| [Fenwick Tree (BIT)](Fenwick_Tree.cpp) | Binary indexed tree for prefix sum queries in O(log n) |
+| [Fenwick Tree 2D](Fenwick_Tree_2D.cpp) | 2D BIT for 2D range sum queries |
+| [Fenwick Tree Range](Fenwick_Tree_Range.cpp) | BIT supporting both range updates and range queries |
+| [Sparse Table](Sparse_Table.cpp) | Static RMQ in O(1) with O(n log n) preprocessing |
+| [DSU / Union-Find](DSU.cpp) | Disjoint set union with path compression and union by rank |
+| [Heavy Light Decomposition](HLD.cpp) | Path and subtree queries on trees via HLD |
+| [Ordered Set](Ordered_Set.cpp) | Policy-based order statistics tree: `find_by_order`, `order_of_key` |
+| [Trie](Trie.cpp) | Prefix tree for string insert and search |
+| [Binary Trie](Trie_Binary.cpp) | Bit-based trie for XOR maximum and queries |
+| [Monotonic Stack](Monotonic_Stacks.cpp) | Next greater/smaller element queries in O(n) |
+| [Monotonic Queue](Monotonic_Queue.cpp) | Sliding window min/max in O(n) |
+| [Implicit Splay Tree](Implicit_SplayTree.cpp) | Implicit key splay tree for sequence split/merge operations |
+| [Splay Tree](SplayTree.cpp) | Self-adjusting BST with amortized O(log n) operations |
+| [Heap](Heap.cpp) | Binary heap / priority queue implementation |
 
 ---
 
-- [Coordinates Compression](https://github.com/7oSkaaa/CP-Templates/blob/main/Coordinate_Compression.cpp)&nbsp;<a href='Coordinate_Compression.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+## 📊 Range Query
 
-<br><br><br>
-
-### Additional Files
+| Template | Description |
+|----------|-------------|
+| [SQRT Decomposition](SQRT_Decomp.cpp) | Bucket decomposition for range queries in O(√n) |
+| [Mo's Algorithm](MO.cpp) | Offline range queries sorted by Mo's ordering in O((n+q)√n) |
+| [Mo's on Trees](MO_Tree.cpp) | Mo's algorithm adapted for tree path queries |
 
 ---
 
-- [Template to Print](https://github.com/7oSkaaa/CP-Templates/blob/main/Print_Template.cpp)&nbsp;<a href='Print_Template.cpp'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+## #️⃣ Hashing
 
-- [CP-Snippets](https://github.com/7oSkaaa/CP-Templates/blob/main/CP.code-snippets)&nbsp;<a href='CP.code-snippets'><img src="https://img.icons8.com/color/48/000000/downloads.png" width="20px"/></a>
+| Template | Description |
+|----------|-------------|
+| [Rolling Hash](Hash.cpp) | Polynomial rolling hash for O(1) substring comparisons |
+| [Hashed Deque](Hashed_Deque.cpp) | Deque with rolling hash support for sliding window hashing |
+| [Hash Segment Tree](Hashing_SegmentTree.cpp) | Segment tree storing hash values for range hash queries |
 
-- [Stress Testing Template](https://github.com/7oSkaaa/Stress_Testing)
+---
 
-<br><br><br>
+## 📈 Dynamic Programming
+
+| Template | Description |
+|----------|-------------|
+| [Convex Hull Trick](Convex_Hull_Trick.cpp) | Li Chao tree / CHT for linear DP transition optimization |
+| [Kadane's Algorithm](Kadane.cpp) | Maximum subarray sum in O(n) |
+| [Manacher's Algorithm](Manacher.cpp) | All palindromic substrings in O(n) |
+| [Prefix Sum 2D](Prefix_Sum_2D.cpp) | 2D prefix sums for O(1) rectangle sum queries |
+| [Partial Sum 2D](Partial_Sum_2D.cpp) | 2D difference array for O(1) rectangle updates |
+
+---
+
+## 📝 String
+
+| Template | Description |
+|----------|-------------|
+| [KMP](KMP.cpp) | Knuth-Morris-Pratt pattern matching in O(n+m) |
+
+---
+
+## π Number Theory
+
+| Template | Description |
+|----------|-------------|
+| [Sieve of Eratosthenes](Seive.cpp) | Find all primes up to N in O(N log log N) |
+| [Sieve + Prime Factors](Seive_Prime_Factors.cpp) | Linear sieve precomputing smallest prime factor per number |
+| [Factorization](Factors.cpp) | Trial division and factorization algorithms |
+| [Miller-Rabin](Miller_Robin.cpp) | Deterministic primality test for large numbers |
+
+---
+
+## 📐 Math & Geometry
+
+| Template | Description |
+|----------|-------------|
+| [Convex Hull](Convex_Hull.cpp) | Andrew's monotone chain convex hull in O(n log n) |
+| [Math Utilities](Math.cpp) | GCD, LCM, extended Euclidean and number utilities |
+| [Matrix Exponentiation](Matrix_Power.cpp) | Fast matrix power for linear recurrences in O(k³ log n) |
+| [Modular Inverse](Power_Inverse.cpp) | Modular inverse via Fermat's little theorem |
+| [Geometry Points](Point.cpp) | 2D point struct with cross/dot product and angle operations |
+| [Ternary Search](Ternary_Search.cpp) | Find minimum/maximum of a unimodal function |
+
+---
+
+## ⚙️ Data Types
+
+| Template | Description |
+|----------|-------------|
+| [Modular Integer](Mod_Int.cpp) | Integer wrapper type with automatic modular arithmetic |
+| [Big Integer](Big_Int.cpp) | Arbitrary precision integer with arithmetic operations |
+
+---
+
+## 🗜️ Compression
+
+| Template | Description |
+|----------|-------------|
+| [Coordinate Compression](Coordinate_Compression.cpp) | Map large sparse coordinate values to compact range |
+
+---
+
+## 🔗 Additional Resources
+
+| Resource | Description |
+|----------|-------------|
+| [CP.code-snippets](CP.code-snippets) | VS Code snippets for all templates |
+| [Print Template](Print_Template.cpp) | Template configured for formatted output |
+| [Stress Testing](https://github.com/7oSkaaa/Stress_Testing) | Stress testing setup for solution validation |
+
+---
+
+<div align="center">
+
+Made with ❤️ by <a href="https://7oskaaa.github.io/Ahmed-Hossam/">Ahmed Hossam</a>
+
+</div>
