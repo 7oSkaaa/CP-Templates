@@ -27,8 +27,8 @@ template < typename T = int > istream& operator >> (istream &in, vector < T > &v
     return in;
 }
 
-template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
-    for (const T &x : v) out << x << ' '; 
+template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) {
+    for (const T &x : v) out << x << ' ';
     return out;
 }
 
@@ -39,7 +39,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *   T = value type (default int)
  *
  * Constructor:
- *   Fenwick_Tree_Range<T> ft(int sz);  // 0-indexed, size = sz
+ *   Fenwick_Tree_Range<T> ft(int sz);   // 0-indexed, size = sz
  *
  * Methods:
  *   build(vector<T>& nums)       → build from 0-indexed array
@@ -47,68 +47,65 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *   add(int idx, T val)          → point add at idx
  *   query(int L, int R)          → T, range sum [L, R] 0-indexed
  *
+ * Note: N = sz + 1 internally to hold the boundary sentinel for range updates.
+ *
  * Example:
  *   Fenwick_Tree_Range<ll> ft(n);
  *   ft.build(arr);
- *   ft.add(2, 5, 3);         // add 3 to elements 2..5
+ *   ft.add(2, 5, 3);         // add 3 to elements [2..5]
  *   cout << ft.query(1, 6);
  */
 template < typename T = int > struct Fenwick_Tree_Range {
-    
+
     int N;
     T DEFAULT;
     vector < T > M, C;
 
-    Fenwick_Tree_Range(int sz = 0){
-        N = sz + 1, DEFAULT = 0;
-        M = C = vector < T > (N + 10);
+    // N = sz + 1 to reserve a sentinel slot for boundary updates at position sz
+    Fenwick_Tree_Range(int sz = 0) : N(sz + 1), DEFAULT(T{}) {
+        M.assign(N + 1, DEFAULT);
+        C.assign(N + 1, DEFAULT);
     }
 
-    int lowest_bit(int idx){
-        return (idx & -idx);
-    }
-
-    void build(vector < T >& nums){
-        for(int i = 0; i < sz(nums); i++)
+    void build(const vector < T >& nums) {
+        for (int i = 0; i < sz(nums); i++)
             add(i, i, nums[i]);
     }
 
-    void add_range(int idx, T addM, T addC){
-        idx++;
-        while(idx <= N){
+    void add_range(int idx, T addM, T addC) {
+        for (++idx; idx <= N; idx += idx & -idx) {
             M[idx] += addM;
             C[idx] += addC;
-            idx += lowest_bit(idx);
         }
     }
 
     void add(int l, int r, T val) {
-        add_range(l, val, -val * (l - 1));
+        add_range(l,     val, -val * (l - 1));
         add_range(r + 1, -val, val * r);
     }
 
-    void add(int idx, T val){
+    void add(int idx, T val) {
         add(idx, idx, val);
     }
 
-    T get(int idx){
+    T get(int idx) const {
         T ans = DEFAULT;
-        int pos = idx++;
-        while(idx){
+        int pos = idx;
+        for (++idx; idx > 0; idx -= idx & -idx)
             ans += pos * M[idx] + C[idx];
-            idx -= lowest_bit(idx);
-        }
         return ans;
     }
 
-    T query(int L, int R){
-        if(L > R) return DEFAULT;
+    T query(int L, int R) const {
+        if (L > R) return DEFAULT;
         return get(R) - get(L - 1);
     }
+
+    int size() const { return N - 1; }
 };
 
 void Solve(){
-    
+
 }
 
 int main(){

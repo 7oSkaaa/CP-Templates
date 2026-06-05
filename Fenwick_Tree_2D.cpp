@@ -29,94 +29,71 @@ template < typename T = int > istream& operator >> (istream &in, vector < T > &v
     return in;
 }
 
-template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
-    for (const T &x : v) out << x << ' '; 
+template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) {
+    for (const T &x : v) out << x << ' ';
     return out;
 }
 
 /*
- * Fenwick_Tree (2D) — 2D Binary Indexed Tree
+ * Fenwick_Tree — 2D Binary Indexed Tree (BIT)
  *
  * Template params:
  *   T = value type (default int)
  *
  * Constructor:
- *   Fenwick_Tree<T> ft(int rows, int cols);  // 1-indexed rows and cols
+ *   Fenwick_Tree<T> ft(int rows, int cols);   // 1-indexed rows and cols
  *
  * Methods:
- *   build(vector<vector<T>>& nums)           → build from 2D array (0-indexed input)
- *   add(int idx, int jdx, T val)            → point update at (idx, jdx) 1-indexed
- *   query(int x1, int y1, int x2, int y2)  → T, rectangle sum [x1..x2] × [y1..y2]
+ *   build(vector<vector<T>>& nums)           → build from 0-indexed 2D array
+ *   add(int x, int y, T val)                → point update at (x, y) 1-indexed
+ *   query(int x1, int y1, int x2, int y2)  → T, rectangle sum [x1..x2] × [y1..y2] 1-indexed
  *
  * Example:
  *   Fenwick_Tree<ll> ft(n, m);
- *   ft.add(1, 1, 5);
- *   ft.add(2, 3, 3);
+ *   ft.build(grid);
+ *   ft.add(2, 3, 5);
  *   cout << ft.query(1, 1, 2, 3);
  */
 template < typename T = int > struct Fenwick_Tree {
 
-    vector < vector < T > > Tree;
     int n, m;
     T DEFAULT;
+    vector < vector < T > > tree;
 
-    Fenwick_Tree(int rows = 0, int cols = 0){
-        n = rows + 1, m = cols + 1, DEFAULT = 0;
-        Tree.assign(n + 10, vector < ll > (m + 10, DEFAULT));
+    Fenwick_Tree(int rows = 0, int cols = 0) : n(rows), m(cols), DEFAULT(T{}) {
+        tree.assign(n + 1, vector < T >(m + 1, DEFAULT));
     }
 
-    int lowest_bit(int idx){
-        return (idx & -idx);
-    }
-
-    void build(vector < vector < T > >& nums){
-        for(int i = 0; i < sz(nums); i++)
-            for(int j = 0; j < sz(nums[0]); j++)
+    void build(const vector < vector < T > >& nums) {
+        for (int i = 0; i < sz(nums); i++)
+            for (int j = 0; j < sz(nums[0]); j++)
                 add(i + 1, j + 1, nums[i][j]);
     }
 
-    T operation(T a, T b){
-        return a + b;
+    void add(int x, int y, T val) {
+        for (int i = x; i <= n; i += i & -i)
+            for (int j = y; j <= m; j += j & -j)
+                tree[i][j] += val;
     }
 
-    void add(int idx, int jdx, T val){
-        int i = idx + 1, j = jdx + 1;
-        while(i <= n){
-            j = jdx + 1;
-            while(j <= m){
-                Tree[i][j] = operation(Tree[i][j], val);
-                j += lowest_bit(j);    
-            }
-            i += lowest_bit(i);
-        }
+    T get_sum(int x, int y) const {
+        T s = DEFAULT;
+        for (int i = x; i > 0; i -= i & -i)
+            for (int j = y; j > 0; j -= j & -j)
+                s += tree[i][j];
+        return s;
     }
 
-    T get_sum(int idx, int jdx){
-        T sum = DEFAULT;
-        int i = idx + 1, j = jdx + 1;
-        while(i){
-            j = jdx + 1;
-            while(j){
-                sum = operation(sum, Tree[i][j]);
-                j -= lowest_bit(j);    
-            }
-            i -= lowest_bit(i);
-        }
-        return sum;
+    T query(int x1, int y1, int x2, int y2) const {
+        if (x1 > x2) swap(x1, x2);
+        if (y1 > y2) swap(y1, y2);
+        return get_sum(x2, y2) - get_sum(x1 - 1, y2)
+             - get_sum(x2, y1 - 1) + get_sum(x1 - 1, y1 - 1);
     }
-
-    // Get the sum of the number in the rectangle x1, y1, x2, y2
-
-    T query(int x1, int y1, int x2, int y2) {
-        if(x1 > x2) swap(x1, x2);
-        if(y1 > y2) swap(y1, y2);
-        return get_sum(x2, y2) - get_sum(x1 - 1, y2) - get_sum(x2, y1 - 1) + get_sum(x1 - 1, y1 - 1);
-    }
-
 };
 
 void Solve(){
-    
+
 }
 
 int main(){

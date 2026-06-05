@@ -29,8 +29,8 @@ template < typename T = int > istream& operator >> (istream &in, vector < T > &v
     return in;
 }
 
-template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
-    for (const T &x : v) out << x << ' '; 
+template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) {
+    for (const T &x : v) out << x << ' ';
     return out;
 }
 
@@ -44,10 +44,11 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *   Fenwick_Tree<T> ft(int sz);   // 0-indexed input, size = sz
  *
  * Methods:
- *   build(vector<T>& nums)    → build from 0-indexed array
+ *   build(vector<T>& nums)    → O(n) build from 0-indexed array
  *   add(int idx, T val)       → point update at 0-indexed idx
- *   query(int l, int r)       → range sum [l, r] (0-indexed) → T
+ *   query(int l, int r)       → range sum [l, r] 0-indexed → T
  *   get(int idx)              → value at single index
+ *   size()                    → number of elements
  *
  * Example:
  *   Fenwick_Tree<int> ft(n);
@@ -57,60 +58,50 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *   cout << ft.get(3);
  */
 template < typename T = int > struct Fenwick_Tree {
-    
-    vector < T > Tree;
+
     int n;
     T DEFAULT;
+    vector < T > tree;
 
-    Fenwick_Tree(int sz = 0){
-        n = sz + 1, DEFAULT = 0;
-        Tree = vector < T > (n + 10, DEFAULT);
+    Fenwick_Tree(int sz = 0) : n(sz), DEFAULT(T{}) {
+        tree.assign(n + 1, DEFAULT);
     }
 
-    T operation(T a, T b){
-        return a + b;
-    }
-
-    int lowest_bit(int idx){
-        return (idx & -idx);
-    }
-
-    void build(vector < T >& nums){
-        for(int i = 0; i < sz(nums); i++)
-            add(i, nums[i]);
-    }
-
-    void add(int idx, T val){
-        idx++;
-        while(idx <= n){
-            Tree[idx] = operation(Tree[idx], val);
-            idx += lowest_bit(idx);
+    // O(n) build — faster than n individual add() calls
+    void build(const vector < T >& nums) {
+        for (int i = 0; i < sz(nums); i++) tree[i + 1] = nums[i];
+        for (int i = 1; i <= n; i++) {
+            int j = i + (i & -i);
+            if (j <= n) tree[j] += tree[i];
         }
     }
 
-    T get_ans(int idx){
+    void add(int idx, T val) {
+        for (++idx; idx <= n; idx += idx & -idx)
+            tree[idx] += val;
+    }
+
+    T prefix(int idx) const {
         T ans = DEFAULT;
-        idx++;
-        while(idx){
-            ans = operation(ans, Tree[idx]);
-            idx -= lowest_bit(idx);
-        }
+        for (++idx; idx > 0; idx -= idx & -idx)
+            ans += tree[idx];
         return ans;
     }
 
-    T query(int l, int r){
-        if(l > r) return DEFAULT;
-        return get_ans(r) - get_ans(l - 1);
+    T query(int l, int r) const {
+        if (l > r) return DEFAULT;
+        return prefix(r) - (l ? prefix(l - 1) : DEFAULT);
     }
 
-    T get(int idx){
+    T get(int idx) const {
         return query(idx, idx);
     }
 
+    int size() const { return n; }
 };
 
 void Solve(){
-    
+
 }
 
 int main(){
