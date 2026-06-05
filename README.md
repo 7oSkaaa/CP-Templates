@@ -47,7 +47,7 @@
 
 | Template | Description |
 |----------|-------------|
-| [Contest Template](Template.cpp) | Main C++ template with macros and common includes |
+| [Contest Template](cp_template.cpp) | Main C++ template with macros and common includes |
 
 ---
 
@@ -55,18 +55,18 @@
 
 | Template | Description |
 |----------|-------------|
-| [Graph Traversal](Graph.cpp) | DFS & BFS on adjacency list graphs |
-| [Graph Representation](Graph_Representation.cpp) | Adjacency list and adjacency matrix representations |
-| [Dijkstra's Algorithm](Dijkstra.cpp) | Single-source shortest path for non-negative weighted graphs |
-| [Floyd-Warshall](Floyd.cpp) | All-pairs shortest path in O(V³) |
-| [Prim's MST](Prim.cpp) | Minimum spanning tree using priority queue |
-| [Bellman-Ford](Bellman_Ford.cpp) | SSSP supporting negative edge weights and cycle detection |
-| [Centroid Decomposition](Centroid_Decomposition.cpp) | Divide-and-conquer on trees via centroid |
-| [LCA — Binary Lifting](LCA.cpp) | Lowest Common Ancestor with O(log n) queries |
-| [LCA Weighted](LCA_Weighted.cpp) | LCA with path distance queries on weighted trees |
-| [Tarjan's SCC](Tarjan.cpp) | Strongly connected components, bridges, and articulation points |
-| [Kuhn's Matching](Kuhn.cpp) | Maximum bipartite matching via augmenting paths |
-| [Link Cut Tree](Link_Cut_Tree.cpp) | Dynamic tree connectivity with path queries in O(log n) |
+| [Graph Traversal](graph.cpp) | DFS & BFS on adjacency list graphs |
+| [Graph Representation](graph_representation.cpp) | Adjacency list and adjacency matrix representations |
+| [Dijkstra's Algorithm](dijkstra.cpp) | Single-source shortest path for non-negative weighted graphs |
+| [Floyd-Warshall](floyd.cpp) | All-pairs shortest path in O(V³) |
+| [Prim's MST](prim.cpp) | Minimum spanning tree using priority queue |
+| [Bellman-Ford](bellman_ford.cpp) | SSSP supporting negative edge weights and cycle detection |
+| [Centroid Decomposition](centroid_decomposition.cpp) | Divide-and-conquer on trees via centroid |
+| [LCA — Binary Lifting](lca.cpp) | Lowest Common Ancestor with O(log n) queries |
+| [LCA Weighted](lca_weighted.cpp) | LCA with path distance queries on weighted trees |
+| [Tarjan's SCC](tarjan.cpp) | Strongly connected components, bridges, and articulation points |
+| [Kuhn's Matching](kuhn.cpp) | Maximum bipartite matching via augmenting paths |
+| [Link Cut Tree](link_cut_tree.cpp) | Dynamic tree connectivity with path queries in O(log n) |
 
 ---
 
@@ -74,25 +74,25 @@
 
 | Template | Description |
 |----------|-------------|
-| [Binary Search Tree](Binary_Search_Tree.cpp) | BST with insert, delete, search operations |
-| [Segment Tree](Seg_Tree.cpp) | Point update, range query in O(log n) |
-| [Segment Tree — Lazy](Lazy_Propagation.cpp) | Range update with lazy propagation in O(log n) |
-| [Persistent Segment Tree](PST.cpp) | Immutable versioned segment tree for historical queries |
-| [Segment Tree 2D](Seg_Tree_2D.cpp) | 2D segment tree for 2D range queries and updates |
-| [Fenwick Tree (BIT)](Fenwick_Tree.cpp) | Binary indexed tree for prefix sum queries in O(log n) |
-| [Fenwick Tree 2D](Fenwick_Tree_2D.cpp) | 2D BIT for 2D range sum queries |
-| [Fenwick Tree Range](Fenwick_Tree_Range.cpp) | BIT supporting both range updates and range queries |
-| [Sparse Table](Sparse_Table.cpp) | Static RMQ in O(1) with O(n log n) preprocessing |
-| [DSU / Union-Find](DSU.cpp) | Disjoint set union with path compression and union by rank |
-| [Heavy Light Decomposition](HLD.cpp) | Path and subtree queries on trees via HLD |
-| [Ordered Set](Ordered_Set.cpp) | Policy-based order statistics tree: `find_by_order`, `order_of_key` |
-| [Trie](Trie.cpp) | Prefix tree for string insert and search |
-| [Binary Trie](Trie_Binary.cpp) | Bit-based trie for XOR maximum and queries |
-| [Monotonic Stack](Monotonic_Stacks.cpp) | Next greater/smaller element queries in O(n) |
-| [Monotonic Queue](Monotonic_Queue.cpp) | Sliding window min/max in O(n) |
-| [Implicit Splay Tree](Implicit_SplayTree.cpp) | Implicit key splay tree for sequence split/merge operations |
-| [Splay Tree](SplayTree.cpp) | Self-adjusting BST with amortized O(log n) operations |
-| [Heap](Heap.cpp) | Binary heap / priority queue implementation |
+| [Binary Search Tree](binary_search_tree.cpp) | BST with insert, delete, search operations |
+| [Segment Tree](seg_tree.cpp) | Point update, range query in O(log n) |
+| [Segment Tree — Lazy](lazy_propagation.cpp) | Range update with lazy propagation in O(log n) |
+| [Persistent Segment Tree](pst.cpp) | Immutable versioned segment tree for historical queries |
+| [Segment Tree 2D](seg_tree_2d.cpp) | 2D segment tree for 2D range queries and updates |
+| [Fenwick Tree (BIT)](fenwick_tree.cpp) | Binary indexed tree for prefix sum queries in O(log n) |
+| [Fenwick Tree 2D](fenwick_tree_2d.cpp) | 2D BIT for 2D range sum queries |
+| [Fenwick Tree Range](fenwick_tree_range.cpp) | BIT supporting both range updates and range queries |
+| [Sparse Table](sparse_table.cpp) | Static RMQ in O(1) with O(n log n) preprocessing |
+| [DSU / Union-Find](dsu.cpp) | Disjoint set union with path compression and union by rank |
+| [Heavy Light Decomposition](hld.cpp) | Path and subtree queries on trees via HLD |
+| [Ordered Set](ordered_set.cpp) | Policy-based order statistics tree: `find_by_order`, `order_of_key` |
+| [Trie](trie.cpp) | Prefix tree for string insert and search |
+| [Binary Trie](trie_binary.cpp) | Bit-based trie for XOR maximum and queries |
+| [Monotonic Stack](monotonic_stacks.cpp) | Next greater/smaller element queries in O(n) |
+| [Monotonic Queue](monotonic_queue.cpp) | Sliding window min/max in O(n) |
+| [Implicit Splay Tree](implicit_splay_tree.cpp) | Implicit key splay tree for sequence split/merge operations |
+| [Splay Tree](splay_tree.cpp) | Self-adjusting BST with amortized O(log n) operations |
+| [Heap](heap.cpp) | Binary heap / priority queue implementation |
 
 ---
 
@@ -100,9 +100,9 @@
 
 | Template | Description |
 |----------|-------------|
-| [SQRT Decomposition](SQRT_Decomp.cpp) | Bucket decomposition for range queries in O(√n) |
-| [Mo's Algorithm](MO.cpp) | Offline range queries sorted by Mo's ordering in O((n+q)√n) |
-| [Mo's on Trees](MO_Tree.cpp) | Mo's algorithm adapted for tree path queries |
+| [SQRT Decomposition](sqrt_decomp.cpp) | Bucket decomposition for range queries in O(√n) |
+| [Mo's Algorithm](mo.cpp) | Offline range queries sorted by Mo's ordering in O((n+q)√n) |
+| [Mo's on Trees](mo_tree.cpp) | Mo's algorithm adapted for tree path queries |
 
 ---
 
@@ -110,9 +110,9 @@
 
 | Template | Description |
 |----------|-------------|
-| [Rolling Hash](Hash.cpp) | Polynomial rolling hash for O(1) substring comparisons |
-| [Hashed Deque](Hashed_Deque.cpp) | Deque with rolling hash support for sliding window hashing |
-| [Hash Segment Tree](Hashing_SegmentTree.cpp) | Segment tree storing hash values for range hash queries |
+| [Rolling Hash](hash.cpp) | Polynomial rolling hash for O(1) substring comparisons |
+| [Hashed Deque](hashed_deque.cpp) | Deque with rolling hash support for sliding window hashing |
+| [Hash Segment Tree](hashing_segment_tree.cpp) | Segment tree storing hash values for range hash queries |
 
 ---
 
@@ -120,11 +120,11 @@
 
 | Template | Description |
 |----------|-------------|
-| [Convex Hull Trick](Convex_Hull_Trick.cpp) | Li Chao tree / CHT for linear DP transition optimization |
-| [Kadane's Algorithm](Kadane.cpp) | Maximum subarray sum in O(n) |
-| [Manacher's Algorithm](Manacher.cpp) | All palindromic substrings in O(n) |
-| [Prefix Sum 2D](Prefix_Sum_2D.cpp) | 2D prefix sums for O(1) rectangle sum queries |
-| [Partial Sum 2D](Partial_Sum_2D.cpp) | 2D difference array for O(1) rectangle updates |
+| [Convex Hull Trick](convex_hull_trick.cpp) | Li Chao tree / CHT for linear DP transition optimization |
+| [Kadane's Algorithm](kadane.cpp) | Maximum subarray sum in O(n) |
+| [Manacher's Algorithm](manacher.cpp) | All palindromic substrings in O(n) |
+| [Prefix Sum 2D](prefix_sum_2d.cpp) | 2D prefix sums for O(1) rectangle sum queries |
+| [Partial Sum 2D](partial_sum_2d.cpp) | 2D difference array for O(1) rectangle updates |
 
 ---
 
@@ -132,7 +132,7 @@
 
 | Template | Description |
 |----------|-------------|
-| [KMP](KMP.cpp) | Knuth-Morris-Pratt pattern matching in O(n+m) |
+| [KMP](kmp.cpp) | Knuth-Morris-Pratt pattern matching in O(n+m) |
 
 ---
 
@@ -140,10 +140,10 @@
 
 | Template | Description |
 |----------|-------------|
-| [Sieve of Eratosthenes](Seive.cpp) | Find all primes up to N in O(N log log N) |
-| [Sieve + Prime Factors](Seive_Prime_Factors.cpp) | Linear sieve precomputing smallest prime factor per number |
-| [Factorization](Factors.cpp) | Trial division and factorization algorithms |
-| [Miller-Rabin](Miller_Robin.cpp) | Deterministic primality test for large numbers |
+| [Sieve of Eratosthenes](sieve.cpp) | Find all primes up to N in O(N log log N) |
+| [Sieve + Prime Factors](sieve_prime_factors.cpp) | Linear sieve precomputing smallest prime factor per number |
+| [Factorization](factors.cpp) | Trial division and factorization algorithms |
+| [Miller-Rabin](miller_rabin.cpp) | Deterministic primality test for large numbers |
 
 ---
 
@@ -151,12 +151,12 @@
 
 | Template | Description |
 |----------|-------------|
-| [Convex Hull](Convex_Hull.cpp) | Andrew's monotone chain convex hull in O(n log n) |
-| [Math Utilities](Math.cpp) | GCD, LCM, extended Euclidean and number utilities |
-| [Matrix Exponentiation](Matrix_Power.cpp) | Fast matrix power for linear recurrences in O(k³ log n) |
-| [Modular Inverse](Power_Inverse.cpp) | Modular inverse via Fermat's little theorem |
-| [Geometry Points](Point.cpp) | 2D point struct with cross/dot product and angle operations |
-| [Ternary Search](Ternary_Search.cpp) | Find minimum/maximum of a unimodal function |
+| [Convex Hull](convex_hull.cpp) | Andrew's monotone chain convex hull in O(n log n) |
+| [Math Utilities](math.cpp) | GCD, LCM, extended Euclidean and number utilities |
+| [Matrix Exponentiation](matrix_power.cpp) | Fast matrix power for linear recurrences in O(k³ log n) |
+| [Modular Inverse](power_inverse.cpp) | Modular inverse via Fermat's little theorem |
+| [Geometry Points](point.cpp) | 2D point struct with cross/dot product and angle operations |
+| [Ternary Search](ternary_search.cpp) | Find minimum/maximum of a unimodal function |
 
 ---
 
@@ -164,8 +164,8 @@
 
 | Template | Description |
 |----------|-------------|
-| [Modular Integer](Mod_Int.cpp) | Integer wrapper type with automatic modular arithmetic |
-| [Big Integer](Big_Int.cpp) | Arbitrary precision integer with arithmetic operations |
+| [Modular Integer](mod_int.cpp) | Integer wrapper type with automatic modular arithmetic |
+| [Big Integer](big_int.cpp) | Arbitrary precision integer with arithmetic operations |
 
 ---
 
@@ -173,7 +173,7 @@
 
 | Template | Description |
 |----------|-------------|
-| [Coordinate Compression](Coordinate_Compression.cpp) | Map large sparse coordinate values to compact range |
+| [Coordinate Compression](coordinate_compression.cpp) | Map large sparse coordinate values to compact range |
 
 ---
 
@@ -182,7 +182,7 @@
 | Resource | Description |
 |----------|-------------|
 | [CP.code-snippets](CP.code-snippets) | VS Code snippets for all templates |
-| [Print Template](Print_Template.cpp) | Template configured for formatted output |
+| [Print Template](Print_cp_template.cpp) | Template configured for formatted output |
 | [Stress Testing](https://github.com/7oSkaaa/Stress_Testing) | Stress testing setup for solution validation |
 
 ---
