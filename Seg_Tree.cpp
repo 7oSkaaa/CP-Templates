@@ -40,7 +40,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  * Template params:
  *   treeType = node/answer type  (default int)
  *   numsType = input array type  (default int)
- *   Base     = 0 → 0-indexed input, 1 → 1-indexed input
+ *   Base     = 0 → 0-indexed input array, 1 → 1-indexed input array (tree API always 1-indexed)
  *   Op       = binary functor for combine operation (default plus<treeType> = sum)
  *
  * Constructor:
@@ -69,6 +69,11 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *   Segment_Tree<int, int, 0, decltype(maxOp)> seg(n, arr, maxOp, INT_MIN);
  *   cout << seg.query(1, n);
  *
+ * Example (custom op via plain function — use & to get pointer type):
+ *   int myOp(int a, int b) { return max(a, b); }
+ *   Segment_Tree<int, int, 0, decltype(&myOp)> seg(n, arr, &myOp, INT_MIN);
+ *   cout << seg.query(1, n);
+ *
  * Example (custom op via struct, 1-indexed input):
  *   struct GCD { int operator()(int a, int b) const { return __gcd(a, b); } };
  *   Segment_Tree<int, int, 1, GCD> seg(n, arr);
@@ -78,7 +83,7 @@ template < typename treeType = int, typename numsType = int, int Base = 0,
            typename Op = plus < treeType > >
 class Segment_Tree {
 private:
-    int n, N, max_level;
+    int n, max_level;
     treeType DEFAULT;
     vector < treeType > tree;
     Op operation;
@@ -118,28 +123,28 @@ public:
         const vector < numsType >& nums = vector < numsType >(),
         Op op = Op{},
         treeType def = treeType{}
-    ) : n(n), N(1), max_level(1), DEFAULT(def), operation(op) {
-        while (N < n) N *= 2, max_level++;
-        tree = vector < treeType > (2 * N, DEFAULT);
-        if (!nums.empty()) build(nums, 1, 1, N);
+    ) : n(n), max_level(1), DEFAULT(def), operation(op) {
+        while ((1 << max_level) < n) max_level++;
+        tree = vector < treeType > (4 * n, DEFAULT);
+        if (!nums.empty()) build(nums, 1, 1, n);
     }
 
     // Rebuild from array — resets tree to DEFAULT first to avoid stale values
     void build(const vector < numsType >& nums) {
         std::fill(tree.begin(), tree.end(), DEFAULT);
-        build(nums, 1, 1, N);
+        build(nums, 1, 1, n);
     }
 
     void update(int index, numsType value) {
-        update(index, value, 1, 1, N);
+        update(index, value, 1, 1, n);
     }
 
     treeType query(int l, int r) const {
-        return query(l, r, 1, 1, N);
+        return query(l, r, 1, 1, n);
     }
 
     treeType operator[](int index) const {
-        return query(index, index, 1, 1, N);
+        return query(index, index, 1, 1, n);
     }
 
     int size() const { return n; }

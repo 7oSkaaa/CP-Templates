@@ -37,7 +37,7 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  *
  * Template params:
  *   T    = value type          (default int)
- *   Base = 0 → 0-indexed input, 1 → 1-indexed input
+ *   Base = 0 → 0-indexed input, 1 → 1-indexed input  (tree API always 1-indexed)
  *   Op   = binary combine functor (default plus<T> = sum)
  *
  * Constructors:
@@ -59,6 +59,10 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
  * Example (custom op via lambda):
  *   auto maxOp = [](int a, int b){ return max(a, b); };
  *   SegmentTree2D<int, 0, decltype(maxOp)> seg(n, m, grid, maxOp, INT_MIN);
+ *
+ * Example (custom op via plain function — use & to get pointer type):
+ *   int myOp(int a, int b) { return max(a, b); }
+ *   SegmentTree2D<int, 0, decltype(&myOp)> seg(n, m, grid, &myOp, INT_MIN);
  */
 template < typename T = int, int Base = 0, typename Op = plus < T > >
 struct SegmentTree2D {
@@ -73,10 +77,8 @@ struct SegmentTree2D {
 
     void init(int n_, int m_) {
         n = n_; m = m_;
-        rows = 1; cols = 1;
-        while (rows < n) rows *= 2;
-        while (cols < m) cols *= 2;
-        tree.assign(2 * rows, vector < T >(2 * cols, DEFAULT));
+        rows = 4 * n; cols = 4 * m;
+        tree.assign(rows, vector < T >(cols, DEFAULT));
     }
 
     SegmentTree2D(int n = 0, int m = 0, Op op = Op{}, T def = T{})
