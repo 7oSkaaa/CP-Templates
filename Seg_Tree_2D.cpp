@@ -107,13 +107,13 @@ struct SegmentTree2D {
             build_x(L(vx), lx, mx, vec);
             build_x(R(vx), mx + 1, rx, vec);
         }
-        build_y(vx, lx, rx, 1, 1, cols, vec);
+        build_y(vx, lx, rx, 1, 1, m, vec);
     }
 
     // Resets tree to DEFAULT before rebuilding to avoid stale values
     void build(const vector < vector < T > >& vec) {
         for (auto& row : tree) fill(row.begin(), row.end(), DEFAULT);
-        build_x(1, 1, rows, vec);
+        build_x(1, 1, n, vec);
     }
 
     T query_y(int vx, int vy, int ly0, int ry0, int ly, int ry) const {
@@ -128,7 +128,7 @@ struct SegmentTree2D {
 
     T query_x(int vx, int lx0, int rx0, int lx, int rx, int ly, int ry) const {
         if (lx > rx) return DEFAULT;
-        if (lx == lx0 && rx0 == rx) return query_y(vx, 1, 1, cols, ly, ry);
+        if (lx == lx0 && rx0 == rx) return query_y(vx, 1, 1, m, ly, ry);
         int mx = (lx0 + rx0) / 2;
         return operation(
             query_x(L(vx), lx0, mx, lx, min(rx, mx), ly, ry),
@@ -137,7 +137,7 @@ struct SegmentTree2D {
     }
 
     T query(int lx, int rx, int ly, int ry) const {
-        return query_x(1, 1, rows, lx, rx, ly, ry);
+        return query_x(1, 1, n, lx, rx, ly, ry);
     }
 
     void update_y(int vx, int lx, int rx, int vy, int ly, int ry, int x, int y, T val) {
@@ -158,11 +158,11 @@ struct SegmentTree2D {
             if (x <= mx) update_x(L(vx), lx, mx, x, y, val);
             else update_x(R(vx), mx + 1, rx, x, y, val);
         }
-        update_y(vx, lx, rx, 1, 1, cols, x, y, val);
+        update_y(vx, lx, rx, 1, 1, m, x, y, val);
     }
 
     void update(int x, int y, T val) {
-        update_x(1, 1, rows, x, y, val);
+        update_x(1, 1, n, x, y, val);
     }
 
     T get(int x, int y) const {

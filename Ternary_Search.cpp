@@ -62,7 +62,7 @@ ll F(ll m){
 ll Ternary_Search(ll L, ll R){
     while(R - L >= 10){
         ll m1 = L + (R - L) / 3, m2 = R - (R - L) / 3;
-        (F(m1) < F(m1) ? R = m2 : L = m1);
+        (F(m1) < F(m2) ? R = m2 : L = m1);
     }
     ll ans = LINF;
     for(ll i = L; i <= R; i++) 
@@ -79,7 +79,7 @@ double Ternary_Search(double L, double R){
     double ans = LINF;
     while(R - L >= EPS){
         double m1 = L + (R - L) / 3, m2 = R - (R - L) / 3;
-        double f1 = F(m1), f2 = F(m1);
+        double f1 = F(m1), f2 = F(m2);
         (f1 < f2 ? R = m2 : L = m1);
         ans = min({ans, f1, f2});
     }
