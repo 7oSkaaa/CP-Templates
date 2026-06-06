@@ -506,12 +506,152 @@
     ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
+    /* ── SNIPPETS SECTION ── */
+    .snippets-section {
+        max-width: 1440px;
+        margin: 0 auto;
+        padding: 0 24px 56px;
+    }
+
+    .snippets-header {
+        border-top: 1px solid var(--border);
+        padding-top: 32px;
+        margin-bottom: 20px;
+    }
+
+    .snippets-title-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .snippets-icon {
+        font-size: 28px;
+        line-height: 1;
+    }
+
+    .snippets-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+    }
+
+    .snippets-sub {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-top: 3px;
+    }
+
+    .snippets-sub code {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 12px;
+        background: rgba(255,255,255,0.06);
+        padding: 1px 6px;
+        border-radius: 4px;
+        color: var(--accent);
+    }
+
+    .snippets-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 12px;
+    }
+
+    .snippet-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: all 0.18s;
+    }
+
+    .snippet-card:hover {
+        border-color: var(--border-bright);
+        background: var(--card);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+    }
+
+    .snippet-card-top {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .snippet-cat-icon {
+        font-size: 20px;
+        line-height: 1;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(52,211,153,0.1);
+        border-radius: var(--radius-sm);
+        flex-shrink: 0;
+    }
+
+    .snippet-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .snippet-desc {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.5;
+        flex: 1;
+    }
+
+    .snippet-actions {
+        display: flex;
+        gap: 7px;
+    }
+
+    .snippet-btn {
+        flex: 1;
+        padding: 7px 8px;
+        border-radius: var(--radius-sm);
+        font-size: 12px;
+        font-weight: 500;
+        font-family: inherit;
+        cursor: pointer;
+        border: none;
+        transition: all 0.18s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .snippet-btn-view {
+        background: rgba(52,211,153,0.09);
+        color: #34d399;
+        border: 1px solid rgba(52,211,153,0.2);
+    }
+
+    .snippet-btn-view:hover { background: rgba(52,211,153,0.18); border-color: rgba(52,211,153,0.4); }
+
+    .snippet-btn-dl {
+        background: rgba(124,92,252,0.09);
+        color: var(--accent2);
+        border: 1px solid rgba(124,92,252,0.2);
+    }
+
+    .snippet-btn-dl:hover { background: rgba(124,92,252,0.18); border-color: rgba(124,92,252,0.4); }
+
     @media (max-width: 600px) {
         header { padding: 32px 16px 24px; }
         .controls { padding: 20px 16px 0; }
         .stats { padding: 12px 16px 4px; }
         .grid { grid-template-columns: 1fr; padding: 8px 16px 40px; gap: 12px; }
         .profiles a span { display: none; }
+        .snippets-section { padding: 0 16px 40px; }
+        .snippets-grid { grid-template-columns: 1fr 1fr; }
     }
     </style>
 </head>
@@ -558,6 +698,20 @@
 <div class="stats" id="stats"></div>
 <div class="grid" id="grid"></div>
 
+<!-- VS Code Snippets Section -->
+<section class="snippets-section">
+    <div class="snippets-header">
+        <div class="snippets-title-row">
+            <span class="snippets-icon">✂️</span>
+            <div>
+                <div class="snippets-title">VS Code Snippets</div>
+                <div class="snippets-sub">Drop any file into your <code>.vscode/</code> folder to activate</div>
+            </div>
+        </div>
+    </div>
+    <div class="snippets-grid" id="snippetsGrid"></div>
+</section>
+
 <footer>
     Made with ❤ by <a href="https://7oskaaa.github.io/Ahmed-Hossam/" target="_blank" rel="noopener">Ahmed Hossam</a>
 </footer>
@@ -598,7 +752,7 @@ const RAW = 'https://raw.githubusercontent.com/7oSkaaa/CP-Templates/main/';
 const CATS = {
     'Contest':             { color: '#f59e0b', bg: 'rgba(245,158,11,0.12)',  icon: '🏆' },
     'Graph':               { color: '#10b981', bg: 'rgba(16,185,129,0.12)',  icon: '🕸️' },
-    'Data Structures':     { color: '#6366f1', bg: 'rgba(99,102,241,0.12)', icon: '🌲' },
+    'Data Structures':     { color: '#6366f1', bg: 'rgba(99,102,241,0.12)', icon: '🗂️' },
     'Range Query':         { color: '#fb923c', bg: 'rgba(251,146,60,0.12)', icon: '📊' },
     'Hashing':             { color: '#ec4899', bg: 'rgba(236,72,153,0.12)', icon: '#️⃣' },
     'Dynamic Programming': { color: '#8b5cf6', bg: 'rgba(139,92,246,0.12)', icon: '📈' },
@@ -607,7 +761,6 @@ const CATS = {
     'Math & Geometry':     { color: '#14b8a6', bg: 'rgba(20,184,166,0.12)', icon: '📐' },
     'Data Types':          { color: '#84cc16', bg: 'rgba(132,204,22,0.12)', icon: '⚙️' },
     'Compression':         { color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', icon: '🗜️' },
-    'Snippets':            { color: '#34d399', bg: 'rgba(52,211,153,0.12)',  icon: '✂️' },
 };
 
 const T = [
@@ -679,16 +832,18 @@ const T = [
     { f:'big_int.cpp',                n:'Big Integer',                c:'Data Types',          d:'Arbitrary precision integer with arithmetic operations' },
     // Compression
     { f:'coordinate_compression.cpp', n:'Coordinate Compression',    c:'Compression',         d:'Map large sparse coordinate values to compact range' },
-    // Snippets
-    { f:'snippets/template.code-snippets',        n:'Template Snippets',        c:'Snippets', d:'VS Code snippets: CP contest template and Google template' },
-    { f:'snippets/graphs.code-snippets',          n:'Graph Snippets',           c:'Snippets', d:'VS Code snippets: Dijkstra, Floyd, LCA, HLD, Tarjan, LCT, and more' },
-    { f:'snippets/trees.code-snippets',           n:'Tree Snippets',            c:'Snippets', d:'VS Code snippets: Segment tree, Fenwick, Trie, Splay, PST, and more' },
-    { f:'snippets/data_structures.code-snippets', n:'Data Structure Snippets',  c:'Snippets', d:'VS Code snippets: DSU, Heap, Monotonic stack/queue, Ordered set, and more' },
-    { f:'snippets/math.code-snippets',            n:'Math Snippets',            c:'Snippets', d:'VS Code snippets: Miller-Rabin, ModInt, BigInt, Sieve, Matrix power, and more' },
-    { f:'snippets/dp.code-snippets',              n:'DP Snippets',              c:'Snippets', d:'VS Code snippets: Digit DP, Kadane' },
-    { f:'snippets/strings.code-snippets',         n:'String Snippets',          c:'Snippets', d:'VS Code snippets: KMP, Manacher, Rolling hash' },
-    { f:'snippets/geometry.code-snippets',        n:'Geometry Snippets',        c:'Snippets', d:'VS Code snippets: Point struct, Convex hull, Convex hull trick' },
-    { f:'snippets/algorithms.code-snippets',      n:'Algorithm Snippets',       c:'Snippets', d:'VS Code snippets: Mo\'s algorithm, Coord compression, Ternary search, and more' },
+];
+
+const SNIPPETS = [
+    { f:'snippets/template.code-snippets',        n:'Template',        icon:'🏆', d:'CP contest template, Google template' },
+    { f:'snippets/graphs.code-snippets',          n:'Graphs',          icon:'🕸️', d:'Dijkstra, Floyd, LCA, HLD, Tarjan, LCT' },
+    { f:'snippets/trees.code-snippets',           n:'Trees',           icon:'🌲', d:'Seg tree, Fenwick, Trie, Splay, PST' },
+    { f:'snippets/data_structures.code-snippets', n:'Data Structures', icon:'🗂️', d:'DSU, Heap, Monotonic stack/queue, Ordered set' },
+    { f:'snippets/math.code-snippets',            n:'Math',            icon:'π',  d:'Miller-Rabin, ModInt, BigInt, Sieve, Matrix power' },
+    { f:'snippets/dp.code-snippets',              n:'DP',              icon:'📈', d:'Digit DP, Kadane' },
+    { f:'snippets/strings.code-snippets',         n:'Strings',         icon:'📝', d:'KMP, Manacher, Rolling hash' },
+    { f:'snippets/geometry.code-snippets',        n:'Geometry',        icon:'📐', d:'Point struct, Convex hull, CHT' },
+    { f:'snippets/algorithms.code-snippets',      n:'Algorithms',      icon:'⚡', d:"Mo's, Coord compression, Ternary search" },
 ];
 
 let activeCat = 'All';
@@ -841,8 +996,38 @@ document.getElementById('searchInput').addEventListener('input', e => {
 
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
+function renderSnippets() {
+    document.getElementById('snippetsGrid').innerHTML = SNIPPETS.map(s => `
+        <div class="snippet-card">
+            <div class="snippet-card-top">
+                <div class="snippet-cat-icon">${s.icon}</div>
+                <div class="snippet-name">${s.n}</div>
+            </div>
+            <div class="snippet-desc">${s.d}</div>
+            <div class="snippet-actions">
+                <button class="snippet-btn snippet-btn-view" onclick="viewCode('${s.f}','${s.n} Snippets')">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                        <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                    View
+                </button>
+                <button class="snippet-btn snippet-btn-dl" onclick="dlFile('${s.f}')">
+                    <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
 renderPills();
 renderGrid();
+renderSnippets();
 </script>
 </body>
 </html>
