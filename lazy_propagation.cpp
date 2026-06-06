@@ -55,11 +55,11 @@ template < typename T = int > ostream& operator << (ostream &out, const vector <
 struct Lazy_Propagation {
 
     // ═══ CUSTOMIZE ════════════════════════════════════════════════════════════
-    using T    = ll;   // node value type
-    using Lazy = ll;   // lazy update type (can differ from T)
+    using T = ll;    // node value type
+    using Lazy = ll; // lazy update type (can differ from T)
 
-    T    IDENTITY = 0; // identity for combine  (0 for sum, INF for min)
-    Lazy LAZY_ID  = 0; // "no pending update"   (0 for add, LLONG_MIN for assign)
+    T IDENTITY = 0;    // identity for combine (0 for sum, INF for min)
+    Lazy LAZY_ID = 0;  // "no pending update"  (0 for add, LLONG_MIN for assign)
 
     T combine(T a, T b) { return a + b; }
     T apply(T val, Lazy lz, int len) { return val + lz * len; }
