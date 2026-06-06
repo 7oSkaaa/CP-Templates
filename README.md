@@ -120,6 +120,7 @@
 
 | Template | Description |
 |----------|-------------|
+| [Digit DP](dp_digits.cpp) | Count integers in [L,R] satisfying digit-based predicates |
 | [Convex Hull Trick](convex_hull_trick.cpp) | Li Chao tree / CHT for linear DP transition optimization |
 | [Kadane's Algorithm](kadane.cpp) | Maximum subarray sum in O(n) |
 | [Manacher's Algorithm](manacher.cpp) | All palindromic substrings in O(n) |
