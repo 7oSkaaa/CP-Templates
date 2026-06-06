@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
     <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -606,6 +607,7 @@ const CATS = {
     'Math & Geometry':     { color: '#14b8a6', bg: 'rgba(20,184,166,0.12)', icon: '📐' },
     'Data Types':          { color: '#84cc16', bg: 'rgba(132,204,22,0.12)', icon: '⚙️' },
     'Compression':         { color: '#a78bfa', bg: 'rgba(167,139,250,0.12)', icon: '🗜️' },
+    'Snippets':            { color: '#34d399', bg: 'rgba(52,211,153,0.12)',  icon: '✂️' },
 };
 
 const T = [
@@ -677,6 +679,16 @@ const T = [
     { f:'big_int.cpp',                n:'Big Integer',                c:'Data Types',          d:'Arbitrary precision integer with arithmetic operations' },
     // Compression
     { f:'coordinate_compression.cpp', n:'Coordinate Compression',    c:'Compression',         d:'Map large sparse coordinate values to compact range' },
+    // Snippets
+    { f:'snippets/template.code-snippets',        n:'Template Snippets',        c:'Snippets', d:'VS Code snippets: CP contest template and Google template' },
+    { f:'snippets/graphs.code-snippets',          n:'Graph Snippets',           c:'Snippets', d:'VS Code snippets: Dijkstra, Floyd, LCA, HLD, Tarjan, LCT, and more' },
+    { f:'snippets/trees.code-snippets',           n:'Tree Snippets',            c:'Snippets', d:'VS Code snippets: Segment tree, Fenwick, Trie, Splay, PST, and more' },
+    { f:'snippets/data_structures.code-snippets', n:'Data Structure Snippets',  c:'Snippets', d:'VS Code snippets: DSU, Heap, Monotonic stack/queue, Ordered set, and more' },
+    { f:'snippets/math.code-snippets',            n:'Math Snippets',            c:'Snippets', d:'VS Code snippets: Miller-Rabin, ModInt, BigInt, Sieve, Matrix power, and more' },
+    { f:'snippets/dp.code-snippets',              n:'DP Snippets',              c:'Snippets', d:'VS Code snippets: Digit DP, Kadane' },
+    { f:'snippets/strings.code-snippets',         n:'String Snippets',          c:'Snippets', d:'VS Code snippets: KMP, Manacher, Rolling hash' },
+    { f:'snippets/geometry.code-snippets',        n:'Geometry Snippets',        c:'Snippets', d:'VS Code snippets: Point struct, Convex hull, Convex hull trick' },
+    { f:'snippets/algorithms.code-snippets',      n:'Algorithm Snippets',       c:'Snippets', d:'VS Code snippets: Mo\'s algorithm, Coord compression, Ternary search, and more' },
 ];
 
 let activeCat = 'All';
@@ -771,7 +783,7 @@ function viewCode(file, name) {
             curCode = code;
             const pre = document.createElement('pre');
             const el = document.createElement('code');
-            el.className = 'language-cpp';
+            el.className = file.endsWith('.code-snippets') ? 'language-json' : 'language-cpp';
             el.textContent = code;
             pre.appendChild(el);
             document.getElementById('mBody').innerHTML = '';

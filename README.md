@@ -39,7 +39,7 @@
 
 ## 📋 Contents
 
-[🏆 Contest](#-contest) · [🕸️ Graph](#️-graph) · [🌲 Data Structures](#-data-structures) · [📊 Range Query](#-range-query) · [#️⃣ Hashing](#️-hashing) · [📈 Dynamic Programming](#-dynamic-programming) · [📝 String](#-string) · [π Number Theory](#-number-theory) · [📐 Math & Geometry](#-math--geometry) · [⚙️ Data Types](#️-data-types) · [🗜️ Compression](#️-compression)
+[🏆 Contest](#-contest) · [🕸️ Graph](#️-graph) · [🌲 Data Structures](#-data-structures) · [📊 Range Query](#-range-query) · [#️⃣ Hashing](#️-hashing) · [📈 Dynamic Programming](#-dynamic-programming) · [📝 String](#-string) · [π Number Theory](#-number-theory) · [📐 Math & Geometry](#-math--geometry) · [⚙️ Data Types](#️-data-types) · [🗜️ Compression](#️-compression) · [✂️ VS Code Snippets](#️-vs-code-snippets)
 
 ---
 
@@ -177,12 +177,28 @@
 
 ---
 
+## ✂️ VS Code Snippets
+
+Drop any file from [`snippets/`](snippets/) into your project's `.vscode/` folder to activate it.
+
+| Snippet File | Covers |
+|---|---|
+| [template.code-snippets](snippets/template.code-snippets) | CP contest template, Google template |
+| [graphs.code-snippets](snippets/graphs.code-snippets) | Dijkstra, Floyd, LCA, HLD, Tarjan, LCT, Centroid, MoTree |
+| [trees.code-snippets](snippets/trees.code-snippets) | Segment tree, Fenwick, Trie, Sparse table, PST, Splay |
+| [data_structures.code-snippets](snippets/data_structures.code-snippets) | DSU, Heap, Monotonic stack/queue, Ordered set, Sqrt decomp |
+| [math.code-snippets](snippets/math.code-snippets) | Miller-Rabin, ModInt, BigInt, Sieve, Matrix power |
+| [dp.code-snippets](snippets/dp.code-snippets) | Digit DP, Kadane |
+| [strings.code-snippets](snippets/strings.code-snippets) | KMP, Manacher, Rolling hash |
+| [geometry.code-snippets](snippets/geometry.code-snippets) | Point struct, Convex hull, Convex hull trick |
+| [algorithms.code-snippets](snippets/algorithms.code-snippets) | Mo's algorithm, Coord compression, Ternary search |
+
+---
+
 ## 🔗 Additional Resources
 
 | Resource | Description |
 |----------|-------------|
-| [CP.code-snippets](CP.code-snippets) | VS Code snippets for all templates |
-| [Print Template](Print_cp_template.cpp) | Template configured for formatted output |
 | [Stress Testing](https://github.com/7oSkaaa/Stress_Testing) | Stress testing setup for solution validation |
 
 ---
