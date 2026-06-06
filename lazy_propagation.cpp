@@ -2,13 +2,11 @@
 
 using namespace std;
 
-#define cin_2d(vec, n, m) for(int i = 0; i < n; i++) for(int j = 0; j < m && cin >> vec[i][j]; j++);
-#define cout_2d(vec, n, m) for(int i = 0; i < n; i++, cout << "\n") for(int j = 0; j < m && cout << vec[i][j] << " "; j++);
 #define fixed(n) fixed << setprecision(n)
-#define ceil(n, m) (((n) / (m)) + ((n) % (m) ? 1 : 0))
-#define fill(vec, value) memset(vec, value, sizeof(vec));
-#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
+#define ceil(n, m) (((n) + (m) - 1) / (m))
 #define add_mod(a, b, m) (((a % m) + (b % m)) % m)
+#define sub_mod(a, b, m) (((a % m) - (b % m) + m) % m)
+#define mul_mod(a, b, m) (((a % m) * (b % m)) % m)
 #define all(vec) vec.begin(), vec.end()
 #define rall(vec) vec.rbegin(), vec.rend()
 #define sz(x) int(x.size())
@@ -17,9 +15,9 @@ using namespace std;
 #define se second
 #define ll long long
 #define ull unsigned long long
-#define Mod  1'000'000'007
-#define OO 2'000'000'000
 #define EPS 1e-9
+constexpr int INF = 1 << 30, Mod = 1e9 + 7;
+constexpr ll LINF = 1LL << 62;
 #define PI acos(-1)
 template < typename T = int > using Pair = pair < T, T >;
 vector < string > RET = {"NO", "YES"};
@@ -29,188 +27,128 @@ template < typename T = int > istream& operator >> (istream &in, vector < T > &v
     return in;
 }
 
-template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) { 
-    for (const T &x : v) out << x << ' '; 
+template < typename T = int > ostream& operator << (ostream &out, const vector < T > &v) {
+    for (const T &x : v) out << x << ' ';
     return out;
 }
 
 /*
  * Lazy_Propagation — Segment Tree with Lazy Propagation
  *
- * Template params:
- *   T    = value type (default int)
- *   Base = 0 → 0-indexed input, 1 → 1-indexed input
+ * Edit only the CUSTOMIZE block. Everything else is framework.
  *
- * NOTE: Edit lazy_operation() and tree_operation() inside for your problem.
- *       Default: range add updates, range sum queries.
+ * Default: range add updates, range sum queries (1-indexed).
  *
- * Constructor:
- *   Lazy_Propagation<T, Base> seg(int n, vector<T> v = {});
+ * Constructor: Lazy_Propagation seg(int n, vector<T> v = {})
  *
  * Methods:
- *   build(T initial_value)       → fill all nodes with constant
- *   build(vector<T>& nums)       → build from array
- *   update(int i, T v)           → point update at i
- *   update(int l, int r, T v)    → range update [l, r]
- *   query(int l, int r)          → range query → T
- *   get(int i)                   → single element value
- *   print()                      → debug print
+ *   update(int l, int r, Lazy v)  — range update [l, r]
+ *   update(int i,        Lazy v)  — point update at i
+ *   query (int l, int r) → T      — range query  [l, r]
+ *   operator[](int i)    → T      — single element query
  *
- * Example:
- *   Lazy_Propagation<ll> seg(n, arr);
- *   seg.update(1, 5, 3);    // add 3 to [1..5]
- *   cout << seg.query(2, 4);
+ * Common customizations:
+ *   Range assign, range min  →  combine: min(a,b)   apply: lz          compose: new_lz
+ *   Range add,    range min  →  combine: min(a,b)   apply: val+lz      compose: old_lz+new_lz
+ *   Range add,    range sum  →  combine: a+b        apply: val+lz*len  compose: old_lz+new_lz  ← default
  */
-template < typename T = int , const int Base = 0 >
-class Lazy_Propagation {
-private:
+struct Lazy_Propagation {
+
+    // ═══ CUSTOMIZE ════════════════════════════════════════════════════════════
+    using T    = ll;   // node value type
+    using Lazy = ll;   // lazy update type (can differ from T)
+
+    T    IDENTITY = 0; // identity for combine  (0 for sum, INF for min)
+    Lazy LAZY_ID  = 0; // "no pending update"   (0 for add, LLONG_MIN for assign)
+
+    T combine(T a, T b) { return a + b; }
+    T apply(T val, Lazy lz, int len) { return val + lz * len; }
+    Lazy compose(Lazy old_lz, Lazy new_lz) { return old_lz + new_lz; }
+    // ══════════════════════════════════════════════════════════════════════════
+
     struct Node {
-        T val, update;
-        bool is_lazy;
-        Node(T V = 0) : val(V), update(0), is_lazy(false) {}
+        T val;
+        Lazy lazy;
     };
 
-    int size, max_level;
-    T query_default, init_default;
+    int n;
     vector < Node > tree;
 
-    // Lazy operation function
-    T lazy_operation(T a, T b) {
-        return a + b; // Change this to your specific lazy operation
+    Lazy_Propagation(int n, const vector < T > &v = vector < T > ())
+        : n(n), tree(4 * n + 4, {IDENTITY, LAZY_ID}) {
+        if (!v.empty()) build(v, 1, 1, n);
     }
 
-    // Tree operation function
-    Node tree_operation(const Node& a, const Node& b) {
-        return Node(a.val + b.val); // Change this to your specific tree operation
+private:
+
+    void push_up(int idx) {
+        tree[idx].val = combine(tree[idx * 2].val, tree[idx * 2 + 1].val);
     }
 
-    // Push lazy value to children
-    void propagate(int idx, int lx, int rx) {
-        if (!tree[idx].is_lazy) return;
-        tree[idx].val = lazy_operation(tree[idx].val, (rx - lx + 1) * tree[idx].update);
-        if (lx != rx) {
-            tree[idx * 2].update = lazy_operation(tree[idx * 2].update, tree[idx].update);
-            tree[idx * 2 + 1].update = lazy_operation(tree[idx * 2 + 1].update, tree[idx].update);
-            tree[idx * 2].is_lazy = tree[idx * 2 + 1].is_lazy = true;
+    void apply_node(int idx, int lx, int rx, Lazy lz) {
+        tree[idx].val = apply(tree[idx].val, lz, rx - lx + 1);
+        tree[idx].lazy = compose(tree[idx].lazy, lz);
+    }
+
+    void push_down(int idx, int lx, int rx) {
+        if (tree[idx].lazy == LAZY_ID) return;
+        int mid = (lx + rx) / 2;
+        apply_node(idx * 2, lx, mid, tree[idx].lazy);
+        apply_node(idx * 2 + 1, mid + 1, rx, tree[idx].lazy);
+        tree[idx].lazy = LAZY_ID;
+    }
+
+    void build(const vector < T > &v, int idx, int lx, int rx) {
+        if (lx == rx) {
+            tree[idx] = {lx <= sz(v) ? v[lx - 1] : IDENTITY, LAZY_ID};
+            return;
         }
-        tree[idx].update = init_default;
-        tree[idx].is_lazy = false;
+        int mid = (lx + rx) / 2;
+        build(v, idx * 2, lx, mid);
+        build(v, idx * 2 + 1, mid + 1, rx);
+        push_up(idx);
     }
 
-    // Update lazy value
-    void update_lazy(int idx, T v) {
-        tree[idx].update = lazy_operation(tree[idx].update, v);
-        tree[idx].is_lazy = true;
-    }
-
-    // Build tree with initial value or vector of values
-    void build(const vector<T>& nums, const T initial_value, int idx, int lx, int rx) {
-        if (!nums.empty() && (Base ? lx >= int(nums.size()) : lx > int(nums.size()))) return;
-        if (rx == lx) tree[idx] = !nums.empty() ? Node(nums[lx - !Base]) : Node(initial_value);
-        else {
-            int mx = (lx + rx) / 2;
-            build(nums, initial_value, idx * 2, lx, mx);
-            build(nums, initial_value, idx * 2 + 1, mx + 1, rx);
-            propagate(idx * 2, lx, mx);
-            propagate(idx * 2 + 1, mx + 1, rx);
-            tree[idx] = tree_operation(tree[idx * 2], tree[idx * 2 + 1]);
-        }
-    }
-
-    void update(int l, int r, T v, int idx, int lx, int rx) {
-        propagate(idx, lx, rx);
-        if (lx >= l && rx <= r) return update_lazy(idx, v);
+    void update(int l, int r, Lazy v, int idx, int lx, int rx) {
+        if (lx >= l && rx <= r) { apply_node(idx, lx, rx, v); return; }
         if (lx > r || rx < l) return;
-        int mx = (lx + rx) / 2;
-        update(l, r, v, idx * 2, lx, mx);
-        update(l, r, v, idx * 2 + 1, mx + 1, rx);
-        propagate(idx * 2, lx, mx);
-        propagate(idx * 2 + 1, mx + 1, rx);
-        tree[idx] = tree_operation(tree[idx * 2], tree[idx * 2 + 1]);
+        push_down(idx, lx, rx);
+        int mid = (lx + rx) / 2;
+        update(l, r, v, idx * 2, lx, mid);
+        update(l, r, v, idx * 2 + 1, mid + 1, rx);
+        push_up(idx);
     }
 
     T query(int l, int r, int idx, int lx, int rx) {
-        propagate(idx, lx, rx);
         if (lx >= l && rx <= r) return tree[idx].val;
-        if (lx > r || rx < l) return query_default;
-        int mx = (lx + rx) / 2;
-        T left_result = query(l, r, idx * 2, lx, mx);
-        T right_result = query(l, r, idx * 2 + 1, mx + 1, rx);
-        return lazy_operation(left_result, right_result);
+        if (lx > r || rx < l) return IDENTITY;
+        push_down(idx, lx, rx);
+        int mid = (lx + rx) / 2;
+        return combine(
+            query(l, r, idx * 2, lx, mid),
+            query(l, r, idx * 2 + 1, mid + 1, rx)
+        );
     }
 
 public:
 
-    Lazy_Propagation(int n, const vector < T >& v = vector < T > ()) : size(1), max_level(1), query_default(0), init_default(0)  {
-        while (size <= n) size *= 2, max_level++;
-        tree = vector < Node > (2 * size, Node(init_default));
-        if (!v.empty()) build(v);
-    }
-
-    void build(const T initial_value) {
-        build(vector < T >(), initial_value, 1, 1, size);
-    }
-
-    void build(const vector < T >& nums) {
-        build(nums, init_default, 1, 1, size);
-    }
-
-    void update(int i, T v) {
-        update(i, i, v, 1, 1, size);
-    }
-
-    void update(int l, int r, T v) {
-        update(l, r, v, 1, 1, size);
-    }
-
-    T query(int l, int r) {
-        return query(l, r, 1, 1, size);
-    }
-
-    T get(int i) {
-        return query(i, i, 1, 1, size);
-    }
-
-    void print() {
-        if (tree.size() <= 1) return;
-        int level = 0;
-        queue < tuple<int, int, int, int> > q;  // pair of (index in tree, level in tree, lx, rx)
-        q.push({1, level, 1, size});
-        while (!q.empty()) {
-            int nodesAtCurrentLevel = q.size();
-            int spacesBetween = (1 << (max_level - level + 1)) - 1;
-            int leadingSpaces = (1 << (max_level - level)) - 1;
-            cout << string(leadingSpaces * 2, ' ');
-            while (nodesAtCurrentLevel--) {
-                auto [idx, lvl, lx, rx] = q.front();
-                q.pop();            
-                // Propagate lazy values
-                propagate(idx, lx, rx);
-                cout << setw(2) << tree[idx].val;
-                // Print spaces between nodes at the current level
-                if (nodesAtCurrentLevel) cout << string(spacesBetween * 2, ' ');
-                // Add children to the queue
-                if (idx * 2 < tree.size()) {
-                    int mx = (lx + rx) / 2;
-                    q.push({idx * 2, lvl + 1, lx, mx});
-                    q.push({idx * 2 + 1, lvl + 1, mx + 1, rx});
-                }
-            }
-            cout << "\n";  // new line for the new level
-            level++;
-        }
-    }
+    void update(int l, int r, Lazy v) { update(l, r, v, 1, 1, n); }
+    void update(int i, Lazy v) { update(i, i, v, 1, 1, n); }
+    T query(int l, int r) { return query(l, r, 1, 1, n); }
+    T operator[](int i) { return query(i, i, 1, 1, n); }
 };
 
-void Solve(){
-    
+void Solve() {
+
 }
 
-int main(){
+int main() {
     ios_base::sync_with_stdio(false), cin.tie(nullptr), cout.tie(nullptr);
-    int t = 1;
-    //cin >> t;
-    while(t--)
+    int test_cases = 1;
+    // cin >> test_cases;
+    for (int tc = 1; tc <= test_cases; tc++) {
+        // cout << "Case #" << tc << ": ";
         Solve();
+    }
     return 0;
 }
